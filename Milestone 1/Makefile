@@ -9,7 +9,7 @@ SRC = $(MAINSRC) include/3dstexture.cpp include/3dsloader.cpp include/bitmap.c i
 OBJ = $(SRC:.c=.o)
 
 OPT = -O3
-CC = gcc $(OPT) -Wall
+CC = g++ $(OPT) -Wall -Wno-write-strings
 
 # You might have to change GLU to MesaGLU depending on your Mesa version
 GLLIBS = $(MAINLIB) -lGL -lGLU
@@ -21,7 +21,7 @@ all: billiard
 	$(CC) -c $<
 
 billiard: $(OBJ)
-	gcc -o $@ $^ $(LIBS)
+	$(CC) -o $@ $^ $(LIBS)
 
 clean:
 	rm -f billiard *.o

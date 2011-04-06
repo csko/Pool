@@ -3,6 +3,14 @@ Ide leírhatja mindenki az éppen aktuális teendőit, az ütközések elkerül�
 Sanyi
 
 Kornél
+ - Ütközés, perdület, játékmenet
+ - Linkek:
+http://www.youtube.com/watch?v=UorbFLrnuXA
+http://sourceforge.net/projects/foobillard/files/FooBillard-Sources/foobillard-3.0a.tar.gz/download
+http://freespace.virgin.net/hugo.elias/models/m_snokr.htm
+http://archive.ncsa.illinois.edu/Classes/MATH198/townsend/math.html
+http://www.phy.ntnu.edu.tw/ntnujava/index.php?topic=41
+http://www.real-world-physics-problems.com/physics-of-billiards.html
 
 Gergő
   -  golyók rendes textúrázása(kicsit ovális az aminek körnek kellene lennie).
