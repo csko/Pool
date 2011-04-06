@@ -1,0 +1,12 @@
+Ide leírhatja mindenki az éppen aktuális teendőit, az ütközések elkerülése miatt.
+
+Sanyi
+
+Kornél
+
+Gergő
+  -  golyók rendes textúrázása(kicsit ovális az aminek körnek kellene lennie).
+  -  asztal befejezése, szépítése
+  -  golyó egyik helyről a másikra gurul(esetleg ez már Kornél feladatába nyúlik)
+  -  megvilágítás
+
