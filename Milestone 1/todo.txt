@@ -1,6 +1,12 @@
 Ide leírhatja mindenki az éppen aktuális teendőit, az ütközések elkerülése miatt.
 
 Sanyi
+ - Kameramozgások
+   Ötletek: 
+   	- adott objektum követése bizonyos szögből (mögüle, szemből "hátrálva"...)
+   	- adott pozícióba való kameramozgás (forgással vagy anélkül, forgás menet közben vagy végén egyszerre)
+   	- négy megfigyelőpozíció (négy sarok), ami forgatható, zoomolható
+ - esetleg a szoba modellezése (nem nagy feladat, de legyen meg)
 
 Kornél
  - Ütközés, perdület, játékmenet
