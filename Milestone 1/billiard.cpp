@@ -17,8 +17,8 @@
  *********************************************************/
 
 // The width and height of your window, change them as you like
-int screen_width=1024;
-int screen_height=768;
+int screen_width=800;
+int screen_height=600;
 
 static GLuint textures[16];
 static int gInit = 0;
@@ -26,8 +26,12 @@ static int gInit = 0;
 obj_type object1;
 obj_type object2;
 
-static GLfloat xRot = 0.0f;
-static GLfloat yRot = 0.0f;
+static GLfloat xRot = 110.0f;
+static GLfloat zRot = 0.0f;
+static GLfloat horizontal = 0.0f;
+static GLfloat vertical = 0.0f;
+static GLfloat zDir = -300.0f;
+static GLfloat zoom = 0.5f;
 
 static GLfloat golyoSugar = 2.0f;
 struct golyo {
@@ -245,6 +249,37 @@ void Timer(int value)
 void keyboard (unsigned char key, int x, int y)
 {
 
+  int state = glutGetModifiers();
+  if ( key == 's' )
+  {
+    vertical += 1.0;
+  }
+  if ( key == 'w' )
+  {
+    vertical -= 1.0;
+  }
+  
+  if ( vertical > 5.0 ) 
+    vertical = 5.0;
+  
+  if ( key == 'a' )
+  {
+    horizontal += 1.0;
+  }
+  if ( key == 'd' )
+  {
+    horizontal -= 1.0;
+  }
+  if ( key == 't' )
+  {
+    zDir += 1.0;
+  }
+  if ( key == 'g' )
+  {
+    zDir -= 1.0;
+  }
+  
+  printf("vertical = %f\n", vertical);  
 }
 
 
@@ -266,22 +301,37 @@ void keyboard_s (int key, int x, int y)
     xRot -= 5.0f;
   
   if(key == GLUT_KEY_LEFT)
-    yRot += 5.0f;
+    zRot += 5.0f;
   
   if(key == GLUT_KEY_RIGHT)
-    yRot -= 5.0f;
+    zRot -= 5.0f;
   
-  if(xRot > 356.0f)
-    xRot = 0.0f;
+  if(key == GLUT_KEY_PAGE_UP)
+    zoom += 0.1f;
   
-  if(xRot < 0.0f)
-    xRot = 355.0f;
+  if(key == GLUT_KEY_PAGE_DOWN)
+    zoom -= 0.1f;  
+ 
+ printf("xRot = %f\n", xRot);
   
-  if(yRot > 356.0f)
-    yRot = 0.0f;
+  if(xRot > 270.0f)
+    xRot = 270.0f;
   
-  if(yRot < -1.0f)
-    yRot = 355.0f;
+  if(xRot < 90.0f)
+    xRot = 90.0f;
+  
+  if(zRot > 356.0f)
+    zRot = 0.0f;
+  
+  if(zRot < -1.0f)
+    zRot = 355.0f;
+    
+  if(zoom > 1.0f)
+    zoom = 1.0f;
+
+  if(zoom < 0.1f)
+    zoom = 0.1f;
+    
 }
 
 
@@ -340,15 +390,38 @@ void display(void)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // This clear the background color to dark blue
     glMatrixMode(GL_MODELVIEW); // Modeling transformation
     glLoadIdentity(); // Initialize the model matrix as identity
-    glTranslatef(0.0,0.0,-300); // We move the object forward (the model matrix is multiplied by the translation matrix
+
+    glEnable(GL_DEPTH_TEST);
+
+
+    glTranslatef(horizontal,vertical,zDir); // We move the object forward (the model matrix is multiplied by the translation matrix
+
+    //glTranslatef(0.0,0.0,-300); // We move the object forward (the model matrix is multiplied by the translation matrix
+
     glRotatef(xRot, 1.0f, 0.0f, 0.0f);
-    glRotatef(yRot, 0.0f, 1.0f, 0.0f);  
+    glRotatef(zRot, 0.0f, 0.0f, 1.0f);
+    glScalef(zoom,zoom,zoom);  
 glPushMatrix();
+    glRotatef(180.0, 1.0f, 0.0f, 0.0f);	//megforgattam a tárgyakat, mert így könnyebb a kameramozgást felügyelni
     texturazas(object1);        
     texturazas(object2);
+glPopMatrix();
+glPushMatrix();
+    glRotatef(180.0, 1.0f, 0.0f, 0.0f);	//megforgattam a tárgyakat, mert így könnyebb a kameramozgást felügyelni
+    glDisable(GL_TEXTURE_2D);
     glTranslatef(0.0,0.0,5);
     DrawGolyok();
     axes();
+glPopMatrix();
+glPushMatrix();
+    glColor3f(0.5,0.5,0.5);
+    glRotatef(-90.0, 1.0, 0.0, 0.0);
+    glBegin(GL_TRIANGLE_STRIP);
+    	glVertex3f(-120.0,-10.0,200.0);
+    	glVertex3f(70.0,-10.0,200.0);
+    	glVertex3f(-120.0,-10.0,-100.0);
+    	glVertex3f(70.0,-10.0,-100.0);    	
+    glEnd();
 glPopMatrix();
     glFlush(); // This force the execution of OpenGL commands
     glutSwapBuffers(); // In double buffered mode we invert the positions of the visible buffer and the writing buffer
