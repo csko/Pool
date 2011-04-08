@@ -7,6 +7,7 @@
 #include "include/3dsloader.h"
 #include "include/texture.h"
 #include "include/jateklogika.h"
+#include "include/vector.h"
 
 #include <iostream>
 using namespace std;
@@ -42,13 +43,9 @@ struct golyo {
    GLfloat xRot, yRot;
 };
 
-struct vektor {
-    float x,y;
-}; // TODO: mindenféle műveletek
-
 struct golyo golyok[16];
-struct vektor feher;
-struct vektor mozgas[16];
+Vector feher(0, 20);
+Vector mozgas[16];
 
 
 void BitmapText(GLfloat x, GLfloat y, char *string)
@@ -64,9 +61,6 @@ void BitmapText(GLfloat x, GLfloat y, char *string)
 void golyokInit(){
   golyok[0].x = -25;
   golyok[0].y = -50;
-
-  feher.x = 0; // Kezdő célzóvektor
-  feher.y = 20;
 
   gInit = 1;
   int i;
@@ -120,7 +114,7 @@ void DrawGolyok(){
 
     glBegin(GL_LINES); // A fehér golyó irányának vektora
         glVertex3f(0,0,0);
-        glVertex3f(feher.x,feher.y,0);
+        glVertex3f(feher.getX(),feher.getY(),0);
     glEnd();
 
     GLUquadric *qobj = gluNewQuadric();
