@@ -42,6 +42,14 @@ class Vector{
             return y;
         }
 
+        void setX(float _x){
+            x = _x;
+        }
+
+        void setY(float _y){
+            y = _y;
+        }
+
     private:
         float x, y;
 };
@@ -56,6 +64,15 @@ Vector Vector::operator-(Vector& v) {
 
 Vector Vector::operator*(float n) {
     return Vector(x * n, y * n);
+}
+
+void Vector::operator+=( const Vector& v ) {
+  x += v.x;
+  y += v.y;
+}
+void Vector::operator-=( const Vector& v ) {
+  x -= v.x;
+  y -= v.y;
 }
 
 void Vector::operator*=( const Vector& v ) {

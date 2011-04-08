@@ -21,8 +21,11 @@ using namespace std;
  *********************************************************/
 
 // The width and height of your window, change them as you like
-int screen_width=800;
-int screen_height=600;
+static int screen_width = 800;
+static int screen_height = 600;
+const static int timer = 10;
+
+bool isMovement = false;
 
 static GLuint textures[16];
 static int gInit = 0;
@@ -41,7 +44,7 @@ struct golyo {
    GLfloat x;
    GLfloat y;
    GLfloat xRot, yRot;
-};
+}; // TODO: két vectorra bontani
 
 struct golyo golyok[16];
 Vector feher(0, 20);
@@ -112,10 +115,12 @@ void DrawGolyok(){
     glColor3f(1,1,1);
     glTranslatef(golyok[0].x, golyok[0].y, 0);
 
-    glBegin(GL_LINES); // A fehér golyó irányának vektora
-        glVertex3f(0,0,0);
-        glVertex3f(feher.getX(),feher.getY(),0);
-    glEnd();
+    if(!isMovement){
+        glBegin(GL_LINES); // A fehér golyó irányának vektora
+            glVertex3f(0,0,0);
+            glVertex3f(feher.getX(),feher.getY(),0);
+        glEnd();
+    }
 
     GLUquadric *qobj = gluNewQuadric();
     gluQuadricTexture(qobj,GL_TRUE);
@@ -171,7 +176,9 @@ glEnd();
 glPopMatrix ();
 }
 
-void hit(){ // A fehér golyót el kell indítani
+void hit(){ 
+    // A fehér golyót el kell indítani
+    mozgas[0] += feher;
     cout << "hit()" << endl;
 }
 
@@ -282,13 +289,25 @@ void resize (int width, int height)
 
 void Timer(int value)
 {
-    // Move the balls
+    // Primitív ütközés detektálás és golyó mozgatás
 
-    //    for(int i = 1; i <= 15; i++){
-    //        golyok[0].x += 10;
-    //    }
+    isMovement = false;
+    for(int i = 0; i <= 0; i++){
+        golyok[i].x += mozgas[i].getX();
+        golyok[i].y += mozgas[i].getY(); // TODO: Vector operator+=
 
-  glutTimerFunc(100, Timer, value + 1);
+        // egyenletes súrlódás
+        mozgas[i] *= friction;
+
+        if(mozgas[i].length() <= eps){
+            mozgas[i].setX(0);
+            mozgas[i].setY(0);
+        }else{
+            isMovement = true;
+        }
+    }
+
+    glutTimerFunc(timer, Timer, value + 1);
 }
 
 /**********************************************************
@@ -527,7 +546,7 @@ int main(int argc, char **argv)
     glutDisplayFunc(display);
     glutIdleFunc(display);
     glutReshapeFunc (resize);
-    glutTimerFunc(100, Timer, 1);
+    glutTimerFunc(timer, Timer, 1);
     glutKeyboardFunc (keyboard);
     glutSpecialFunc (keyboard_s);
     init();
