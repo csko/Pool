@@ -402,6 +402,16 @@ void display(void)
     glRotatef(zRot, 0.0f, 0.0f, 1.0f);
     glScalef(zoom,zoom,zoom);  
 glPushMatrix();
+    glColor3f(0.5,0.5,0.5);
+    glRotatef(-90.0, 1.0, 0.0, 0.0);
+    glBegin(GL_TRIANGLE_STRIP);
+    	glVertex3f(-120.0,-10.0,200.0);
+    	glVertex3f(70.0,-10.0,200.0);
+    	glVertex3f(-120.0,-10.0,-100.0);
+    	glVertex3f(70.0,-10.0,-100.0);    	
+    glEnd();
+glPopMatrix();
+glPushMatrix();
     glRotatef(180.0, 1.0f, 0.0f, 0.0f);	//megforgattam a tárgyakat, mert így könnyebb a kameramozgást felügyelni
     texturazas(object1);        
     texturazas(object2);
@@ -413,16 +423,7 @@ glPushMatrix();
     DrawGolyok();
     axes();
 glPopMatrix();
-glPushMatrix();
-    glColor3f(0.5,0.5,0.5);
-    glRotatef(-90.0, 1.0, 0.0, 0.0);
-    glBegin(GL_TRIANGLE_STRIP);
-    	glVertex3f(-120.0,-10.0,200.0);
-    	glVertex3f(70.0,-10.0,200.0);
-    	glVertex3f(-120.0,-10.0,-100.0);
-    	glVertex3f(70.0,-10.0,-100.0);    	
-    glEnd();
-glPopMatrix();
+
     glFlush(); // This force the execution of OpenGL commands
     glutSwapBuffers(); // In double buffered mode we invert the positions of the visible buffer and the writing buffer
 }
