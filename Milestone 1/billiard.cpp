@@ -23,8 +23,7 @@ int screen_height=600;
 static GLuint textures[16];
 static int gInit = 0;
 
-obj_type object1;
-obj_type object2;
+obj_type object1, object2, object3;
 
 static GLfloat xRot = 110.0f;
 static GLfloat zRot = 0.0f;
@@ -184,9 +183,11 @@ void init(void)
 
     Load3DS (&object1,"blender/obj1.3ds");
     Load3DS (&object2,"blender/obj2.3ds");
+    Load3DS (&object3,"blender/obj3.3ds");
 
     object1.id_texture=LoadBitmap("images/asztal1.bmp"); // The Function LoadBitmap() return the current texture ID
     object2.id_texture=LoadBitmap("images/asztal2.bmp");
+    object3.id_texture=LoadBitmap("images/asztal3.bmp");
 
   textures[1] = TextureLoad("images/1.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
   textures[2] = TextureLoad("images/2.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
@@ -413,8 +414,10 @@ glPushMatrix();
 glPopMatrix();
 glPushMatrix();
     glRotatef(180.0, 1.0f, 0.0f, 0.0f);	//megforgattam a tárgyakat, mert így könnyebb a kameramozgást felügyelni
+    texturazas(object3);
     texturazas(object1);        
     texturazas(object2);
+
 glPopMatrix();
 glPushMatrix();
     glRotatef(180.0, 1.0f, 0.0f, 0.0f);	//megforgattam a tárgyakat, mert így könnyebb a kameramozgást felügyelni
