@@ -6,6 +6,7 @@
 #include "include/3dstexture.h"
 #include "include/3dsloader.h"
 #include "include/texture.h"
+#include "include/jateklogika.h"
 
 #include <iostream>
 using namespace std;
@@ -63,6 +64,10 @@ void BitmapText(GLfloat x, GLfloat y, char *string)
 void golyokInit(){
   golyok[0].x = -25;
   golyok[0].y = -50;
+
+  feher.x = 0; // Kezdő célzóvektor
+  feher.y = 20;
+
   gInit = 1;
   int i;
 //  int par = 0;
@@ -112,6 +117,12 @@ void DrawGolyok(){
   glPushMatrix();
     glColor3f(1,1,1);
     glTranslatef(golyok[0].x, golyok[0].y, 0);
+
+    glBegin(GL_LINES); // A fehér golyó irányának vektora
+        glVertex3f(0,0,0);
+        glVertex3f(feher.x,feher.y,0);
+    glEnd();
+
     GLUquadric *qobj = gluNewQuadric();
     gluQuadricTexture(qobj,GL_TRUE);
     gluSphere(qobj,golyoSugar,10,10);
@@ -170,14 +181,27 @@ void hit(){ // A fehér golyót el kell indítani
     cout << "hit()" << endl;
 }
 
+void balraIrany(){
+//    feher.forgat(balra_a);
+}
+void jobbraIrany(){
+//    feher.forgat(-jobbra_a);
+}
+void erosit(){
+//    feher.skalaz(erosit_a);
+}
+void gyengit(){
+//    feher.skalaz(1/erosit_a);
+}
+
 
 void drawAbout()
 {
     glColor3f(1,1,1);
     BitmapText(-20.0f, 21.0f, "Billiárd");
-    BitmapText(-20.0f, 19.0f, "Bordé Sándor, Csernai Kornél, Ladányi Gergely");
-    BitmapText(-20.0f, 17.0f, "Fejlett Grafikai Algoritmusok");
-    BitmapText(-20.0f, 15.0f, "SZTE PTI MsC 2010/11 oszi felev");
+    BitmapText(-20.0f, 18.0f, "Bordé Sándor, Csernai Kornél, Ladányi Gergely");
+    BitmapText(-20.0f, 15.0f, "Fejlett Grafikai Algoritmusok");
+    BitmapText(-20.0f, 12.0f, "SZTE PTI MsC 2010/11 oszi felev");
 }
 void init(void)
 {
@@ -302,6 +326,19 @@ void keyboard (unsigned char key, int x, int y)
         break;
     case ' ':
         hit();
+        break;
+    case '4':
+        balraIrany();
+        break;
+    case '6':
+        jobbraIrany();
+        break;
+    case '8':
+        erosit();
+        break;
+    case '2':
+        gyengit();
+        break;
     default:
         cout << "Unknown key pressed: " << key << endl;
     }
@@ -424,6 +461,10 @@ void display(void)
 
 
     glTranslatef(horizontal,vertical,zDir); // We move the object forward (the model matrix is multiplied by the translation matrix
+
+    glTranslatef(40,28.0,0.0);
+        drawAbout();
+    glTranslatef(-40,-28.0,0.0);
 
     //glTranslatef(0.0,0.0,-300); // We move the object forward (the model matrix is multiplied by the translation matrix
 
