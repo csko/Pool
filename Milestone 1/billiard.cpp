@@ -1,12 +1,14 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <GL/glut.h>
 #include "include/billiard.h"
 #include "include/3dstexture.h"
 #include "include/3dsloader.h"
 #include "include/texture.h"
 
+#include <iostream>
+using namespace std;
 
 
 
@@ -38,7 +40,15 @@ struct golyo {
    GLfloat y;
    GLfloat xRot, yRot;
 };
+
+struct vektor {
+    float x,y;
+}; // TODO: mindenféle műveletek
+
 struct golyo golyok[16];
+struct vektor feher;
+struct vektor mozgas[16];
+
 
 void BitmapText(GLfloat x, GLfloat y, char *string)
 {
@@ -55,7 +65,7 @@ void golyokInit(){
   golyok[0].y = -50;
   gInit = 1;
   int i;
-  int par = 0;
+//  int par = 0;
   GLfloat x = -25;
   GLfloat y = 0;
   golyok[1].x = x;
@@ -128,9 +138,9 @@ void DrawGolyok(){
 void axes(){
 float ORG[3] = {0,0,0};
 
-float XP[3] = {1,0,0}, XN[3] = {-1,0,0},
-YP[3] = {0,1,0}, YN[3] = {0,-1,0},
-ZP[3] = {0,0,1}, ZN[3] = {0,0,-1};
+float XP[3] = {1,0,0},
+YP[3] = {0,1,0},
+ZP[3] = {0,0,1};
 
 glPushMatrix ();
 
@@ -155,6 +165,11 @@ glEnd();
 
 glPopMatrix ();
 }
+
+void hit(){ // A fehér golyót el kell indítani
+    cout << "hit()" << endl;
+}
+
 
 void drawAbout()
 {
@@ -235,6 +250,11 @@ void resize (int width, int height)
 
 void Timer(int value)
 {
+    // Move the balls
+
+    //    for(int i = 1; i <= 15; i++){
+    //        golyok[0].x += 10;
+    //    }
 
   glutTimerFunc(100, Timer, value + 1);
 }
@@ -251,38 +271,46 @@ void keyboard (unsigned char key, int x, int y)
 {
 
   int state = glutGetModifiers();
-  if ( key == 's' )
-  {
-    vertical += 1.0;
-  }
-  if ( key == 'w' )
-  {
-    vertical -= 1.0;
-  }
-  
-  if ( vertical > 5.0 ) 
-    vertical = 5.0;
-  
-  if ( key == 'a' )
-  {
-    horizontal += 1.0;
-  }
-  if ( key == 'd' )
-  {
-    horizontal -= 1.0;
-  }
-  if ( key == 't' )
-  {
-    zDir += 1.0;
-  }
-  if ( key == 'g' )
-  {
-    zDir -= 1.0;
-  }
-  
-  printf("vertical = %f\n", vertical);  
-}
+  switch(key){
+    case 's':
+    case 'S':
+        vertical += 1.0;
+        break;
+    case 'w':
+    case 'W':
+        vertical -= 1.0;
+        break;
+    case 'a':
+    case 'A':
+        horizontal += 1.0;
+        break;
+    case 'd':
+    case 'D':
+        horizontal -= 1.0;
+        break;
+    case 't':
+    case 'T':
+        zDir += 1.0;
+        break;
+    case 'g':
+    case 'G':
+        zDir -= 1.0;
+        break;
+    case 'q':
+    case 'Q':
+        exit(0);
+        break;
+    case ' ':
+        hit();
+    default:
+        cout << "Unknown key pressed: " << key << endl;
+    }
 
+  if ( vertical > 5.0 )
+    vertical = 5.0;
+
+  printf("vertical = %f\n", vertical);
+}
 
 
 /**********************************************************
