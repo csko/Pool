@@ -176,16 +176,30 @@ void hit(){ // A fehér golyót el kell indítani
 }
 
 void balraIrany(){
-//    feher.forgat(balra_a);
+    feher.rotate(balra_a);
+    cout << feher.length() << endl;
 }
 void jobbraIrany(){
-//    feher.forgat(-jobbra_a);
+    feher.rotate(-jobbra_a);
+    cout << feher.length() << endl;
 }
 void erosit(){
-//    feher.skalaz(erosit_a);
+    feher *= erosit_a;
+    /* TODO: max érték
+    if(feher.len() >= MAX){
+        feher.normalize();
+        feher *= MAX;
+    }
+    */
 }
 void gyengit(){
-//    feher.skalaz(1/erosit_a);
+    feher /= erosit_a;
+    /* TODO: min érték
+    if(feher.len() <= MIN){
+        feher.normalize();
+        feher *= MIN;
+    }
+    */
 }
 
 

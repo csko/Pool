@@ -1,6 +1,6 @@
 #ifndef _VECTOR_H
 #define _VECTOR_H
-#include <cmath> // sqrt
+#include <cmath> // sqrt, sin, cos
 
 // 2D vector mostly for handling the balls
 class Vector{
@@ -23,12 +23,15 @@ class Vector{
         void operator*=(const Vector& v);
         void operator/=(const Vector& v);
 
+        void operator+=(const float n);
+        void operator-=(const float n);
         void operator*=(const float n );
         void operator/=(const float n );
 
         float length() const;
 
         void normalize();
+        void rotate(float theta);
 
         friend float dot(const Vector& left, const Vector& right);
 
@@ -58,6 +61,16 @@ Vector Vector::operator*(float n) {
 void Vector::operator*=( const Vector& v ) {
   x *= v.x;
   y *= v.y;
+}
+
+void Vector::operator+=( const float n ) {
+  x += n;
+  y += n;
+}
+
+void Vector::operator-=( const float n ) {
+  x -= n;
+  y -= n;
 }
 
 void Vector::operator*=( const float n ) {
@@ -95,6 +108,13 @@ inline void Vector::normalize() {
   float len = length();
   x /= len;
   y /= len;
+}
+
+inline void Vector::rotate(float theta){
+    float _x = x * cos(theta) - y * sin(theta);
+    float _y = x * sin(theta) + y * cos(theta);
+    x = _x;
+    y = _y;
 }
 
 #endif
