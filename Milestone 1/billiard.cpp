@@ -23,7 +23,6 @@ int screen_height=768;
 static GLuint textures[16];
 static int gInit = 0;
 
-//Now the object is generic, the cube has annoyed us a little bit, or not?
 obj_type object1;
 obj_type object2;
 
@@ -123,6 +122,37 @@ void DrawGolyok(){
   }
 }
 
+void axes(){
+float ORG[3] = {0,0,0};
+
+float XP[3] = {1,0,0}, XN[3] = {-1,0,0},
+YP[3] = {0,1,0}, YN[3] = {0,-1,0},
+ZP[3] = {0,0,1}, ZN[3] = {0,0,-1};
+
+glPushMatrix ();
+
+//glTranslatef (-2.4, -1.5, -5);
+//glRotatef (tip , 1,0,0);
+//glRotatef (turn, 0,1,0);
+glScalef (100, 100, 100);
+
+glLineWidth (2.0);
+
+glBegin (GL_LINES);
+glColor3f (1,0,0); // X axis is red.
+glVertex3fv (ORG);
+glVertex3fv (XP );
+glColor3f (0,1,0); // Y axis is green.
+glVertex3fv (ORG);
+glVertex3fv (YP );
+glColor3f (0,0,1); // z axis is blue.
+glVertex3fv (ORG);
+glVertex3fv (ZP );
+glEnd();
+
+glPopMatrix ();
+}
+
 void drawAbout()
 {
     glColor3f(1,1,1);
@@ -133,7 +163,6 @@ void drawAbout()
 }
 void init(void)
 {
-    glClearColor(0.0, 0.0, 0.0, 0.0); // This clear the background color to black
     glShadeModel(GL_SMOOTH); // Type of shading for the polygons
    	
     // Viewport transformation
@@ -265,6 +294,7 @@ void keyboard_s (int key, int x, int y)
  * 
  *********************************************************/
 void texturazas(obj_type object1){
+glColor3f(1,1,1);
     int l_index = 0;
     glClear(GL_DEPTH_BUFFER_BIT); // This clear the background color to dark blue
     glEnable(GL_TEXTURE_2D);
@@ -302,28 +332,23 @@ glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     }
       glDisable(GL_TEXTURE_2D);
     glEnd();
-    glFlush(); // This force the execution of OpenGL commands
+    glDisable(GL_TEXTURE_2D);
 }
 void display(void)
 {
-    //glClearColor(0.0, 0.0, 0.0, 0.0); // This clear the background color to black
+    glClearColor(0.0, 0.0, 0.0, 0.0); // This clear the background color to black
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // This clear the background color to dark blue
     glMatrixMode(GL_MODELVIEW); // Modeling transformation
     glLoadIdentity(); // Initialize the model matrix as identity
-
-
-
     glTranslatef(0.0,0.0,-300); // We move the object forward (the model matrix is multiplied by the translation matrix
     glRotatef(xRot, 1.0f, 0.0f, 0.0f);
     glRotatef(yRot, 0.0f, 1.0f, 0.0f);  
 glPushMatrix();
     texturazas(object1);        
     texturazas(object2);
-glPopMatrix();
-glPushMatrix();
-    glDisable(GL_TEXTURE_2D);
     glTranslatef(0.0,0.0,5);
     DrawGolyok();
+    axes();
 glPopMatrix();
     glFlush(); // This force the execution of OpenGL commands
     glutSwapBuffers(); // In double buffered mode we invert the positions of the visible buffer and the writing buffer
