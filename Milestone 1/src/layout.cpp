@@ -84,7 +84,7 @@ void DrawGolyok(){
 
     GLUquadric *qobj = gluNewQuadric();
     gluQuadricTexture(qobj,GL_TRUE);
-    gluSphere(qobj,golyoSugar,10,10);
+    gluSphere(qobj,golyoSugar,15,15);
     gluDeleteQuadric(qobj);
   glPopMatrix();
   int i;
@@ -98,7 +98,7 @@ void DrawGolyok(){
       gluQuadricTexture(qobj,GL_TRUE);
       glEnable(GL_TEXTURE_2D);
       glBindTexture(GL_TEXTURE_2D,textures[i]);
-      gluSphere(qobj,golyoSugar,10,10);
+      gluSphere(qobj,golyoSugar,15,15);
       gluDeleteQuadric(qobj);
       glDisable(GL_TEXTURE_2D);
     glPopMatrix();
@@ -117,7 +117,7 @@ glPushMatrix ();
 //glTranslatef (-2.4, -1.5, -5);
 //glRotatef (tip , 1,0,0);
 //glRotatef (turn, 0,1,0);
-glScalef (100, 100, 100);
+glScalef (50, 50, 50);
 
 glLineWidth (2.0);
 
@@ -137,12 +137,12 @@ glPopMatrix ();
 }
 
 void texturazas(obj_type object1){
-glColor3f(1,1,1);
+    glColor3f(1,1,1);
     int l_index = 0;
     glClear(GL_DEPTH_BUFFER_BIT); // This clear the background color to dark blue
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, object1.id_texture); // We set the active texture 
-glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glBegin(GL_TRIANGLES); // glBegin and glEnd delimit the vertices that define a primitive (in our case triangles)
     for (l_index=0;l_index<object1.polygons_qty;l_index++)
     {

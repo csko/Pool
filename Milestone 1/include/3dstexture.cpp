@@ -40,18 +40,19 @@ int LoadBitmap(char *filename)
     if( (file = fopen(filename, "rb"))==NULL) return (-1); // Open the file for reading
 
     fseek(file, 18, SEEK_CUR);  /* start reading width & height */
-    fread(&infoheader.biWidth, sizeof(int), 1, file);
+    int ret = fread(&infoheader.biWidth, sizeof(int), 1, file);
 
-    fread(&infoheader.biHeight, sizeof(int), 1, file);
+    ret=fread(&infoheader.biHeight, sizeof(int), 1, file);
 
-    fread(&infoheader.biPlanes, sizeof(short int), 1, file);
+    ret= fread(&infoheader.biPlanes, sizeof(short int), 1, file);
     if (infoheader.biPlanes != 1) {
 	    printf("Planes from %s is not 1: %u\n", filename, infoheader.biPlanes);
 	    return 0;
     }
 
     // read the bpp
-    fread(&infoheader.biBitCount, sizeof(unsigned short int), 1, file);
+    ret=fread(&infoheader.biBitCount, sizeof(unsigned short int), 1, file);
+    if (ret == 0) return 0;
     if (infoheader.biBitCount != 24) {
       printf("Bpp from %s is not 24: %d\n", filename, infoheader.biBitCount);
       return 0;

@@ -161,7 +161,7 @@ void Timer(int value)
 void keyboard (unsigned char key, int x, int y)
 {
 
-  int state = glutGetModifiers();
+//  int state = glutGetModifiers();
   switch(key){
     case 's':
     case 'S':
@@ -245,7 +245,7 @@ void keyboard_s (int key, int x, int y)
   if(key == GLUT_KEY_PAGE_DOWN)
     zoom -= 0.1f;  
  
- printf("xRot = %f\n", xRot);
+// printf("xRot = %f\n", xRot);
   
   if(xRot > 270.0f)
     xRot = 270.0f;
