@@ -1,5 +1,7 @@
 #ifndef _JATEKLOGIKA_
 #define _JATEKLOGIKA_
+#include "vector.h"
+
 const float eps = 0.000000000001;
 
 const float erosit_a = 1.2;

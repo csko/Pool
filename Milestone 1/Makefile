@@ -4,9 +4,10 @@
 MAINSRC = billiard.cpp
 MAINLIB = -lglut
 
-SRC = $(MAINSRC) include/3dstexture.cpp include/3dsloader.cpp include/bitmap.c include/texture.c
+SRC = $(MAINSRC) include/3dstexture.cpp include/3dsloader.cpp include/bitmap.c include/texture.c src/game.cpp src/vector.cpp
 
 OBJ = $(SRC:.c=.o)
+#OBJ = src/game.cpp
 
 OPT = -O3
 CC = g++ $(OPT) -Wall -Wno-write-strings

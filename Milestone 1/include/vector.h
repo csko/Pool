@@ -1,5 +1,5 @@
-#ifndef _VECTOR_H
-#define _VECTOR_H
+#ifndef _VECTOR_H_
+#define _VECTOR_H_
 #include <cmath> // sqrt, sin, cos
 
 // 2D vector mostly for handling the balls
@@ -35,103 +35,13 @@ class Vector{
 
         friend float dot(const Vector& left, const Vector& right);
 
-        float getX(){
-            return x;
-        }
-        float getY(){
-            return y;
-        }
-
-        void setX(float _x){
-            x = _x;
-        }
-
-        void setY(float _y){
-            y = _y;
-        }
+        float getX();
+        float getY();
+        void setX(float _x);
+        void setY(float _y);
 
     private:
         float x, y;
 };
-
-Vector Vector::operator+(Vector& v) {
-    return Vector(x + v.x, y + v.y);
-}
-
-Vector Vector::operator-(Vector& v) {
-    return Vector(x + v.x, y + v.y);
-}
-
-Vector Vector::operator*(float n) {
-    return Vector(x * n, y * n);
-}
-
-void Vector::operator+=( const Vector& v ) {
-  x += v.x;
-  y += v.y;
-}
-void Vector::operator-=( const Vector& v ) {
-  x -= v.x;
-  y -= v.y;
-}
-
-void Vector::operator*=( const Vector& v ) {
-  x *= v.x;
-  y *= v.y;
-}
-
-void Vector::operator+=( const float n ) {
-  x += n;
-  y += n;
-}
-
-void Vector::operator-=( const float n ) {
-  x -= n;
-  y -= n;
-}
-
-void Vector::operator*=( const float n ) {
-  x *= n;
-  y *= n;
-}
-
-void Vector::operator/=( const float n ) {
-  x /= n;
-  y /= n;
-}
-
-void Vector::operator/=( const Vector& v ) {
-  x /= v.x;
-  y /= v.y;
-}
-
-inline bool Vector::operator==( const Vector& v ) const {
-  return (v.x == x and v.y == y);
-}
-
-inline bool Vector::operator!=( const Vector& v ) const {
-  return !(*this == v);
-}
-
-inline float dot(const Vector& v1, const Vector& v2) {
-  return (v1.x * v2.x) + (v1.y * v2.y);
-}
-
-inline float Vector::length() const {
-  return sqrt((x * x) + (y * y));
-}
-
-inline void Vector::normalize() {
-  float len = length();
-  x /= len;
-  y /= len;
-}
-
-inline void Vector::rotate(float theta){
-    float _x = x * cos(theta) - y * sin(theta);
-    float _y = x * sin(theta) + y * cos(theta);
-    x = _x;
-    y = _y;
-}
 
 #endif

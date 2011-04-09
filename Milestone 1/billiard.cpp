@@ -6,12 +6,10 @@
 #include "include/3dstexture.h"
 #include "include/3dsloader.h"
 #include "include/texture.h"
-#include "include/jateklogika.h"
-#include "include/vector.h"
+#include "include/game.h"
 
 #include <iostream>
 using namespace std;
-
 
 
 /**********************************************************
@@ -47,9 +45,10 @@ struct golyo {
 }; // TODO: két vectorra bontani
 
 struct golyo golyok[16];
-Vector feher(0, 20);
-Vector mozgas[16];
 
+// src/game.cpp
+extern Vector white;
+extern Vector movement[16];
 
 void BitmapText(GLfloat x, GLfloat y, char *string)
 {
@@ -118,7 +117,7 @@ void DrawGolyok(){
     if(!isMovement){
         glBegin(GL_LINES); // A fehér golyó irányának vektora
             glVertex3f(0,0,0);
-            glVertex3f(feher.getX(),feher.getY(),0);
+            glVertex3f(white.getX(), white.getY(), 0);
         glEnd();
     }
 
@@ -175,40 +174,6 @@ glEnd();
 
 glPopMatrix ();
 }
-
-void hit(){ 
-    // A fehér golyót el kell indítani
-    mozgas[0] += feher;
-    cout << "hit()" << endl;
-}
-
-void balraIrany(){
-    feher.rotate(balra_a);
-    cout << feher.length() << endl;
-}
-void jobbraIrany(){
-    feher.rotate(-jobbra_a);
-    cout << feher.length() << endl;
-}
-void erosit(){
-    feher *= erosit_a;
-    /* TODO: max érték
-    if(feher.len() >= MAX){
-        feher.normalize();
-        feher *= MAX;
-    }
-    */
-}
-void gyengit(){
-    feher /= erosit_a;
-    /* TODO: min érték
-    if(feher.len() <= MIN){
-        feher.normalize();
-        feher *= MIN;
-    }
-    */
-}
-
 
 void drawAbout()
 {
@@ -293,15 +258,15 @@ void Timer(int value)
 
     isMovement = false;
     for(int i = 0; i <= 0; i++){
-        golyok[i].x += mozgas[i].getX();
-        golyok[i].y += mozgas[i].getY(); // TODO: Vector operator+=
+        golyok[i].x += movement[i].getX();
+        golyok[i].y += movement[i].getY(); // TODO: Vector operator+=
 
         // egyenletes súrlódás
-        mozgas[i] *= friction;
+        movement[i] *= friction;
 
-        if(mozgas[i].length() <= eps){
-            mozgas[i].setX(0);
-            mozgas[i].setY(0);
+        if(movement[i].length() <= eps){
+            movement[i].setX(0);
+            movement[i].setY(0);
         }else{
             isMovement = true;
         }
