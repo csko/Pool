@@ -1,6 +1,13 @@
 #ifndef _JATEKLOGIKA_
 #define _JATEKLOGIKA_
 #include "vector.h"
+#include <GL/glut.h> // GLfloat
+
+struct golyo {
+   GLfloat x;
+   GLfloat y;
+   GLfloat xRot, yRot;
+}; // TODO: két vectorra bontani
 
 const float eps = 0.000000000001;
 

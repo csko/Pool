@@ -1,4 +1,5 @@
-
+#ifndef _INCLUDE_BILLIARD_H_
+#define _INCLUDE_BILLIARD_H_
 /**********************************************************
  *
  * TYPES DECLARATION
@@ -35,3 +36,4 @@ typedef struct {
     mapcoord_type mapcoord[MAX_VERTICES];
     int id_texture;
 } obj_type, *obj_type_ptr;
+#endif

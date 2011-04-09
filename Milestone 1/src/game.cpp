@@ -2,6 +2,8 @@
 
 Vector white(0, 20);
 Vector movement[16];
+struct golyo golyok[16];
+bool isMovement = false;
 
 void hit(){ 
     // A fehér golyót el kell indítani
