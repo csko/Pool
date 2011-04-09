@@ -19,6 +19,7 @@ static GLfloat golyoSugar = 2.0f;
 extern struct golyo golyok[16];
 extern Vector white;
 extern bool isMovement;
+extern Game game;
 
 void golyokInit(){
   golyok[0].x = -25;
@@ -67,10 +68,16 @@ void golyokInit(){
   for(i=1;i<=15;i++){
     golyok[i].xRot = -90;
   }
+  for(i = 0; i<=15; i++){
+//    printf("%d %f %f\n", i, golyok[i].x, golyok[i].y);
+  }
 }
 
 void DrawGolyok(){
-  if(gInit == 0) golyokInit();
+  if(gInit == 0) {
+    golyokInit();
+    game.init();
+  }
   glPushMatrix();
     glColor3f(1,1,1);
     glTranslatef(golyok[0].x, golyok[0].y, 0);

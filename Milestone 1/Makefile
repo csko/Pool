@@ -13,7 +13,7 @@ CC = g++ $(OPT) -Wall -Wno-write-strings
 
 # You might have to change GLU to MesaGLU depending on your Mesa version
 GLLIBS = $(MAINLIB) -lGL -lGLU
-LIBS = $(GLLIBS) -L/usr/X11R6/lib -lX11 -lXi -lm -lpthread
+LIBS = $(GLLIBS) -L/usr/X11R6/lib -lX11 -lXi -lm -lpthread -lBox2D
 
 all: billiard
 

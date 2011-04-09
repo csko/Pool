@@ -40,6 +40,7 @@ extern Vector white;
 extern Vector movement[16];
 extern struct golyo golyok[16];
 extern bool isMovement;
+extern Game game;
 
 void BitmapText(GLfloat x, GLfloat y, char *string)
 {
@@ -192,7 +193,7 @@ void keyboard (unsigned char key, int x, int y)
         exit(0);
         break;
     case ' ':
-        hit();
+        game.hit();
         break;
     case '4':
         balraIrany();
@@ -314,6 +315,9 @@ glPushMatrix();
     texturazas(object2);
 
 glPopMatrix();
+
+    game.updateBalls();
+
 glPushMatrix();
     glRotatef(180.0, 1.0f, 0.0f, 0.0f);	//megforgattam a tárgyakat, mert így könnyebb a kameramozgást felügyelni
     glDisable(GL_TEXTURE_2D);
