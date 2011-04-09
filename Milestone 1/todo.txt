@@ -10,10 +10,10 @@ Sanyi
 
 Kornél
  - Ütközés, perdület, játékmenet
- - Az asztal széle legyen egy végtelen tömegű poligon test
- - Legyen asztal alja, súrlódás
- - Detektálja, hogy az összes labda megállt-e (isMovement)
+ - Súrlódási konstansok finomítása
+ - isMovement finomítása
  - Detektálja, ha a golyó a lyukba esik
+ - A golyók lassúnak tűnnek és furcsán pattannak. A konstansokat finomítani kell.
 
 Gergő
   -  golyók rendes textúrázása(kicsit ovális az aminek körnek kellene lennie).

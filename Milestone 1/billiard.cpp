@@ -130,24 +130,6 @@ void resize (int width, int height)
 
 void Timer(int value)
 {
-    // Primitív ütközés detektálás és golyó mozgatás
-
-    isMovement = false;
-    for(int i = 0; i <= 0; i++){
-        golyok[i].x += movement[i].getX();
-        golyok[i].y += movement[i].getY(); // TODO: Vector operator+=
-
-        // egyenletes súrlódás
-        movement[i] *= friction;
-
-        if(movement[i].length() <= eps){
-            movement[i].setX(0);
-            movement[i].setY(0);
-        }else{
-            isMovement = true;
-        }
-    }
-
     glutTimerFunc(timer, Timer, value + 1);
 }
 
@@ -317,7 +299,20 @@ glPushMatrix();
 glPopMatrix();
 
     game.updateBalls();
-
+/*
+glPushMatrix();
+    glRotatef(180.0, 1.0f, 0.0f, 0.0f);
+    texturazas(object3);
+    texturazas(object1);       
+    texturazas(object2);
+    glBegin(GL_TRIANGLE_STRIP);
+        glVertex3f(-60.4,-84.29,0.0);
+        glVertex3f(10.6,-84.29,0.0);
+        glVertex3f(-60.4,28.14,0.0);       
+        glVertex3f(10.6,28.14,0.0);
+    glEnd();
+glPopMatrix();
+*/
 glPushMatrix();
     glRotatef(180.0, 1.0f, 0.0f, 0.0f);	//megforgattam a tárgyakat, mert így könnyebb a kameramozgást felügyelni
     glDisable(GL_TEXTURE_2D);

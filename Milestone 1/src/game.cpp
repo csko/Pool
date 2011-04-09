@@ -1,38 +1,42 @@
 #include "../include/game.h"
-#include <cstdio>
-#include <iostream>
 
 using namespace std;
 
-Vector white(0, 20);
+Vector white(0, 60);
 Vector movement[16];
 struct golyo golyok[16];
 bool isMovement = false;
 Game game;
 
 void balraIrany(){
-    white.rotate(balra_a);
+    if(!isMovement){
+        white.rotate(balra_a);
+    }
 }
 void jobbraIrany(){
-    white.rotate(-jobbra_a);
+    if(!isMovement){
+        white.rotate(-jobbra_a);
+    }
 }
 void erosit(){
-    white *= erosit_a;
-    /* TODO: max érték
-    if(white.len() >= MAX){
-        white.normalize();
-        white *= MAX;
+    if(!isMovement){
+        white *= erosit_a;
+        const float maxlen = 200;
+        if(white.length() >= maxlen){
+            white.normalize();
+            white *= maxlen;
+        }
     }
-    */
 }
 void gyengit(){
-    white /= erosit_a;
-    /* TODO: min érték
-    if(white.len() <= MIN){
-        white.normalize();
-        white *= MIN;
+    if(!isMovement){
+        white /= erosit_a;
+        const float minlen = 1;
+        if(white.length() <= minlen){
+            white.normalize();
+            white *= minlen;
+        }
     }
-    */
 }
 
 Game::Game(){
@@ -42,7 +46,9 @@ Game::Game(){
 }
 
 void Game::hit(){
-    state->hit(white.getX(), white.getY());
+    if(!isMovement){
+        state->hit(white.getX(), white.getY());
+    }
 }
 
 void Game::updateBalls(){
@@ -54,10 +60,6 @@ Game::~Game(){
 }
 
 void Game::init(){
-//    cout << "Loading ball positions into engine" << endl;
-    for(int i = 0; i <= 15; i++){
-//        printf("%d %f %f\n", i, golyok[i].x, golyok[i].y);
-    }
     state->init();
 }
 
@@ -66,32 +68,74 @@ GameState::GameState(b2Vec2 gravity, bool doSleep) : world(gravity, doSleep){
     velocityIterations = 6;
     positionIterations = 2;
 
+    // Ball definition
+
     ballShape.m_radius = 2.0f;
 
     ballFixture.shape = &ballShape;
     ballFixture.density = 1.0f;
-    ballFixture.friction = 0.3f;
-    ballFixture.restitution = 1.0f;
-
+    ballFixture.friction = 0.5f;
+    ballFixture.restitution = 0.5f;
     ballDef.type = b2_dynamicBody;
+    ballDef.linearDamping = 0.6f; // TODO: angular damping
+
+    // Side definition
+    b2PolygonShape sideShape;
+
+    b2BodyDef sideDef;
+    sideDef.type = b2_staticBody;
+
+    // Create the 4 sides
+
+    sideDef.position.Set(-60.4f, -84.29f);
+    sideShape.SetAsBox(500.0f, 0.1f);
+    sides[0] = world.CreateBody(&sideDef);
+    sides[0]->CreateFixture(&sideShape, 0.0f);
+
+    sideDef.position.Set(-60.4f, -84.29f);
+    sideShape.SetAsBox(0.1f, 500.0f);
+    sides[1] = world.CreateBody(&sideDef);
+    sides[1]->CreateFixture(&sideShape, 0.0f);
+
+    sideDef.position.Set(10.6f, 28.14f);
+    sideShape.SetAsBox(0.1f, 500.0f);
+    sides[2] = world.CreateBody(&sideDef);
+    sides[2]->CreateFixture(&sideShape, 0.0f);
+
+    sideDef.position.Set(10.6f, 28.14f);
+    sideShape.SetAsBox(500.0f, 0.1f);
+    sides[3] = world.CreateBody(&sideDef);
+    sides[3]->CreateFixture(&sideShape, 0.0f);
 
     initDone = false;
 }
 
 GameState::~GameState(){
+    for(int i = 0; i <= 15; i++){
+        world.DestroyBody(balls[i]);
+    }
+    for(int i = 0; i < 4; i++){
+        world.DestroyBody(sides[i]);
+    }
 }
 
 void GameState::init(){
+    if(initDone == true){
+        return;
+    }
     for(int i = 0; i <= 15; i++){
         ballDef.position.Set(golyok[i].x, golyok[i].y);
+        lastpos[i].Set(golyok[i].x, golyok[i].y);
         balls[i] = world.CreateBody(&ballDef);
         balls[i]->CreateFixture(&ballFixture);
+        balls[i]->SetBullet(true); // For greater precision
     }
     initDone = true;
 }
 
 void GameState::hit(float x, float y){
-    balls[0]->ApplyLinearImpulse(b2Vec2(x  * balls[0]->GetMass(), y * balls[0]->GetMass()), balls[0]->GetWorldCenter());
+    const float mult = 30;
+    balls[0]->ApplyLinearImpulse(b2Vec2(x * mult * balls[0]->GetMass(), y * mult * balls[0]->GetMass()), balls[0]->GetWorldCenter());
     // TODO: angle
 }
 
@@ -101,12 +145,20 @@ void GameState::updateBalls(){
     }
     world.Step(timeStep, velocityIterations, positionIterations);
     world.ClearForces();
+    isMovement = false;
+    float32 diff = 0;
     for(int i = 0; i <= 15; i++){
         b2Vec2 position = balls[i]->GetPosition();
         golyok[i].x = position.x;
         golyok[i].y = position.y;
         // TODO: angle
-    }
 
+        diff += (lastpos[i] - position).Length();
+        lastpos[i] = position;
+
+    }
+    if(diff > 0.1){ // TODO
+        isMovement = true;
+    }
 }
 

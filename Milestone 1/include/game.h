@@ -29,6 +29,9 @@ class GameState {
         b2BodyDef ballDef;
 
         b2Body* balls[16];
+        b2Body* sides[4];
+
+        b2Vec2 lastpos[16];
 
         bool initDone;
 };
@@ -49,9 +52,8 @@ const float eps = 0.000000000001;
 
 const float erosit_a = 1.2;
 const float gyengit_a = 1.2;
-const float balra_a = 0.1;
-const float jobbra_a = 0.1;
-const float friction = 0.5;
+const float balra_a = 0.05;
+const float jobbra_a = 0.05;
 
 void hit();
 void balraIrany();
