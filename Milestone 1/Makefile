@@ -4,7 +4,7 @@
 MAINSRC = billiard.cpp
 MAINLIB = -lglut
 
-SRC = $(MAINSRC) include/3dstexture.cpp include/3dsloader.cpp include/bitmap.c include/texture.c src/game.cpp src/vector.cpp src/layout.cpp
+SRC = $(MAINSRC) include/3dstexture.cpp include/3dsloader.cpp include/bitmap.c include/texture.c src/game.cpp src/vector.cpp src/layout.cpp src/Camera.cpp
 
 OBJ = $(SRC:.c=.o)
 
