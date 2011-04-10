@@ -32,8 +32,8 @@ static GLfloat xRot = 110.0f;
 static GLfloat zRot = 0.0f;
 static GLfloat horizontal = 0.0f;
 static GLfloat vertical = 0.0f;
-static GLfloat zDir = -300.0f;
-static GLfloat zoom = 0.5f;
+static GLfloat zDir = 30.0f;
+static GLfloat zoom = 0.3f;
 
 // src/game.cpp
 extern Vector white;
@@ -106,6 +106,18 @@ void init(void)
 
 /**********************************************************
  *
+ * CAMERA functions 
+ *
+ **********************************************************/
+void rotateHorizontal(GLfloat degrees) {
+  xRot += degrees;
+}
+void rotateVertical(GLfloat degrees) {
+  zRot += degrees;
+}
+
+/**********************************************************
+ *
  * SUBROUTINE resize(int,int)
  *
  * This routine must be called everytime we resize our window.
@@ -146,13 +158,17 @@ void keyboard (unsigned char key, int x, int y)
 
 //  int state = glutGetModifiers();
   switch(key){
+    case 'r':
+    case 'R':
+        rotateVertical(90.0);
+        break;
     case 's':
     case 'S':
-        vertical += 1.0;
+        vertical -= 1.0;
         break;
     case 'w':
     case 'W':
-        vertical -= 1.0;
+        vertical += 1.0;
         break;
     case 'a':
     case 'A':
@@ -193,10 +209,6 @@ void keyboard (unsigned char key, int x, int y)
         cout << "Unknown key pressed: " << key << endl;
     }
 
-  if ( vertical > 5.0 )
-    vertical = 5.0;
-
-  printf("vertical = %f\n", vertical);
 }
 
 
@@ -210,36 +222,46 @@ void keyboard (unsigned char key, int x, int y)
 
 void keyboard_s (int key, int x, int y)
 {
-  if(key == GLUT_KEY_UP)
-    xRot+= 5.0f;
+  if(key == GLUT_KEY_UP) {
+    xRot += 5.0f;
+    printf("xRot=%f\n", xRot);
+  }
   
-  if(key == GLUT_KEY_DOWN)
+  if(key == GLUT_KEY_DOWN) {
     xRot -= 5.0f;
+    printf("xRot=%f\n", xRot);
+  }
   
-  if(key == GLUT_KEY_LEFT)
-    zRot += 5.0f;
-  
-  if(key == GLUT_KEY_RIGHT)
+  if(key == GLUT_KEY_LEFT) {
     zRot -= 5.0f;
+    printf("zRot=%f\n", zRot);
+  }    
   
-  if(key == GLUT_KEY_PAGE_UP)
+  if(key == GLUT_KEY_RIGHT) {
+    zRot += 5.0f;
+    printf("zRot=%f\n", zRot);
+  }    
+  
+  if(key == GLUT_KEY_PAGE_UP) {  
     zoom += 0.1f;
+    printf("zoom=%f\n", zoom);
+  }        
   
-  if(key == GLUT_KEY_PAGE_DOWN)
+  if(key == GLUT_KEY_PAGE_DOWN) {
     zoom -= 0.1f;  
- 
-// printf("xRot = %f\n", xRot);
+    printf("zoom=%f\n", zoom);
+  }            
+   
+  if(xRot < 0.0f)
+    xRot = 355.0f;
   
-  if(xRot > 270.0f)
-    xRot = 270.0f;
-  
-  if(xRot < 90.0f)
-    xRot = 90.0f;
+  if(xRot > 360.0f)
+    xRot = 5.0f;
   
   if(zRot > 356.0f)
     zRot = 0.0f;
   
-  if(zRot < -1.0f)
+  if(zRot < 0.0f)
     zRot = 355.0f;
     
   if(zoom > 1.0f)
@@ -249,7 +271,6 @@ void keyboard_s (int key, int x, int y)
     zoom = 0.1f;
     
 }
-
 
 
 /**********************************************************
@@ -269,20 +290,24 @@ void display(void)
     glEnable(GL_DEPTH_TEST);
 
 
-    glTranslatef(horizontal,vertical,zDir); // We move the object forward (the model matrix is multiplied by the translation matrix
-
     glTranslatef(40,28.0,0.0);
         drawAbout();
     glTranslatef(-40,-28.0,0.0);
 
     //glTranslatef(0.0,0.0,-300); // We move the object forward (the model matrix is multiplied by the translation matrix
-
-    glRotatef(xRot, 1.0f, 0.0f, 0.0f);
-    glRotatef(zRot, 0.0f, 0.0f, 1.0f);
-    glScalef(zoom,zoom,zoom);  
+    
+    glRotatef(xRot, 1.0f, 0.0, 0.0);    
+    glRotatef(zRot, 0.0f, 0.0, 1.0);
+    
+    //gluLookAt(vertical, horizontal, zDir, vertical+10.0, horizontal, zDir, 0.0, 0.0, 1.0);    
+    
+    glTranslatef(horizontal,vertical,zDir); // We move the object forward (the model matrix is multiplied by the translation matrix
+    
+    glScalef(zoom,zoom,zoom);      
+    
 glPushMatrix();
     glColor3f(0.5,0.5,0.5);
-    glRotatef(-90.0, 1.0, 0.0, 0.0);
+    glRotatef(90.0, 1.0, 0.0, 0.0);
     glBegin(GL_TRIANGLE_STRIP);
     	glVertex3f(-120.0,-10.0,200.0);
     	glVertex3f(70.0,-10.0,200.0);
@@ -291,7 +316,7 @@ glPushMatrix();
     glEnd();
 glPopMatrix();
 glPushMatrix();
-    glRotatef(180.0, 1.0f, 0.0f, 0.0f);	//megforgattam a tárgyakat, mert így könnyebb a kameramozgást felügyelni
+    glRotatef(180.0, 0.0f, 1.0f, 0.0f);	//megforgattam a tárgyakat, mert így könnyebb a kameramozgást felügyelni
     texturazas(object3);
     texturazas(object1);        
     texturazas(object2);
@@ -314,7 +339,7 @@ glPushMatrix();
 glPopMatrix();
 */
 glPushMatrix();
-    glRotatef(180.0, 1.0f, 0.0f, 0.0f);	//megforgattam a tárgyakat, mert így könnyebb a kameramozgást felügyelni
+    glRotatef(180.0, 0.0f, 1.0f, 0.0f);	//megforgattam a tárgyakat, mert így könnyebb a kameramozgást felügyelni
     glDisable(GL_TEXTURE_2D);
     glTranslatef(0.0,0.0,5);
     DrawGolyok();
