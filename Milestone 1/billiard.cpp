@@ -30,10 +30,14 @@ extern obj_type object1, object2, object3;
 
 static GLfloat xRot = 110.0f;
 static GLfloat zRot = 0.0f;
-static GLfloat horizontal = 0.0f;
-static GLfloat vertical = 0.0f;
+static GLfloat horizontal = 10.0f;
+static GLfloat vertical = -70.0f;
 static GLfloat zDir = 30.0f;
 static GLfloat zoom = 0.3f;
+
+static int mouse_elozo_x = 0.0f;
+static bool mouse_init = false;
+static GLfloat angle=0.0f;
 
 // src/game.cpp
 extern Vector white;
@@ -75,7 +79,9 @@ void init(void)
    
     glEnable(GL_DEPTH_TEST); // We enable the depth test (also called z buffer)
     glPolygonMode (GL_FRONT_AND_BACK, GL_FILL); // Polygon rasterization mode (polygon filled)
-    
+
+    glutWarpPointer( glutGet( GLUT_WINDOW_WIDTH )/2, glutGet( GLUT_WINDOW_HEIGHT )/2 );
+
     glEnable(GL_TEXTURE_2D); // This Enable the Texture mapping
 
     Load3DS (&object1,"blender/obj1.3ds");
@@ -86,21 +92,21 @@ void init(void)
     object2.id_texture=LoadBitmap("images/asztal2.bmp");
     object3.id_texture=LoadBitmap("images/asztal3.bmp");
 
-  textures[1] = TextureLoad("images/1.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
-  textures[2] = TextureLoad("images/2.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
-  textures[3] = TextureLoad("images/3.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
-  textures[4] = TextureLoad("images/4.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
-  textures[5] = TextureLoad("images/5.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
-  textures[6] = TextureLoad("images/6.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
-  textures[7] = TextureLoad("images/7.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
-  textures[8] = TextureLoad("images/8.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
+  textures[1] = TextureLoad("images/14.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
+  textures[2] = TextureLoad("images/7.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
+  textures[3] = TextureLoad("images/5.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
+  textures[4] = TextureLoad("images/12.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
+  textures[5] = TextureLoad("images/8.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
+  textures[6] = TextureLoad("images/10.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
+  textures[7] = TextureLoad("images/6.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
+  textures[8] = TextureLoad("images/4.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
   textures[9] = TextureLoad("images/9.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
-  textures[10] = TextureLoad("images/10.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
-  textures[11] = TextureLoad("images/11.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
-  textures[12] = TextureLoad("images/12.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
+  textures[10] = TextureLoad("images/3.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
+  textures[11] = TextureLoad("images/15.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
+  textures[12] = TextureLoad("images/2.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
   textures[13] = TextureLoad("images/13.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
-  textures[14] = TextureLoad("images/14.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
-  textures[15] = TextureLoad("images/15.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
+  textures[14] = TextureLoad("images/1.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
+  textures[15] = TextureLoad("images/11.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
 
 }
 
@@ -233,12 +239,12 @@ void keyboard_s (int key, int x, int y)
   }
   
   if(key == GLUT_KEY_LEFT) {
-    zRot -= 5.0f;
+    zRot += 5.0f;
     printf("zRot=%f\n", zRot);
   }    
   
   if(key == GLUT_KEY_RIGHT) {
-    zRot += 5.0f;
+    zRot -= 5.0f;
     printf("zRot=%f\n", zRot);
   }    
   
@@ -271,8 +277,30 @@ void keyboard_s (int key, int x, int y)
     zoom = 0.1f;
     
 }
+void mouse(int button, int state, int x, int y)
+{
+  if (button == GLUT_LEFT_BUTTON)
+  {
+    if (state == GLUT_DOWN)
+    {
 
+    }else{
+      game.hit();  
+    }
+  }
+}
 
+void motionPassive(int x, int y)
+{ 
+if(!mouse_init){
+  mouse_init = true;
+  mouse_elozo_x = x;
+}
+  glutSetCursor(GLUT_CURSOR_FULL_CROSSHAIR); 
+  angle = (mouse_elozo_x-x)*0.01f;
+  white.rotate(angle);
+  mouse_elozo_x = x;
+}
 /**********************************************************
  *
  * SUBROUTINE display()
@@ -291,20 +319,17 @@ void display(void)
 
 
     glTranslatef(40,28.0,0.0);
-        drawAbout();
+    drawAbout();
     glTranslatef(-40,-28.0,0.0);
-
-    //glTranslatef(0.0,0.0,-300); // We move the object forward (the model matrix is multiplied by the translation matrix
     
     glRotatef(xRot, 1.0f, 0.0, 0.0);    
     glRotatef(zRot, 0.0f, 0.0, 1.0);
-    
     //gluLookAt(vertical, horizontal, zDir, vertical+10.0, horizontal, zDir, 0.0, 0.0, 1.0);    
     
     glTranslatef(horizontal,vertical,zDir); // We move the object forward (the model matrix is multiplied by the translation matrix
     
     glScalef(zoom,zoom,zoom);      
-    
+    glRotatef(180, 0.0, 0.0, 1.0);
 glPushMatrix();
     glColor3f(0.5,0.5,0.5);
     glRotatef(90.0, 1.0, 0.0, 0.0);
@@ -320,27 +345,10 @@ glPushMatrix();
     texturazas(object3);
     texturazas(object1);        
     texturazas(object2);
-
 glPopMatrix();
-
     game.updateBalls();
-/*
-glPushMatrix();
-    glRotatef(180.0, 1.0f, 0.0f, 0.0f);
-    texturazas(object3);
-    texturazas(object1);       
-    texturazas(object2);
-    glBegin(GL_TRIANGLE_STRIP);
-        glVertex3f(-60.4,-84.29,0.0);
-        glVertex3f(10.6,-84.29,0.0);
-        glVertex3f(-60.4,28.14,0.0);       
-        glVertex3f(10.6,28.14,0.0);
-    glEnd();
-glPopMatrix();
-*/
 glPushMatrix();
     glRotatef(180.0, 0.0f, 1.0f, 0.0f);	//megforgattam a tárgyakat, mert így könnyebb a kameramozgást felügyelni
-    glDisable(GL_TEXTURE_2D);
     glTranslatef(0.0,0.0,5);
     DrawGolyok();
     axes();
@@ -372,6 +380,8 @@ int main(int argc, char **argv)
     glutTimerFunc(timer, Timer, 1);
     glutKeyboardFunc (keyboard);
     glutSpecialFunc (keyboard_s);
+    glutMouseFunc(mouse);
+    glutPassiveMotionFunc(motionPassive);
     init();
     glutMainLoop();
 

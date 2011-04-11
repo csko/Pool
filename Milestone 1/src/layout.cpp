@@ -27,43 +27,44 @@ void golyokInit(){
 
   gInit = 1;
   int i;
+  GLfloat e = 0.05f;
 //  int par = 0;
   GLfloat x = -25;
   GLfloat y = 0;
   golyok[1].x = x;
   golyok[1].y = y;
-  x-=golyoSugar;
-  y+=1.6*golyoSugar;
+  x-=golyoSugar+e;
+  y+=1.8*golyoSugar+e;
   int hanyadik = 1;
   for(i = 1; i<=2;i++){  
     hanyadik++;
     golyok[hanyadik].x = x;
     golyok[hanyadik].y = y;
-    x+=2*golyoSugar;
+    x+=2*golyoSugar+e;
   }
-  x-=golyoSugar;
-  y+=1.6*golyoSugar;
+  x-=golyoSugar+e;
+  y+=1.8*golyoSugar+e;
   for(i = 1; i<=3;i++){  
     hanyadik++;
     golyok[hanyadik].x = x;
     golyok[hanyadik].y = y;
-    x-=2*golyoSugar;
+    x-=2*golyoSugar+e;
   }
-  x+=golyoSugar;
-  y+=1.6*golyoSugar;
+  x+=golyoSugar+e;
+  y+=1.8*golyoSugar+e;
   for(i = 1; i<=4;i++){  
     hanyadik++;
     golyok[hanyadik].x = x;
     golyok[hanyadik].y = y;
-    x+=2*golyoSugar;
+    x+=2*golyoSugar+e;
   }
-  x-=golyoSugar;
-  y+=1.6*golyoSugar;
+  x-=golyoSugar+e;
+  y+=1.8*golyoSugar+e;
   for(i = 1; i<=5;i++){  
     hanyadik++;
     golyok[hanyadik].x = x;
     golyok[hanyadik].y = y;
-    x-=2*golyoSugar;
+    x-=2*golyoSugar+e;
   }
   for(i=1;i<=15;i++){
     golyok[i].xRot = -90;
