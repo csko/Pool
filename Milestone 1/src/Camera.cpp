@@ -4,11 +4,11 @@
 using namespace std;
 
 Camera::Camera() {
-    xRot = 90.0f;
-    zRot = 90.0f;
-    horizontal = 0.0f;
-    vertical = 0.0f;
-    zDir = 15.0f;
+    xRot = 115.0f;
+    zRot = 0.0f;
+    horizontal = 10.0f;
+    vertical = -90.0f;
+    zDir = 40.0f;
     zoom = 0.4f;
     
     roomDimension = 300.0f;
@@ -16,8 +16,8 @@ Camera::Camera() {
     horizontalBound1 = (-1)*(roomDimension*zoom/2);
     horizontalBound2 = (roomDimension*zoom/2);
 
-    verticalBound1 = (-1)*(roomDimension*zoom/2);
-    verticalBound2 = (roomDimension*zoom/2);
+    verticalBound1 = -100;
+    verticalBound2 = 30;
     
     rotate = false;
 }

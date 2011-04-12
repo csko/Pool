@@ -129,16 +129,16 @@ void drawFloor() {
     glBegin(GL_TRIANGLE_STRIP);
         glTexCoord2f(0.0,1.0);
         glNormal3f(0.0, -1.0, 0.0);
-    	glVertex3f(-150.0,-10.0,150.0);
+    	glVertex3f(-250.0,-10.0,250.0);
         glTexCoord2f(1.0,1.0);
         glNormal3f(0.0, -1.0, 0.0);
-    	glVertex3f(150.0,-10.0,150.0);
+    	glVertex3f(250.0,-10.0,250.0);
         glTexCoord2f(0.0,0.0);    	
         glNormal3f(0.0, -1.0, 0.0);
-    	glVertex3f(-150.0,-10.0,-150.0);
+    	glVertex3f(-250.0,-10.0,-250.0);
         glTexCoord2f(1.0,0.0);
         glNormal3f(0.0, -1.0, 0.0);        
-    	glVertex3f(150.0,-10.0,-150.0);    	
+    	glVertex3f(250.0,-10.0,-250.0);    	
     glEnd();
     glDisable(GL_TEXTURE_2D);
 }
@@ -150,16 +150,16 @@ void drawWall() {
     glBegin(GL_TRIANGLE_STRIP);
         glTexCoord2f(0.0,1.0);
         glNormal3f(0.0, -1.0, 0.0);
-    	glVertex3f(-150.0,-10.0,150.0);
+    	glVertex3f(-250.0,-10.0,250.0);
         glTexCoord2f(1.0,1.0);
         glNormal3f(0.0, -1.0, 0.0);
-    	glVertex3f(150.0,-10.0,150.0);
+    	glVertex3f(250.0,-10.0,250.0);
         glTexCoord2f(0.0,0.0);    	
         glNormal3f(0.0, -1.0, 0.0);
-    	glVertex3f(-150.0,-120.0,150.0);
+    	glVertex3f(-250.0,-220.0,250.0);
         glTexCoord2f(1.0,0.0);
         glNormal3f(0.0, -1.0, 0.0);        
-    	glVertex3f(150.0,-120.0,150.0);    	
+    	glVertex3f(250.0,-220.0,250.0);    	
     glEnd();
     glDisable(GL_TEXTURE_2D);
     
