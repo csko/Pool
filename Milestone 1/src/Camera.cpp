@@ -162,13 +162,18 @@ void Camera::cubicEaseInOutRotate(){
   	actualTime -= 2;
   	actualSpeed = (rotateSpeed)*(actualTime*actualTime*(actualTime + 2)) + rotateSpeed;
   }
-  rotated += actualSpeed;
   cout << "actualSpeed=" << actualSpeed << endl;
 }
 
 void Camera::rotateHorizontal() {
   cubicEaseInOutRotate();  
-  xRot += actualSpeed;
+  if ((rotated+actualSpeed)>withDeg) {
+  	  xRot += (withDeg-rotated);
+  	  rotated = withDeg;
+  } else {
+	  xRot += actualSpeed;
+	  rotated += actualSpeed;	  
+  }
   if(xRot < 0.0f)
     xRot = 355.0f;
   
@@ -177,11 +182,18 @@ void Camera::rotateHorizontal() {
   if (abs(rotated) >= abs(withDeg)) {
   	rotate = false;
   	cout << "Rotated horizontally " << rotated << endl;
+    cout << "xRot=" << xRot << endl;  	
   }
 }
 void Camera::rotateVertical() {
   cubicEaseInOutRotate();
-  zRot += actualSpeed;
+  if ((rotated+actualSpeed)>withDeg) {
+  	  zRot += (withDeg-rotated);
+  	  rotated = withDeg;
+  } else {
+	  zRot += actualSpeed;
+	  rotated += actualSpeed;
+  }
   
   if(zRot > 356.0f)
     zRot = 0.0f;
@@ -191,6 +203,7 @@ void Camera::rotateVertical() {
   if (abs(rotated) >= abs(withDeg)) {
        rotate = false;
        cout << "Rotated vertically " << rotated << endl;
+       cout << "zRot=" << zRot << endl;
   }       
 }
 
@@ -235,15 +248,15 @@ void Camera::doMove() {
 	
 	if ((xMoved >= xMoveLength)&&(yMoved >= yMoveLength)&&(zMoved >= zMoveLength)) {
 	  	move = false;
-  	cout << "Moved to (" << horizontal << "," << vertical << "," << zDir << ")" << endl;
-}	
+  		cout << "Moved to (" << horizontal << "," << vertical << "," << zDir << ")" << endl;
+	}	
 }
 
 void Camera::moveToPos(GLfloat x, GLfloat y, GLfloat z) {
 	/*horizontal = x;
 	vertical = y;
 	zDir = z;*/
-	
+		
 	move = true;
 	moveTime = 0;
 	

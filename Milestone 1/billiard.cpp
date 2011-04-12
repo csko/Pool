@@ -210,7 +210,8 @@ void keyboard (unsigned char key, int x, int y)
   switch(key){
     case 'z':
     case 'Z':
-		cam.moveToPos(40.0, -30.0, 15.0);
+		cam.moveToPos(10.0, -50.0, 10.0);
+		cam.rotateTo(-10.0, 1.0, HORIZONTAL);
         break;  
     case 'e':
     case 'E':
