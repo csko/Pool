@@ -262,7 +262,7 @@ void Camera::moveToPos(GLfloat x, GLfloat y, GLfloat z) {
 	
 	xMoved = yMoved = zMoved = 0.0f;
 	
-	xMoveLength = abs(x - horizontal);
+	xMoveLength = abs(x - horizontal)-35;
 	yMoveLength = abs(y - vertical);
 	zMoveLength = abs(z - zDir);
 	
