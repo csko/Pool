@@ -24,16 +24,19 @@ static int screen_width = 800;
 static int screen_height = 600;
 const static int timer = 10;
 
+static GLuint floorTexture;
+static GLuint wallTexture;
+
 // src/layout.cpp
 extern GLuint textures[16];
 extern obj_type object1, object2, object3;
 
-static GLfloat xRot = 110.0f;
-static GLfloat zRot = 0.0f;
-static GLfloat horizontal = 10.0f;
-static GLfloat vertical = -70.0f;
-static GLfloat zDir = 30.0f;
-static GLfloat zoom = 0.3f;
+static GLfloat xRot = 130.0f;
+static GLfloat zRot = 5.0f;
+static GLfloat horizontal = 0.0f;
+static GLfloat vertical = -20.0f;
+static GLfloat zDir = 10.0f;
+static GLfloat zoom = 0.1f;
 
 static int mouse_elozo_x = 0.0f;
 static bool mouse_init = false;
@@ -109,17 +112,127 @@ void init(void)
   textures[15] = TextureLoad("images/11.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
 
 }
+/**********************************************************
+ * 
+ * ROOM walls functions
+ *
+ **********************************************************/
+void drawFloor() {
+    floorTexture = TextureLoad("images/floor.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, floorTexture);
+    glBegin(GL_TRIANGLE_STRIP);
+        glTexCoord2f(0.0,1.0);
+        glNormal3f(0.0, -1.0, 0.0);
+    	glVertex3f(-150.0,-10.0,150.0);
+        glTexCoord2f(1.0,1.0);
+        glNormal3f(0.0, -1.0, 0.0);
+    	glVertex3f(150.0,-10.0,150.0);
+        glTexCoord2f(0.0,0.0);    	
+        glNormal3f(0.0, -1.0, 0.0);
+    	glVertex3f(-150.0,-10.0,-150.0);
+        glTexCoord2f(1.0,0.0);
+        glNormal3f(0.0, -1.0, 0.0);        
+    	glVertex3f(150.0,-10.0,-150.0);    	
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
+}
 
+void drawWall() {
+    wallTexture = TextureLoad("images/wallpaper3.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
+    //glEnable(GL_TEXTURE_2D);
+    //glBindTexture(GL_TEXTURE_2D, wallTexture);
+    glBegin(GL_TRIANGLE_STRIP);
+        glTexCoord2f(0.0,1.0);
+        glNormal3f(0.0, -1.0, 0.0);
+    	glVertex3f(-150.0,-10.0,150.0);
+        glTexCoord2f(1.0,1.0);
+        glNormal3f(0.0, -1.0, 0.0);
+    	glVertex3f(150.0,-10.0,150.0);
+        glTexCoord2f(0.0,0.0);    	
+        glNormal3f(0.0, -1.0, 0.0);
+    	glVertex3f(-150.0,-120.0,150.0);
+        glTexCoord2f(1.0,0.0);
+        glNormal3f(0.0, -1.0, 0.0);        
+    	glVertex3f(150.0,-120.0,150.0);    	
+    glEnd();
+    //glDisable(GL_TEXTURE_2D);
+    
+}
 /**********************************************************
  *
  * CAMERA functions 
  *
  **********************************************************/
-void rotateHorizontal(GLfloat degrees) {
-  xRot += degrees;
+static GLfloat withDeg;
+static GLfloat actualSpeed;
+static GLfloat rotateSpeed;
+static GLfloat duration;	//meddig tartana a forgás egyenletes sebességgel
+static GLfloat rotated;
+static int rotateTime;
+static bool isRotate = false;
+/*
+void cubicEaseInRotate() {
+  rotateTime++;
+  GLfloat actualTime = rotateTime / (duration);
+  actualSpeed = rotateSpeed*(actualTime*actualTime*actualTime) + rotateSpeed;
+  printf("startSpeed=%f\n",actualSpeed);
 }
-void rotateVertical(GLfloat degrees) {
-  zRot += degrees;
+void cubicEaseOutRotate() {
+  rotateTime++;
+  GLfloat actualTime = rotateTime / (duration) - 1;
+  actualSpeed = rotateSpeed*(actualTime*actualTime*actualTime + 1) + rotateSpeed;
+  printf("startSpeed=%f\n",actualSpeed);
+}*/
+void cubicEaseInOutRotate(){
+  rotateTime++;
+  GLfloat actualTime = rotateTime / (duration/2);
+  if (actualTime < 1) {
+  	actualSpeed = (rotateSpeed)*actualTime*actualTime*actualTime + rotateSpeed;
+  } else {
+  	actualTime -= 2;
+  	actualSpeed = (rotateSpeed)*(actualTime*actualTime*(actualTime + 2)) + rotateSpeed;
+  }
+  rotated += actualSpeed;
+  printf("actualSpeed=%f\n",actualSpeed);
+}
+
+void rotateHorizontal() {
+  cubicEaseInOutRotate();  
+  xRot += actualSpeed;
+  if(xRot < 0.0f)
+    xRot = 355.0f;
+  
+  if(xRot > 360.0f)
+    xRot = 5.0f;  
+  if (abs(rotated) >= abs(withDeg)) {
+  	isRotate = false;
+  	printf("Rotated horizontally %f\n", rotated);
+  }
+}
+void rotateVertical() {
+  cubicEaseInOutRotate();
+  zRot += actualSpeed;
+  
+  if(zRot > 356.0f)
+    zRot = 0.0f;
+  
+  if(zRot < 0.0f)
+    zRot = 355.0f;  
+  if (abs(rotated) >= abs(withDeg)) {
+       isRotate = false;
+       printf("Rotated vertically %f\n", rotated);
+  }       
+}
+
+//forgató függvény, paraméterben várja az elfordulás szögét és a másodpercenkénti szögelfordulást
+void rotateTo(GLfloat deg, GLfloat speed) {
+    withDeg = deg;
+    isRotate = true;
+    rotateSpeed = speed;
+    duration = withDeg / rotateSpeed;
+    rotateTime = 0;
+    rotated = 0;
 }
 
 /**********************************************************
@@ -145,10 +258,10 @@ void resize (int width, int height)
     glutPostRedisplay (); // This command redraw the scene (it calls the same routine of glutDisplayFunc)
 }
 
-
 void Timer(int value)
 {
     glutTimerFunc(timer, Timer, value + 1);
+    if (isRotate) rotateVertical();
 }
 
 /**********************************************************
@@ -166,31 +279,37 @@ void keyboard (unsigned char key, int x, int y)
   switch(key){
     case 'r':
     case 'R':
-        rotateVertical(90.0);
+	rotateTo(90.0, 5.0);
         break;
     case 's':
     case 'S':
         vertical -= 1.0;
+        printf("vertical=%f\n",vertical);
         break;
     case 'w':
     case 'W':
-        vertical += 1.0;
+        vertical += 1.0;        
+        printf("vertical=%f\n",vertical);
         break;
     case 'a':
     case 'A':
         horizontal += 1.0;
+        printf("horizontal=%f\n",horizontal);
         break;
     case 'd':
     case 'D':
         horizontal -= 1.0;
+        printf("horizontal=%f\n",horizontal);
         break;
     case 't':
     case 'T':
         zDir += 1.0;
+        printf("zDir=%f\n",zDir);
         break;
     case 'g':
     case 'G':
         zDir -= 1.0;
+        printf("zDir=%f\n",zDir);
         break;
     case 'q':
     case 'Q':
@@ -229,12 +348,12 @@ void keyboard (unsigned char key, int x, int y)
 void keyboard_s (int key, int x, int y)
 {
   if(key == GLUT_KEY_UP) {
-    xRot += 5.0f;
+    xRot -= 5.0f;
     printf("xRot=%f\n", xRot);
   }
   
   if(key == GLUT_KEY_DOWN) {
-    xRot -= 5.0f;
+    xRot += 5.0f;
     printf("xRot=%f\n", xRot);
   }
   
@@ -249,13 +368,21 @@ void keyboard_s (int key, int x, int y)
   }    
   
   if(key == GLUT_KEY_PAGE_UP) {  
-    zoom += 0.1f;
-    printf("zoom=%f\n", zoom);
+    if (zoom <= 0.1f) {
+    	zoom += 0.01f;
+    } else {
+	zoom += 0.1f;  
+    }
+    //printf("zoom=%f\n", zoom);
   }        
   
   if(key == GLUT_KEY_PAGE_DOWN) {
-    zoom -= 0.1f;  
-    printf("zoom=%f\n", zoom);
+    if (zoom <= 0.1f) {
+    	zoom -= 0.01f;
+    } else {
+	zoom -= 0.1f;  
+    }
+    //printf("zoom=%f\n", zoom);
   }            
    
   if(xRot < 0.0f)
@@ -273,8 +400,8 @@ void keyboard_s (int key, int x, int y)
   if(zoom > 1.0f)
     zoom = 1.0f;
 
-  if(zoom < 0.1f)
-    zoom = 0.1f;
+  if (zoom < 0.0f) 
+    zoom = 0.01f;
     
 }
 void mouse(int button, int state, int x, int y)
@@ -322,6 +449,8 @@ void display(void)
     drawAbout();
     glTranslatef(-40,-28.0,0.0);
     
+    //glTranslatef(-horizontal,-vertical,-zDir);
+    
     glRotatef(xRot, 1.0f, 0.0, 0.0);    
     glRotatef(zRot, 0.0f, 0.0, 1.0);
     //gluLookAt(vertical, horizontal, zDir, vertical+10.0, horizontal, zDir, 0.0, 0.0, 1.0);    
@@ -333,12 +462,28 @@ void display(void)
 glPushMatrix();
     glColor3f(0.5,0.5,0.5);
     glRotatef(90.0, 1.0, 0.0, 0.0);
-    glBegin(GL_TRIANGLE_STRIP);
-    	glVertex3f(-120.0,-10.0,200.0);
-    	glVertex3f(70.0,-10.0,200.0);
-    	glVertex3f(-120.0,-10.0,-100.0);
-    	glVertex3f(70.0,-10.0,-100.0);    	
-    glEnd();
+    glPushMatrix();
+	drawFloor();
+    glPopMatrix();
+   /* glPushMatrix();
+        glTranslatef(0.0,0.0,0.0);    
+        drawWall();
+    glPopMatrix();
+    glPushMatrix();
+    	glRotatef(180.0, 0.0, 1.0, 0.0);
+        glTranslatef(0.0,0.0,0.0);
+	drawWall();    
+    glPopMatrix();
+    glPushMatrix();
+    	glRotatef(90.0, 0.0, 1.0, 0.0);
+        glTranslatef(0.0,0.0,0.0);
+	drawWall();    
+    glPopMatrix();
+    glPushMatrix();
+    	glRotatef(-90.0, 0.0, 1.0, 0.0);
+        glTranslatef(0.0,0.0,0.0);
+	drawWall();    
+    glPopMatrix();     */   
 glPopMatrix();
 glPushMatrix();
     glRotatef(180.0, 0.0f, 1.0f, 0.0f);	//megforgattam a tárgyakat, mert így könnyebb a kameramozgást felügyelni
