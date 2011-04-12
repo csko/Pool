@@ -449,7 +449,6 @@ void display(void)
     drawAbout();
     glTranslatef(-40,-28.0,0.0);
     
-    //glTranslatef(-horizontal,-vertical,-zDir);
     
     glRotatef(xRot, 1.0f, 0.0, 0.0);    
     glRotatef(zRot, 0.0f, 0.0, 1.0);
