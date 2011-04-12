@@ -31,11 +31,11 @@ static GLuint wallTexture;
 extern GLuint textures[16];
 extern obj_type object1, object2, object3;
 
-static GLfloat xRot = 120.0f;
+static GLfloat xRot = 130.0f;
 static GLfloat zRot = 0.0f;
-static GLfloat horizontal = 0.0f;
-static GLfloat vertical = 0.0f;
-static GLfloat zDir = 0.0f;
+static GLfloat horizontal = 2.5f;
+static GLfloat vertical = -20.0f;
+static GLfloat zDir = 15.0f;
 static GLfloat zoom = 0.1f;
 
 static int mouse_elozo_x = 0.0f;
@@ -110,8 +110,8 @@ void init(void)
   textures[13] = TextureLoad("images/13.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
   textures[14] = TextureLoad("images/1.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
   textures[15] = TextureLoad("images/11.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
-    floorTexture = TextureLoad("images/floor.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
     wallTexture = TextureLoad("images/wallpaper3.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
+    floorTexture = TextureLoad("images/floor.bmp", GL_FALSE, GL_LINEAR, GL_LINEAR, GL_REPEAT);
 }
 /**********************************************************
  * 
@@ -140,6 +140,7 @@ void drawFloor() {
 }
 
 void drawWall() {
+
     //glEnable(GL_TEXTURE_2D);
     //glBindTexture(GL_TEXTURE_2D, wallTexture);
     glBegin(GL_TRIANGLE_STRIP);
@@ -283,12 +284,12 @@ void keyboard (unsigned char key, int x, int y)
         break;
     case 's':
     case 'S':
-        vertical += 1.0;
+        vertical -= 1.0;
         printf("vertical=%f\n",vertical);
         break;
     case 'w':
     case 'W':
-        vertical -= 1.0;        
+        vertical += 1.0;        
         printf("vertical=%f\n",vertical);
         break;
     case 'a':
@@ -442,15 +443,20 @@ void display(void)
     glMatrixMode(GL_MODELVIEW); // Modeling transformation
     glLoadIdentity(); // Initialize the model matrix as identity
 
-    glEnable(GL_DEPTH_TEST);    
+    glEnable(GL_DEPTH_TEST);
 
-    glTranslatef(horizontal,vertical,zDir); // We move the object forward (the model matrix is multiplied by the translation matrix
+
+    glTranslatef(40,28.0,0.0);
+    drawAbout();
+    glTranslatef(-40,-28.0,0.0);
+    
+    //glTranslatef(-horizontal,-vertical,-zDir);
     
     glRotatef(xRot, 1.0f, 0.0, 0.0);    
     glRotatef(zRot, 0.0f, 0.0, 1.0);
     //gluLookAt(vertical, horizontal, zDir, vertical+10.0, horizontal, zDir, 0.0, 0.0, 1.0);    
-    glTranslatef(2.5,-20,10);
-
+    
+    glTranslatef(horizontal,vertical,zDir); // We move the object forward (the model matrix is multiplied by the translation matrix
     
     glScalef(zoom,zoom,zoom);      
     glRotatef(180, 0.0, 0.0, 1.0);
