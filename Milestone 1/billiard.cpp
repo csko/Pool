@@ -8,6 +8,7 @@
 #include "include/texture.h"
 #include "include/game.h"
 #include "include/layout.h"
+#include "include/Camera.h"
 
 #include <iostream>
 using namespace std;
@@ -31,12 +32,13 @@ static GLuint wallTexture;
 extern GLuint textures[16];
 extern obj_type object1, object2, object3;
 
+/*
 static GLfloat xRot = 130.0f;
 static GLfloat zRot = 0.0f;
 static GLfloat horizontal = 2.5f;
 static GLfloat vertical = -20.0f;
 static GLfloat zDir = 15.0f;
-static GLfloat zoom = 0.1f;
+static GLfloat zoom = 0.1f;*/
 
 static int mouse_elozo_x = 0.0f;
 static bool mouse_init = false;
@@ -48,6 +50,8 @@ extern Vector movement[16];
 extern struct golyo golyok[16];
 extern bool isMovement;
 extern Game game;
+
+static Camera cam;
 
 void BitmapText(GLfloat x, GLfloat y, char *string)
 {
@@ -141,8 +145,8 @@ void drawFloor() {
 
 void drawWall() {
 
-    //glEnable(GL_TEXTURE_2D);
-    //glBindTexture(GL_TEXTURE_2D, wallTexture);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, wallTexture);
     glBegin(GL_TRIANGLE_STRIP);
         glTexCoord2f(0.0,1.0);
         glNormal3f(0.0, -1.0, 0.0);
@@ -157,83 +161,8 @@ void drawWall() {
         glNormal3f(0.0, -1.0, 0.0);        
     	glVertex3f(150.0,-120.0,150.0);    	
     glEnd();
-    //glDisable(GL_TEXTURE_2D);
+    glDisable(GL_TEXTURE_2D);
     
-}
-/**********************************************************
- *
- * CAMERA functions 
- *
- **********************************************************/
-static GLfloat withDeg;
-static GLfloat actualSpeed;
-static GLfloat rotateSpeed;
-static GLfloat duration;	//meddig tartana a forgás egyenletes sebességgel
-static GLfloat rotated;
-static int rotateTime;
-static bool isRotate = false;
-/*
-void cubicEaseInRotate() {
-  rotateTime++;
-  GLfloat actualTime = rotateTime / (duration);
-  actualSpeed = rotateSpeed*(actualTime*actualTime*actualTime) + rotateSpeed;
-  printf("startSpeed=%f\n",actualSpeed);
-}
-void cubicEaseOutRotate() {
-  rotateTime++;
-  GLfloat actualTime = rotateTime / (duration) - 1;
-  actualSpeed = rotateSpeed*(actualTime*actualTime*actualTime + 1) + rotateSpeed;
-  printf("startSpeed=%f\n",actualSpeed);
-}*/
-void cubicEaseInOutRotate(){
-  rotateTime++;
-  GLfloat actualTime = rotateTime / (duration/2);
-  if (actualTime < 1) {
-  	actualSpeed = (rotateSpeed)*actualTime*actualTime*actualTime + rotateSpeed;
-  } else {
-  	actualTime -= 2;
-  	actualSpeed = (rotateSpeed)*(actualTime*actualTime*(actualTime + 2)) + rotateSpeed;
-  }
-  rotated += actualSpeed;
-  printf("actualSpeed=%f\n",actualSpeed);
-}
-
-void rotateHorizontal() {
-  cubicEaseInOutRotate();  
-  xRot += actualSpeed;
-  if(xRot < 0.0f)
-    xRot = 355.0f;
-  
-  if(xRot > 360.0f)
-    xRot = 5.0f;  
-  if (abs(rotated) >= abs(withDeg)) {
-  	isRotate = false;
-  	printf("Rotated horizontally %f\n", rotated);
-  }
-}
-void rotateVertical() {
-  cubicEaseInOutRotate();
-  zRot += actualSpeed;
-  
-  if(zRot > 356.0f)
-    zRot = 0.0f;
-  
-  if(zRot < 0.0f)
-    zRot = 355.0f;  
-  if (abs(rotated) >= abs(withDeg)) {
-       isRotate = false;
-       printf("Rotated vertically %f\n", rotated);
-  }       
-}
-
-//forgató függvény, paraméterben várja az elfordulás szögét és a másodpercenkénti szögelfordulást
-void rotateTo(GLfloat deg, GLfloat speed) {
-    withDeg = deg;
-    isRotate = true;
-    rotateSpeed = speed;
-    duration = withDeg / rotateSpeed;
-    rotateTime = 0;
-    rotated = 0;
 }
 
 /**********************************************************
@@ -262,7 +191,8 @@ void resize (int width, int height)
 void Timer(int value)
 {
     glutTimerFunc(timer, Timer, value + 1);
-    if (isRotate) rotateVertical();
+    if (cam.isRotate()) cam.doRotate();
+    if (cam.isMove()) cam.doMove();
 }
 
 /**********************************************************
@@ -278,39 +208,47 @@ void keyboard (unsigned char key, int x, int y)
 
 //  int state = glutGetModifiers();
   switch(key){
+    case 'z':
+    case 'Z':
+		cam.moveToPos(40.0, -30.0, 15.0);
+        break;  
+    case 'e':
+    case 'E':
+    	if (!cam.isRotate())
+			cam.rotateTo(90.0, 5.0, HORIZONTAL);
+		else 
+			cout << "Rotation in process..." << endl;
+        break;        
     case 'r':
     case 'R':
-	rotateTo(90.0, 5.0);
+    	if (!cam.isRotate())
+			cam.rotateTo(90.0, 5.0, VERTICAL);
+		else 
+			cout << "Rotation in process..." << endl;			
         break;
     case 's':
     case 'S':
-        vertical -= 1.0;
-        printf("vertical=%f\n",vertical);
+        cam.decVertical(1.0);
         break;
     case 'w':
     case 'W':
-        vertical += 1.0;        
-        printf("vertical=%f\n",vertical);
+        cam.incVertical(1.0);        
         break;
     case 'a':
     case 'A':
-        horizontal += 1.0;
-        printf("horizontal=%f\n",horizontal);
+        cam.incHorizontal(1.0);
         break;
     case 'd':
     case 'D':
-        horizontal -= 1.0;
-        printf("horizontal=%f\n",horizontal);
+        cam.decHorizontal(1.0);
         break;
     case 't':
     case 'T':
-        zDir += 1.0;
-        printf("zDir=%f\n",zDir);
+        cam.incZDir(1.0);
         break;
     case 'g':
     case 'G':
-        zDir -= 1.0;
-        printf("zDir=%f\n",zDir);
+        cam.decZDir(1.0);
         break;
     case 'q':
     case 'Q':
@@ -349,61 +287,36 @@ void keyboard (unsigned char key, int x, int y)
 void keyboard_s (int key, int x, int y)
 {
   if(key == GLUT_KEY_UP) {
-    xRot -= 5.0f;
-    printf("xRot=%f\n", xRot);
+    cam.decXRot(5.0f);
   }
   
   if(key == GLUT_KEY_DOWN) {
-    xRot += 5.0f;
-    printf("xRot=%f\n", xRot);
+    cam.incXRot(5.0f);
   }
   
   if(key == GLUT_KEY_LEFT) {
-    zRot += 5.0f;
-    printf("zRot=%f\n", zRot);
+    cam.incZRot(5.0f);
   }    
   
   if(key == GLUT_KEY_RIGHT) {
-    zRot -= 5.0f;
-    printf("zRot=%f\n", zRot);
+    cam.decZRot(5.0f);
   }    
   
   if(key == GLUT_KEY_PAGE_UP) {  
-    if (zoom <= 0.1f) {
-    	zoom += 0.01f;
+    if (cam.getZoom() <= 0.1f) {
+    	cam.incZoom(0.01f);
     } else {
-	zoom += 0.1f;  
+	cam.incZoom(0.1f);
     }
-    //printf("zoom=%f\n", zoom);
   }        
   
   if(key == GLUT_KEY_PAGE_DOWN) {
-    if (zoom <= 0.1f) {
-    	zoom -= 0.01f;
+    if (cam.getZoom() <= 0.1f) {
+    	cam.decZoom(0.01f);
     } else {
-	zoom -= 0.1f;  
+	cam.decZoom(0.1f);
     }
-    //printf("zoom=%f\n", zoom);
-  }            
-   
-  if(xRot < 0.0f)
-    xRot = 355.0f;
-  
-  if(xRot > 360.0f)
-    xRot = 5.0f;
-  
-  if(zRot > 356.0f)
-    zRot = 0.0f;
-  
-  if(zRot < 0.0f)
-    zRot = 355.0f;
-    
-  if(zoom > 1.0f)
-    zoom = 1.0f;
-
-  if (zoom < 0.0f) 
-    zoom = 0.01f;
-    
+  }                
 }
 void mouse(int button, int state, int x, int y)
 {
@@ -452,13 +365,14 @@ void display(void)
     
     //glTranslatef(-horizontal,-vertical,-zDir);
     
-    glRotatef(xRot, 1.0f, 0.0, 0.0);    
-    glRotatef(zRot, 0.0f, 0.0, 1.0);
+    //glRotatef(xRot, 1.0f, 0.0, 0.0);    
+    //glRotatef(zRot, 0.0f, 0.0, 1.0);
     //gluLookAt(vertical, horizontal, zDir, vertical+10.0, horizontal, zDir, 0.0, 0.0, 1.0);    
     
-    glTranslatef(horizontal,vertical,zDir); // We move the object forward (the model matrix is multiplied by the translation matrix
+    //glTranslatef(horizontal,vertical,zDir); // We move the object forward (the model matrix is multiplied by the translation matrix
     
-    glScalef(zoom,zoom,zoom);      
+    //glScalef(zoom,zoom,zoom);      
+    cam.view();
     glRotatef(180, 0.0, 0.0, 1.0);
 glPushMatrix();
     glColor3f(0.5,0.5,0.5);
@@ -466,7 +380,7 @@ glPushMatrix();
     glPushMatrix();
 	drawFloor();
     glPopMatrix();
-   /* glPushMatrix();
+    glPushMatrix();
         glTranslatef(0.0,0.0,0.0);    
         drawWall();
     glPopMatrix();
@@ -484,7 +398,7 @@ glPushMatrix();
     	glRotatef(-90.0, 0.0, 1.0, 0.0);
         glTranslatef(0.0,0.0,0.0);
 	drawWall();    
-    glPopMatrix();     */   
+    glPopMatrix();        
 glPopMatrix();
 glPushMatrix();
     glRotatef(180.0, 0.0f, 1.0f, 0.0f);	//megforgattam a tárgyakat, mert így könnyebb a kameramozgást felügyelni
