@@ -17,6 +17,7 @@ static GLfloat golyoSugar = 2.0f;
 
 // src/game.cpp
 extern struct golyo golyok[16];
+extern bool disabled[16];
 extern Vector white;
 extern bool isMovement;
 extern Game game;
@@ -24,6 +25,10 @@ extern Game game;
 void golyokInit(){
   golyok[0].x = -25;
   golyok[0].y = -50;
+
+  for(int i = 0; i <= 15; i++){
+    disabled[i] = false;
+  }
 
   gInit = 1;
   int i;
@@ -79,6 +84,7 @@ void DrawGolyok(){
     golyokInit();
     game.init();
   }
+  if(!disabled[0]){
   glPushMatrix();
     glColor3f(1,1,1);
     glTranslatef(golyok[0].x, golyok[0].y, 0);
@@ -95,8 +101,12 @@ void DrawGolyok(){
     gluSphere(qobj,golyoSugar,15,15);
     gluDeleteQuadric(qobj);
   glPopMatrix();
+  }
   int i;
   for(i=1;i<=15;i++){
+    if(disabled[i]){
+        continue;
+    }
     glColor3f(1,1,1);
     glPushMatrix();
       glTranslatef(golyok[i].x, golyok[i].y, 0);

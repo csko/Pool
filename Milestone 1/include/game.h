@@ -18,6 +18,7 @@ class GameState {
         void init();
         void hit(float x, float y);
         void updateBalls();
+        void removeBall(int id);
     private:
         float32 timeStep;
         int32 velocityIterations;

@@ -5,8 +5,13 @@ using namespace std;
 Vector white(0, 60);
 Vector movement[16];
 struct golyo golyok[16];
+bool disabled[16];
 bool isMovement = false;
 Game game;
+
+float holes[6][2] = {{8.18, 24.89},{7.88, -27.43},{8.2, -2.11},
+                     {-57.68, -27.42},{-58, 24.89},{-58, -81.03}
+                     };
 
 void balraIrany(){
     if(!isMovement){
@@ -53,6 +58,20 @@ void Game::hit(){
 
 void Game::updateBalls(){
     state->updateBalls();
+    for(int i = 0; i <= 15; i++){
+        for(int j = 0; j < 6; j++){
+            int x = holes[j][0];
+            int y = holes[j][1];
+            int px = golyok[i].x;
+            int py = golyok[i].y;
+            if((x-px)*(x-px) + (y-py)*(y-py) < 20){
+                disabled[i] = true;
+                state->removeBall(i);
+                // TODO: remove from state
+                // TODO: cue ball reset, 8-ball, etc.
+            }
+        }
+    }
 }
 
 Game::~Game(){
@@ -73,11 +92,11 @@ GameState::GameState(b2Vec2 gravity, bool doSleep) : world(gravity, doSleep){
     ballShape.m_radius = 2.0f;
 
     ballFixture.shape = &ballShape;
-    ballFixture.density = 1.0f;
-    ballFixture.friction = 0.5f;
-    ballFixture.restitution = 0.5f;
+    ballFixture.density = 10.0f;
+    ballFixture.friction = 0.8f;
+    ballFixture.restitution = 0.8f;
     ballDef.type = b2_dynamicBody;
-    ballDef.linearDamping = 0.6f; // TODO: angular damping
+    ballDef.linearDamping = 0.5f; // TODO: angular damping
 
     // Side definition
     b2PolygonShape sideShape;
@@ -162,3 +181,6 @@ void GameState::updateBalls(){
     }
 }
 
+void GameState::removeBall(int id){
+    // TODO
+}
