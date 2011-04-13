@@ -1,6 +1,15 @@
 #include "../include/Camera.h"
 #include <iostream>
 
+#define _HACK
+
+#ifdef _HACK
+GLfloat abs(GLfloat a){
+    return a < 0 ? -a : a;
+}
+#else
+#endif
+
 using namespace std;
 
 Camera::Camera() {

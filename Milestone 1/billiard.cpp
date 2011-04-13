@@ -24,6 +24,7 @@ using namespace std;
 static int screen_width = 800;
 static int screen_height = 600;
 const static int timer = 10;
+static bool doHelp = 0;
 
 static GLuint floorTexture;
 static GLuint wallTexture;
@@ -64,7 +65,7 @@ void BitmapText(GLfloat x, GLfloat y, char *string)
 }
 
 
-void drawAbout()
+void drawHelp()
 {
     glColor3f(1,1,1);
     BitmapText(-20.0f, 21.0f, "Billiárd");
@@ -72,6 +73,18 @@ void drawAbout()
     BitmapText(-20.0f, 15.0f, "Fejlett Grafikai Algoritmusok");
     BitmapText(-20.0f, 12.0f, "SZTE PTI MsC 2010/11 oszi felev");
 }
+
+void drawAbout()
+{
+    if(doHelp){
+        glColor3f(1,1,1);
+        BitmapText(-20.0f, 21.0f, "Billiárd");
+        BitmapText(-20.0f, 18.0f, "Bordé Sándor, Csernai Kornél, Ladányi Gergely");
+        BitmapText(-20.0f, 15.0f, "Fejlett Grafikai Algoritmusok");
+        BitmapText(-20.0f, 12.0f, "SZTE PTI MsC 2010/11 oszi felev");
+    }
+}
+
 void init(void)
 {
     glShadeModel(GL_SMOOTH); // Type of shading for the polygons
@@ -269,6 +282,9 @@ void keyboard (unsigned char key, int x, int y)
     case '2':
         gyengit();
         break;
+    case 'h':
+        doHelp = ~doHelp;
+        break;
     default:
         cout << "Unknown key pressed: " << key << endl;
     }
@@ -361,6 +377,7 @@ void display(void)
 
     glTranslatef(40,28.0,0.0);
     drawAbout();
+    drawHelp();
     glTranslatef(-40,-28.0,0.0);
     
     //glTranslatef(-horizontal,-vertical,-zDir);
