@@ -65,7 +65,7 @@ void BitmapText(GLfloat x, GLfloat y, char *string)
 }
 
 
-void drawHelp()
+void drawAbout()
 {
     glColor3f(1,1,1);
     BitmapText(-20.0f, 21.0f, "Billiárd");
@@ -74,14 +74,15 @@ void drawHelp()
     BitmapText(-20.0f, 12.0f, "SZTE PTI MsC 2010/11 oszi felev");
 }
 
-void drawAbout()
+void drawHelp()
 {
     if(doHelp){
         glColor3f(1,1,1);
-        BitmapText(-20.0f, 21.0f, "Billiárd");
-        BitmapText(-20.0f, 18.0f, "Bordé Sándor, Csernai Kornél, Ladányi Gergely");
-        BitmapText(-20.0f, 15.0f, "Fejlett Grafikai Algoritmusok");
-        BitmapText(-20.0f, 12.0f, "SZTE PTI MsC 2010/11 oszi felev");
+        BitmapText(-20.0f, 21.0f, "Hasznalhato billentyuk:");
+        BitmapText(-20.0f, 18.0f, "a,s,d,w - kamera pozicionalasa");
+        BitmapText(-20.0f, 15.0f, "fel,le - kamera iranyitasa");
+        BitmapText(-20.0f, 12.0f, "2,4,6,8 - feher golyo celzasa");
+        BitmapText(-20.0f, 9.0f,  "space - feher golyo kilovese");
     }
 }
 
@@ -283,7 +284,7 @@ void keyboard (unsigned char key, int x, int y)
         gyengit();
         break;
     case 'h':
-        doHelp = ~doHelp;
+        doHelp = !doHelp;
         break;
     default:
         cout << "Unknown key pressed: " << key << endl;
@@ -374,10 +375,9 @@ void display(void)
 
     glEnable(GL_DEPTH_TEST);
 
-
     glTranslatef(40,28.0,0.0);
-    drawAbout();
     drawHelp();
+    drawAbout();
     glTranslatef(-40,-28.0,0.0);
     
     //glTranslatef(-horizontal,-vertical,-zDir);
