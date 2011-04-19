@@ -34,6 +34,9 @@ private:
    
    GLfloat xRot;
    GLfloat zRot;
+   GLfloat moveX; 
+   GLfloat moveZ; 
+   GLfloat moveY; 
    GLfloat horizontal;
    GLfloat vertical;
    GLfloat zDir;

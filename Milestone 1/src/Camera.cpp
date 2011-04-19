@@ -13,32 +13,28 @@ GLfloat abs(GLfloat a){
 using namespace std;
 
 Camera::Camera() {
-    xRot = 115.0f;
+    xRot = 0.0f;
     zRot = 0.0f;
-    horizontal = 10.0f;
-    vertical = -90.0f;
-    zDir = 40.0f;
-    zoom = 0.4f;
+    horizontal = 0.0f;
+    vertical = 0.0f;
+    zDir = 0.0f;
+    zoom = 1.0f;
     
     roomDimension = 300.0f;
     
     horizontalBound1 = (-1)*(roomDimension*zoom/2);
     horizontalBound2 = (roomDimension*zoom/2);
 
-    verticalBound1 = -100;
-    verticalBound2 = 30;
+    verticalBound1 = -65;
+    verticalBound2 = 150;
     
     rotate = false;
 }
 
 void Camera::view() {
-    //kameramozgató transzformációk
-    //glRotatef(xRot, 1.0f, 0.0f, 0.0f);
-    //glRotatef(zRot, 0.0f, 0.0f, 1.0f);
+    glTranslatef(horizontal,zDir, vertical);   
     glRotatef(xRot, 1.0f, 0.0f, 0.0f);
-    glRotatef(zRot, 0.0f, 0.0f, 1.0f);    
-    glTranslatef(horizontal,vertical, 0.0);    
-    glTranslatef(0.0,0.0, zDir);
+    glRotatef(zRot, 0.0f, 1.0f, 0.0f);     
     glScalef(zoom,zoom,zoom);    
 }
 
@@ -262,16 +258,15 @@ void Camera::doMove() {
 }
 
 void Camera::moveToPos(GLfloat x, GLfloat y, GLfloat z) {
-	/*horizontal = x;
-	vertical = y;
-	zDir = z;*/
+        x*=-1;
+        y*=-1;
 		
 	move = true;
 	moveTime = 0;
 	
 	xMoved = yMoved = zMoved = 0.0f;
 	
-	xMoveLength = abs(x - horizontal)-35;
+	xMoveLength = abs(x - horizontal);
 	yMoveLength = abs(y - vertical);
 	zMoveLength = abs(z - zDir);
 	

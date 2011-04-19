@@ -3,15 +3,15 @@
 
 using namespace std;
 
-Vector white(0, 60);
+Vector white(0, -60);
 Vector movement[16];
 struct golyo golyok[16];
 bool disabled[16];
 bool isMovement = false;
 Game game;
 
-float holes[6][2] = {{8.18, 24.89},{7.88, -27.43},{8.2, -2.11},
-                     {-57.68, -27.42},{-58, 24.89},{-58, -81.03}
+float holes[6][2] = {{25.549, -50},{27.564, 0},{25.549, 51},
+                     {-25.549, 51},{-27.564, 0},{-25.549, -50.275}
                      };
 
 void balraIrany(){
@@ -76,7 +76,7 @@ GameState::GameState(b2Vec2 gravity, bool doSleep) : world(gravity, doSleep){
 
     // Ball definition
 
-    ballShape.m_radius = 2.0f;
+    ballShape.m_radius = 1.5f;
 
     ballFixture.shape = &ballShape;
     ballFixture.density = 10.0f;
@@ -93,22 +93,22 @@ GameState::GameState(b2Vec2 gravity, bool doSleep) : world(gravity, doSleep){
 
     // Create the 4 sides
 
-    sideDef.position.Set(-60.4f, -84.29f);
+    sideDef.position.Set(-25.0f, -49.0f);
     sideShape.SetAsBox(500.0f, 0.1f);
     sides[0] = world.CreateBody(&sideDef);
     sides[0]->CreateFixture(&sideShape, 0.0f);
 
-    sideDef.position.Set(-60.4f, -84.29f);
+    sideDef.position.Set(-25.0f, -49.0f);
     sideShape.SetAsBox(0.1f, 500.0f);
     sides[1] = world.CreateBody(&sideDef);
     sides[1]->CreateFixture(&sideShape, 0.0f);
 
-    sideDef.position.Set(10.6f, 28.14f);
+    sideDef.position.Set(25.0f, 49.0f);
     sideShape.SetAsBox(0.1f, 500.0f);
     sides[2] = world.CreateBody(&sideDef);
     sides[2]->CreateFixture(&sideShape, 0.0f);
 
-    sideDef.position.Set(10.6f, 28.14f);
+    sideDef.position.Set(25.0f, 49.0f);
     sideShape.SetAsBox(500.0f, 0.1f);
     sides[3] = world.CreateBody(&sideDef);
     sides[3]->CreateFixture(&sideShape, 0.0f);
@@ -166,7 +166,7 @@ void GameState::updateBalls(){
 //                    cout << "reset" << endl;
                     world.DestroyBody(balls[0]);
 
-                    ballDef.position.Set(-25, -50); // TODO
+                    ballDef.position.Set(0, 25); // TODO
                     lastpos[0].Set(golyok[0].x, golyok[0].y);
                     balls[0] = world.CreateBody(&ballDef);
                     balls[0]->CreateFixture(&ballFixture);

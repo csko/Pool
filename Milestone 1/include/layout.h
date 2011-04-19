@@ -1,9 +1,33 @@
 #ifndef _LAYOUT_H_
 #define _LAYOUT_H_
 #include "billiard.h"
-
-void golyokInit();
-void DrawGolyok();
-void axes();
-void texturazas(obj_type object1);
+#include "texturefunctions.h"
+#include "game.h"
 #endif
+
+using namespace std;
+
+class Layout {
+	public:
+		Layout();
+		void initGolyok();
+		void drawGolyok();
+		void drawTable();
+		void drawWall();
+		void drawFloor();
+		void drawAxes();
+		void drawEnv();
+		void drawAbout(int doAbout);
+		void drawHelp(int doHelp);
+		void BitmapText(GLfloat x, GLfloat y, char *string);
+	private:
+		Image ballsImage[16];
+		Image f0;
+		Image f1;
+		Image f2;
+		Image floor;
+		Image wall;
+		GLfloat sugar;
+		bool disabled[16];
+		int gInit;
+};
