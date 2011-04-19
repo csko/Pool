@@ -83,7 +83,7 @@ GameState::GameState(b2Vec2 gravity, bool doSleep) : world(gravity, doSleep){
     ballFixture.friction = 0.8f;
     ballFixture.restitution = 0.8f;
     ballDef.type = b2_dynamicBody;
-    ballDef.linearDamping = 0.5f; // TODO: angular damping
+    ballDef.linearDamping = 0.7f; // TODO: angular damping
 
     // Side definition
     b2PolygonShape sideShape;
@@ -158,7 +158,7 @@ void GameState::updateBalls(){
             int y = holes[j][1];
             int px = golyok[i].x;
             int py = golyok[i].y;
-            if((x-px)*(x-px) + (y-py)*(y-py) < 20){
+            if((x-px)*(x-px) + (y-py)*(y-py) < 30){
                 if(i != 0){
                     disabled[i] = true;
                     removeBall(i);

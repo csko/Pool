@@ -14,6 +14,8 @@ extern struct golyo golyok[16];
 extern bool isMovement;
 extern Vector white;
 extern Game game;
+extern bool disabled[16];
+
 Layout layout;
 Layout::Layout(){
     sugar = 1.5f;

@@ -28,6 +28,5 @@ class Layout {
 		Image floor;
 		Image wall;
 		GLfloat sugar;
-		bool disabled[16];
 		int gInit;
 };
