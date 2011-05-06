@@ -19,7 +19,12 @@ class Layout {
 		void drawEnv();
 		void drawAbout(int doAbout);
 		void drawHelp(int doHelp);
+                void drawScore(int doScore);
 		void BitmapText(GLfloat x, GLfloat y, char *string);
+
+
+
+
 	private:
 		Image ballsImage[16];
 		Image f0;

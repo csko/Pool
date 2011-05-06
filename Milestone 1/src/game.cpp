@@ -10,6 +10,29 @@ bool disabled[16];
 bool isMovement = false;
 Game game;
 
+char* player1="Player1";
+char* player2="Player2";
+bool p1Balls[16] = {false, false, true, true, false, false, false, true, true, false, true, false, true, false, true, false};
+bool p2Balls[16] = {false, true, false, false, true, false, true, false, false, true, false, true, false, true, false, true};
+int p1Score = 0;
+int p2Score = 0;
+bool p1Turn=true;
+bool p2Turn=false;
+int stepNum = 1; //hanyszor kovetkezik az adott jatekos meg
+bool end = false; //vege van-e a jateknak
+int winner = 0; //ki a nyertes
+bool isRoundOver = true;
+//milyen esemény történt egy ütés során
+bool blackHole = false; //lement a fekete
+bool whiteHole = false; //lement a feher
+bool p1Ball = false; //ment le tomor golyo 
+bool p2Ball = false; //ment le csikos golyo
+bool firstTouchP1Ball = false; //elso erintett golyo tomor volt
+bool firstTouchP2Ball = false; //elso erintett golyo csikos volt
+bool firstTouchBlack = false; //elso erintett golyo fekete volt
+
+
+
 float holes[6][2] = {{25.549, -50},{27.564, 0},{25.549, 51},
                      {-25.549, 51},{-27.564, 0},{-25.549, -50.275}
                      };
@@ -54,6 +77,7 @@ Game::Game(){
 void Game::hit(){
     if(!isMovement){
         state->hit(white.getX(), white.getY());
+        isRoundOver = false;
     }
 }
 
@@ -67,6 +91,99 @@ Game::~Game(){
 
 void Game::init(){
     state->init();
+}
+
+bool Game::getP1Turn(){
+    return p1Turn;
+}
+bool Game::getEnd(){
+    return end;
+}
+void Game::setEnd(bool e){
+    end = e;
+}
+int Game::getP1Score(){
+    return p1Score;
+}
+int Game::getP2Score(){
+    return p2Score;
+}
+
+void Game::roundOver(){
+    isRoundOver = true;
+    if(p1Turn){
+       if(blackHole){
+           if(p1Score == 7){
+               winner = 1;
+               end = true;
+           }else{
+               winner = 2;
+               end = true;
+           }
+       }
+       if(p1Ball && !p2Ball){
+           stepNum = 1;
+       }
+       if(!p1Ball && p2Ball){
+           stepNum = 1;
+           p2Turn = true; p1Turn = false;
+       }
+       if(!p1Ball && !p2Ball){
+           if(stepNum==2){stepNum--;}
+           else{p2Turn = true; p1Turn = false;}
+       }
+       if(p1Ball && p2Ball){
+           stepNum = 1;
+           p2Turn = true;
+           p1Turn = false;
+       }
+       if(whiteHole){
+           p2Turn = true;
+           p1Turn = false;
+           stepNum = 2;
+       }
+    }else{
+       if(blackHole){
+           if(p2Score == 7){
+               winner = 2;
+               end = true;
+           }else{
+               winner = 1;
+               end = true;
+           }
+       }
+       if(!p1Ball && p2Ball){
+           stepNum = 1;
+       }
+       if(p1Ball && !p2Ball){
+           stepNum = 1;
+           p2Turn = false; p1Turn = true;
+       }
+       if(!p1Ball && !p2Ball){
+           if(stepNum==2){stepNum--;}
+           else{p2Turn = false; p1Turn = true;}
+       }
+       if(p1Ball && p2Ball){
+           stepNum = 1;
+           p2Turn = false;
+           p1Turn = true;
+       }
+       if(whiteHole){
+           p2Turn = false;
+           p1Turn = true;
+           stepNum = 2;
+       }
+    }
+    p1Ball = false;
+    p2Ball = false;
+    whiteHole = false;    
+    blackHole = false;
+    if(end){
+        p1Turn = 1;
+        p1Score = 0;
+        p2Score = 0;
+        stepNum = 1;   
+    }
 }
 
 GameState::GameState(b2Vec2 gravity, bool doSleep) : world(gravity, doSleep){
@@ -129,9 +246,10 @@ GameState::~GameState(){
 
 void GameState::init(){
     if(initDone == true){
-        return;
+        //return;
     }
     for(int i = 0; i <= 15; i++){
+        if(balls[i])world.DestroyBody(balls[i]);
         ballDef.position.Set(golyok[i].x, golyok[i].y);
         lastpos[i].Set(golyok[i].x, golyok[i].y);
         balls[i] = world.CreateBody(&ballDef);
@@ -159,11 +277,15 @@ void GameState::updateBalls(){
             int px = golyok[i].x;
             int py = golyok[i].y;
             if((x-px)*(x-px) + (y-py)*(y-py) < 30){
-                if(i != 0){
+                if(i != 0 && !disabled[i]){
                     disabled[i] = true;
                     removeBall(i);
-                }else{ // Reset the ball
+	            if(p1Balls[i]) {p1Score++;p1Ball=true;} //lemenet egy tomor golyo
+	            if(p2Balls[i]) {p2Score++;p2Ball=true;} //lemenet egy csikos golyo
+		    if(i==5) blackHole=true; //lement a fekete
+                }else if(i==0){ // Reset the ball
 //                    cout << "reset" << endl;
+                    whiteHole=true; //lement a fehér
                     world.DestroyBody(balls[0]);
 
                     ballDef.position.Set(0, 25); // TODO
@@ -181,7 +303,6 @@ void GameState::updateBalls(){
     world.Step(timeStep, velocityIterations, positionIterations);
     world.ClearForces();
     isMovement = false;
-    float32 diff = 0;
     for(int i = 0; i <= 15; i++){
         if(!balls[i]){
             continue;
@@ -190,15 +311,17 @@ void GameState::updateBalls(){
         golyok[i].x = position.x;
         golyok[i].y = position.y;
         // TODO: angle
-
-        diff += (lastpos[i] - position).Length();
+        float32 diff = (lastpos[i] - position).Length();
         lastpos[i] = position;
-
+        if(diff > 0.01){ // TODO
+           isMovement = true;
+        }
     }
-    if(diff > 0.1){ // TODO
-        isMovement = true;
+    if(!isMovement && !isRoundOver){
+        game.roundOver();
     }
 }
+
 
 void GameState::removeBall(int id){
     if(id == 0){
@@ -209,3 +332,4 @@ void GameState::removeBall(int id){
     }
     // TODO
 }
+

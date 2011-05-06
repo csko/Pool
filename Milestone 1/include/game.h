@@ -45,6 +45,12 @@ class Game {
         void hit();
         void init();
         void updateBalls();
+        void roundOver();
+        bool getP1Turn();
+        bool getEnd();
+        void setEnd(bool e);
+	int getP1Score();
+	int getP2Score();
     private:
         GameState* state;
 };

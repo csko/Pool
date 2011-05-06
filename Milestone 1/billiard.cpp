@@ -24,6 +24,7 @@ static int screen_height = 600;
 const static int timer = 10;
 static bool doHelp = 0;
 static bool doAbout = 0;
+static bool doScore = 1;
 
 static int mouse_elozo_x = 0.0f;
 static bool mouse_init = false;
@@ -168,6 +169,9 @@ void keyboard (unsigned char key, int x, int y)
     case 'h':
         doHelp = !doHelp;
         break;
+    case 'p':
+        doScore = !doScore;
+        break;
     default:
         cout << "Unknown key pressed: " << key << endl;
     }
@@ -258,8 +262,9 @@ void display(void)
 
   glRotatef(30,1,0,0);    //egy kicsit döntött szögben nézünk az asztalra
   glTranslatef(0.0, -140.0,-180);   //minden a helyére kerül
-  layout.drawHelp(doAbout);
-  layout.drawAbout(doHelp);
+  layout.drawHelp(doHelp);
+  layout.drawAbout(doAbout);
+  layout.drawScore(doScore);
   cam.view();
   layout.drawEnv(); //falak, padló, meg ami még jön
   layout.drawTable();

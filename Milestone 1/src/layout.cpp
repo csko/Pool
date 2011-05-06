@@ -7,6 +7,8 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <stdio.h>
+#include <stdlib.h>
 
 #include <iostream>
 using namespace std;
@@ -26,20 +28,23 @@ Layout::Layout(){
     wall = ImageLoad("images/w4.bmp");
     floor = ImageLoad("images/floor.bmp");
     ballsImage[1] = ImageLoad("images/14.bmp");
+    ballsImage[4] = ImageLoad("images/12.bmp");
+    ballsImage[6] = ImageLoad("images/10.bmp");
+    ballsImage[9] = ImageLoad("images/9.bmp");
+    ballsImage[11] = ImageLoad("images/15.bmp");
+    ballsImage[13] = ImageLoad("images/13.bmp");
+    ballsImage[15] = ImageLoad("images/11.bmp");
+
+
     ballsImage[2] = ImageLoad("images/7.bmp");
     ballsImage[3] = ImageLoad("images/5.bmp");
-    ballsImage[4] = ImageLoad("images/12.bmp");
     ballsImage[5] = ImageLoad("images/8.bmp");
-    ballsImage[6] = ImageLoad("images/10.bmp");
     ballsImage[7] = ImageLoad("images/6.bmp");
     ballsImage[8] = ImageLoad("images/4.bmp");
-    ballsImage[9] = ImageLoad("images/9.bmp");
     ballsImage[10] = ImageLoad("images/3.bmp");
-    ballsImage[11] = ImageLoad("images/15.bmp");
     ballsImage[12] = ImageLoad("images/2.bmp");
-    ballsImage[13] = ImageLoad("images/13.bmp");
     ballsImage[14] = ImageLoad("images/1.bmp");
-    ballsImage[15] = ImageLoad("images/11.bmp");
+
 }
 
 void Layout::drawTable(){
@@ -212,9 +217,10 @@ void Layout::initGolyok(){
 }
 
 void Layout::drawGolyok(){
-  if(gInit == 0) {
+  if(gInit == 0 || game.getEnd()) {
     initGolyok();
     game.init();
+    game.setEnd(false);
     gInit = 1;
   }
   if(!disabled[0]){
@@ -303,10 +309,10 @@ void Layout::drawAbout(int doAbout)
 {
     if(doAbout){
     	glColor3f(1,1,1);
-    	BitmapText(0.0f, 21.0f+50, "Billiard");
-    	BitmapText(0.0f, 18.0f+50, "Borde Sandor, Csernai Kornel, Ladanyi Gergely");
-	BitmapText(0.0f, 15.0f+50, "Fejlett Grafikai Algoritmusok");
-    	BitmapText(0.0f, 12.0f+50, "SZTE PTI MsC 2010/11 oszi felev");
+    	BitmapText(0.0f, 21.0f+45, "Billiard");
+    	BitmapText(0.0f, 18.0f+45, "Borde Sandor, Csernai Kornel, Ladanyi Gergely");
+	BitmapText(0.0f, 15.0f+45, "Fejlett Grafikai Algoritmusok");
+    	BitmapText(0.0f, 12.0f+45, "SZTE PTI MsC 2010/11 oszi felev");
     }
 }
 
@@ -314,10 +320,68 @@ void Layout::drawHelp(int doHelp)
 {
     if(doHelp){
         glColor3f(1,1,1);
-        BitmapText(-40.0f, 21.0f+50, "Hasznalhato billentyuk:");
-        BitmapText(-40.0f, 18.0f+50, "a,s,d,w - kamera pozicionalasa");
-        BitmapText(-40.0f, 15.0f+50, "fel,le - kamera iranyitasa");
-        BitmapText(-40.0f, 12.0f+50, "2,4,6,8 - feher golyo celzasa");
-        BitmapText(-40.0f, 9.0f+50,  "space - feher golyo kilovese");
+        BitmapText(-40.0f, 21.0f+45, "Hasznalhato billentyuk:");
+        BitmapText(-40.0f, 18.0f+45, "a,s,d,w - kamera pozicionalasa");
+        BitmapText(-40.0f, 15.0f+45, "fel,le - kamera iranyitasa");
+        BitmapText(-40.0f, 12.0f+45, "2,4,6,8 - feher golyo celzasa");
+        BitmapText(-40.0f, 9.0f+45,  "space - feher golyo kilovese");
     }
+}
+
+void Layout::drawScore(int doScore)
+{
+	if(doScore){
+        int p1Score = game.getP1Score();
+        int p2Score = game.getP2Score();
+        glColor3f(1,1,1);
+        char p1[50];
+        char p2[50];
+        char p1_pontszam[100] = "Pontszam: ";
+        char p2_pontszam[100] = "Pontszam: ";
+	sprintf(p1, "%d",p1Score);
+	sprintf(p2, "%d",p2Score);
+        strcat(p1_pontszam,p1);
+        strcat(p2_pontszam,p2);       
+
+        BitmapText(-39.7f, 21.0f+50, "Player 1");
+        BitmapText(  0.0f, 21.0f+50, "Player 2");
+        BitmapText(-40.0f, 18.0f+50, p1_pontszam);
+        BitmapText(  0.0f, 18.0f+50, p2_pontszam);
+        glColor3f(1,1,0);
+        if(game.getP1Turn()){
+            glBegin(GL_LINES);
+                glVertex3f(-40.0f, 73.0f, 0.0f);
+       	        glVertex3f(-40.5f, 67.5f, 0.0f);
+            glEnd();
+            glBegin(GL_LINES);
+                glVertex3f(-27.0f, 73.0f, 0.0f);
+       	        glVertex3f(-27.4f, 67.5f, 0.0f);
+            glEnd();
+            glBegin(GL_LINES);
+                glVertex3f(-27.0f, 73.0f, 0.0f);
+       	        glVertex3f(-40.0f, 73.0f, 0.0f);
+            glEnd();
+            glBegin(GL_LINES);
+                glVertex3f(-27.4f, 67.5f, 0.0f);
+       	        glVertex3f(-40.5f, 67.5f, 0.0f);
+            glEnd();
+        }else{
+            glBegin(GL_LINES);
+                glVertex3f(-40.0f+39.5, 73.0f, 0.0f);
+       	        glVertex3f(-40.0f+39.5, 67.5f, 0.0f);
+            glEnd();
+            glBegin(GL_LINES);
+                glVertex3f(-27.0f+39.5, 73.0f, 0.0f);
+       	        glVertex3f(-26.8f+39.5, 67.5f, 0.0f);
+            glEnd();
+            glBegin(GL_LINES);
+                glVertex3f(-27.0f+39.5, 73.0f, 0.0f);
+       	        glVertex3f(-40.0f+39.5, 73.0f, 0.0f);
+            glEnd();
+            glBegin(GL_LINES);
+                glVertex3f(-26.8f+39.5, 67.5f, 0.0f);
+       	        glVertex3f(-40.0f+39.5, 67.5f, 0.0f);
+            glEnd();
+        }
+	}
 }
