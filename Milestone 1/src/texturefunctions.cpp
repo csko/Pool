@@ -1,10 +1,11 @@
-#include <stdio.h>
+#include <cstdio>
 #include "../include/texturefunctions.h"
 #include <iostream>
 #include <GL/glu.h>
 #include <GL/glut.h>
 #include <GL/gl.h>			// Header File For The OpenGL32 Library
 #include <GL/glext.h>
+#include <cstdlib>
 
 using std::cout;
 

@@ -1,17 +1,9 @@
-#ifndef _JATEKLOGIKA_
-#define _JATEKLOGIKA_
+#ifndef _B2GAMESTATE_
+#define _B2GAMESTATE_
 #include "vector.h"
 #include <GL/glut.h> // GLfloat
 #include <Box2D/Box2D.h>
-#include "../include/B2GameState.h"
 
-
-struct golyo {
-   GLfloat x;
-   GLfloat y;
-   GLfloat xRot, yRot;
-}; // TODO: két vectorra bontani
-/*
 class GameState {
     public:
         virtual void init() = 0;
@@ -46,35 +38,4 @@ class B2GameState : public GameState {
 
         bool initDone;
 };
-*/
-class Game {
-    public:
-        Game();
-        ~Game();
-
-        void hit();
-        void init();
-        void updateBalls();
-        void roundOver();
-        bool getP1Turn();
-        bool getEnd();
-        void setEnd(bool e);
-	int getP1Score();
-	int getP2Score();
-    private:
-        B2GameState* state;
-};
-
-const float eps = 0.000000000001;
-
-const float erosit_a = 1.2;
-const float gyengit_a = 1.2;
-const float balra_a = 0.05;
-const float jobbra_a = 0.05;
-
-void hit();
-void balraIrany();
-void jobbraIrany();
-void erosit();
-void gyengit();
 #endif
