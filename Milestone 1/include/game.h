@@ -7,6 +7,16 @@
 
 class B2GameState; // forward declaration
 
+const float holes[6][2] = {{25.549, -50},{27.564, 0},{25.549, 51},
+                          {-25.549, 51},{-27.564, 0},{-25.549, -50.275}
+                          };
+
+const bool p1Balls[16] = {false, false, true, true, false, false, false, true, true, false, true, false, true, false, true, false};
+const bool p2Balls[16] = {false, true, false, false, true, false, true, false, false, true, false, true, false, true, false, true};
+
+//const char* player1="Player1";
+//const char* player2="Player2";
+
 struct golyo {
    GLfloat x;
    GLfloat y;
@@ -28,9 +38,20 @@ class Game {
 	int getP2Score();
 	    bool getMovement();
 	    void setMovement(bool m);
+	    bool getRoundOver();
+	    struct golyo golyok[16];
+        bool disabled[16];
     private:
         B2GameState* state;
         bool isMovement;
+        bool isRoundOver;
+        int p1Score, p2Score;
+        bool p1Turn, p2Turn;
+        int winner; //ki a nyertes
+        bool blackHole, whiteHole; //lement a fekete (feher)
+        bool p1Ball, p2Ball; //ment le tomor (csikos) golyo
+        bool end; //vege van-e a jateknak
+        int stepNum; //hanyszor kovetkezik az adott jatekos meg
 };
 
 const float eps = 0.000000000001;

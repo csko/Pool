@@ -6,20 +6,6 @@ using namespace std;
 
 // src/game.cpp
 class golyo;
-extern float holes[6][2];
-extern struct golyo golyok[16];
-extern bool disabled[16];
-extern bool p1Balls[16];
-extern bool p2Balls[16];
-extern int p1Score;
-extern int p2Score;
-extern bool p1Turn;
-extern bool p2Turn;
-extern bool isRoundOver;
-extern bool blackHole;
-extern bool whiteHole;
-extern bool p1Ball;
-extern bool p2Ball;
 
 B2GameState::B2GameState(Game* _game, b2Vec2 gravity, bool doSleep) : world(gravity, doSleep){
     game = _game;
@@ -86,8 +72,8 @@ void B2GameState::init(){
     }
     for(int i = 0; i <= 15; i++){
         if(balls[i])world.DestroyBody(balls[i]);
-        ballDef.position.Set(golyok[i].x, golyok[i].y);
-        lastpos[i].Set(golyok[i].x, golyok[i].y);
+        ballDef.position.Set(game->golyok[i].x, game->golyok[i].y);
+        lastpos[i].Set(game->golyok[i].x, game->golyok[i].y);
         balls[i] = world.CreateBody(&ballDef);
         balls[i]->CreateFixture(&ballFixture);
         balls[i]->SetBullet(true); // For greater precision
@@ -106,36 +92,6 @@ void B2GameState::updateBalls(){
         return;
     }
 
-    for(int i = 0; i <= 15; i++){
-        for(int j = 0; j < 6; j++){
-            int x = holes[j][0];
-            int y = holes[j][1];
-            int px = golyok[i].x;
-            int py = golyok[i].y;
-            if((x-px)*(x-px) + (y-py)*(y-py) < 30){
-                if(i != 0 && !disabled[i]){
-                    disabled[i] = true;
-                    removeBall(i);
-	            if(p1Balls[i]) {p1Score++;p1Ball=true;} //lemenet egy tomor golyo
-	            if(p2Balls[i]) {p2Score++;p2Ball=true;} //lemenet egy csikos golyo
-		    if(i==5) blackHole=true; //lement a fekete
-                }else if(i==0){ // Reset the ball
-//                    cout << "reset" << endl;
-                    whiteHole=true; //lement a fehér
-                    world.DestroyBody(balls[0]);
-
-                    ballDef.position.Set(0, 25); // TODO
-                    lastpos[0].Set(golyok[0].x, golyok[0].y);
-                    balls[0] = world.CreateBody(&ballDef);
-                    balls[0]->CreateFixture(&ballFixture);
-                    balls[0]->SetBullet(true); // For greater precision
-                }
-                // TODO:  8-ball, etc.
-            }
-        }
-    }
-
-
     world.Step(timeStep, velocityIterations, positionIterations);
     world.ClearForces();
     game->setMovement(false);
@@ -144,8 +100,8 @@ void B2GameState::updateBalls(){
             continue;
         }
         b2Vec2 position = balls[i]->GetPosition();
-        golyok[i].x = position.x;
-        golyok[i].y = position.y;
+        game->golyok[i].x = position.x;
+        game->golyok[i].y = position.y;
         // TODO: angle
         float32 diff = (lastpos[i] - position).Length();
         lastpos[i] = position;
@@ -153,7 +109,7 @@ void B2GameState::updateBalls(){
            game->setMovement(true);
         }
     }
-    if(!game->getMovement() && !isRoundOver){
+    if(!game->getMovement() && !game->getRoundOver()){
         game->roundOver();
     }
 }
@@ -161,7 +117,6 @@ void B2GameState::updateBalls(){
 
 void B2GameState::removeBall(int id){
     if(id == 0){
-//        balls[id].SetPosition(10, 10);
     }else if(balls[id]){
         world.DestroyBody(balls[id]);
         balls[id] = NULL;
@@ -169,3 +124,12 @@ void B2GameState::removeBall(int id){
     // TODO
 }
 
+void B2GameState::moveBall(int id, float x, float y){
+    world.DestroyBody(balls[id]);
+
+    ballDef.position.Set(x, y);
+    lastpos[id].Set(game->golyok[id].x, game->golyok[id].y);
+    balls[id] = world.CreateBody(&ballDef);
+    balls[id]->CreateFixture(&ballFixture);
+    balls[id]->SetBullet(true); // For greater precision
+}

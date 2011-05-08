@@ -12,10 +12,8 @@
 
 #include <iostream>
 using namespace std;
-extern struct golyo golyok[16];
 extern Vector white;
 extern Game game;
-extern bool disabled[16];
 
 Layout layout;
 Layout::Layout(){
@@ -166,52 +164,52 @@ void Layout::drawWall() {
 }
 
 void Layout::initGolyok(){
-  golyok[0].x = 0;
-  golyok[0].y = 25;
+  game.golyok[0].x = 0;
+  game.golyok[0].y = 25;
   for(int i = 0; i <= 15; i++){
-    disabled[i] = false;
+    game.disabled[i] = false;
   }
   int i;
   GLfloat e = 0.05f;
   GLfloat x = 0;
   GLfloat y = -20;
-  golyok[1].x = x;
-  golyok[1].y = y;
+  game.golyok[1].x = x;
+  game.golyok[1].y = y;
   x+=sugar+e;
   y-=1.8*sugar+e;
   int hanyadik = 1;
   for(i = 1; i<=2;i++){  
     hanyadik++;
-    golyok[hanyadik].x = x;
-    golyok[hanyadik].y = y;
+    game.golyok[hanyadik].x = x;
+    game.golyok[hanyadik].y = y;
     x-=2*sugar+e;
   }
   x+=sugar+e;
   y-=1.8*sugar+e;
   for(i = 1; i<=3;i++){  
     hanyadik++;
-    golyok[hanyadik].x = x;
-    golyok[hanyadik].y = y;
+    game.golyok[hanyadik].x = x;
+    game.golyok[hanyadik].y = y;
     x+=2*sugar+e;
   }
   x-=sugar+e;
   y-=1.8*sugar+e;
   for(i = 1; i<=4;i++){  
     hanyadik++;
-    golyok[hanyadik].x = x;
-    golyok[hanyadik].y = y;
+    game.golyok[hanyadik].x = x;
+    game.golyok[hanyadik].y = y;
     x-=2*sugar+e;
   }
   x+=sugar+e;
   y-=1.8*sugar+e;
   for(i = 1; i<=5;i++){  
     hanyadik++;
-    golyok[hanyadik].x = x;
-    golyok[hanyadik].y = y;
+    game.golyok[hanyadik].x = x;
+    game.golyok[hanyadik].y = y;
     x+=2*sugar+e;
   }
   for(i=1;i<=15;i++){
-    golyok[i].xRot = 180;
+    game.golyok[i].xRot = 180;
   }
 }
 
@@ -222,11 +220,11 @@ void Layout::drawGolyok(){
     game.setEnd(false);
     gInit = 1;
   }
-  if(!disabled[0]){
+  if(!game.disabled[0]){
   glPushMatrix();
     glColor3f(1,1,1);
     for(int i = 1; i<=10; i++)glDisable(GL_TEXTURE_2D);
-    glTranslatef(golyok[0].x, 35.5, golyok[0].y);
+    glTranslatef(game.golyok[0].x, 35.5, game.golyok[0].y);
 
     if(!game.getMovement()){
         glBegin(GL_LINES); // A fehér golyó irányának vektora
@@ -243,14 +241,14 @@ void Layout::drawGolyok(){
   }
   int i;
   for(i=15;i>=1;i--){
-    if(disabled[i]){
+    if(game.disabled[i]){
         continue;
     }
     glColor3f(1,1,1);
     glPushMatrix();
-      glTranslatef(golyok[i].x, 35.5, golyok[i].y);
-      glRotatef(golyok[i].xRot, 1, 0, 0);
-      glRotatef(golyok[i].yRot, 0, 1, 0);
+      glTranslatef(game.golyok[i].x, 35.5, game.golyok[i].y);
+      glRotatef(game.golyok[i].xRot, 1, 0, 0);
+      glRotatef(game.golyok[i].yRot, 0, 1, 0);
       GLUquadric *qobj = gluNewQuadric();
       gluQuadricTexture(qobj,GL_TRUE);
       glEnable(GL_TEXTURE_2D);

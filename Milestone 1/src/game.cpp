@@ -5,35 +5,14 @@ using namespace std;
 
 Vector white(0, -60);
 Vector movement[16];
-struct golyo golyok[16];
-bool disabled[16];
 Game game;
 
-char* player1="Player1";
-char* player2="Player2";
-bool p1Balls[16] = {false, false, true, true, false, false, false, true, true, false, true, false, true, false, true, false};
-bool p2Balls[16] = {false, true, false, false, true, false, true, false, false, true, false, true, false, true, false, true};
-int p1Score = 0;
-int p2Score = 0;
-bool p1Turn=true;
-bool p2Turn=false;
-int stepNum = 1; //hanyszor kovetkezik az adott jatekos meg
-bool end = false; //vege van-e a jateknak
-int winner = 0; //ki a nyertes
-bool isRoundOver = true;
+// TODO: ezeket bele kell rakni Game osztályba
 //milyen esemény történt egy ütés során
-bool blackHole = false; //lement a fekete
-bool whiteHole = false; //lement a feher
-bool p1Ball = false; //ment le tomor golyo 
-bool p2Ball = false; //ment le csikos golyo
 bool firstTouchP1Ball = false; //elso erintett golyo tomor volt
 bool firstTouchP2Ball = false; //elso erintett golyo csikos volt
 bool firstTouchBlack = false; //elso erintett golyo fekete volt
 
-
-float holes[6][2] = {{25.549, -50},{27.564, 0},{25.549, 51},
-                     {-25.549, 51},{-27.564, 0},{-25.549, -50.275}
-                     };
 
 void balraIrany(){
     if(!game.getMovement()){
@@ -68,6 +47,15 @@ void gyengit(){
 
 Game::Game(){
     isMovement = false;
+    isRoundOver = true;
+    p1Score = p2Score = 0;
+    p1Turn = true;
+    p2Turn = false;
+    winner = 0;
+    blackHole = whiteHole = false;
+    p1Ball = p2Ball = false;
+    end = false;
+    stepNum = 1;
 
     b2Vec2 gravity(0.0f, 0.0f);
     bool doSleep = false;
@@ -76,6 +64,10 @@ Game::Game(){
 
 bool Game::getMovement(){
     return isMovement;
+}
+
+bool Game::getRoundOver(){
+    return isRoundOver;
 }
 
 void Game::setMovement(bool m){
@@ -90,7 +82,40 @@ void Game::hit(){
 }
 
 void Game::updateBalls(){
-    state->updateBalls();
+    state->updateBalls(); // Update the position of the balls
+
+    // Handle balls falling in the holes
+    for(int i = 0; i <= 15; i++){
+        for(int j = 0; j < 6; j++){
+            int x = holes[j][0];
+            int y = holes[j][1];
+            int px = golyok[i].x;
+            int py = golyok[i].y;
+            if((x-px)*(x-px) + (y-py)*(y-py) < 30){ // TODO: 30 jo ertek?
+                if(i != 0 && !disabled[i]){
+                    disabled[i] = true;
+                    state->removeBall(i);
+
+                    if(p1Balls[i]){
+                        p1Score++;
+                        p1Ball=true;
+                    } //lement egy tomor golyo
+
+                    if(p2Balls[i]){
+                    p2Score++;
+                    p2Ball=true;
+                    } //lement egy csikos golyo
+
+                if(i==5) blackHole=true; //lement a fekete
+                }else if(i==0){ // Reset the ball
+                    whiteHole=true; //lement a fehér
+                    state->moveBall(0, 0, 25); // TODO: jo pozicio?
+                }
+                // TODO:  8-ball, etc.
+            }
+        }
+    }
+
 }
 
 Game::~Game(){

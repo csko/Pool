@@ -34,8 +34,6 @@ static GLfloat angle=0.0f;
 extern Vector white;
 extern Vector movement[16];
 
-extern golyo golyok[16];
-
 extern bool isMovement;
 extern Game game;
 extern Layout layout;
@@ -104,7 +102,7 @@ void keyboard (unsigned char key, int x, int y)
   switch(key){
     case 'z':
     case 'Z':
-       	cam.moveToPos(golyok[0].x, golyok[0].y-80, 40);
+       	cam.moveToPos(game.golyok[0].x, game.golyok[0].y-80, 40);
         break;  
     case 'e':
     case 'E':

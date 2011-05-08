@@ -11,6 +11,7 @@ class GameState {
         virtual void hit(float x, float y) = 0;
         virtual void updateBalls() = 0;
         virtual void removeBall(int id) = 0;
+        virtual void moveBall(int id, float x, float y) = 0;
 };
 
 class Game; // forward declaration
@@ -24,6 +25,7 @@ class B2GameState : public GameState {
         void hit(float x, float y);
         void updateBalls();
         void removeBall(int id);
+        void moveBall(int id, float x, float y);
     private:
         float32 timeStep;
         int32 velocityIterations;
