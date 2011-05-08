@@ -9,7 +9,6 @@ class golyo;
 extern float holes[6][2];
 extern struct golyo golyok[16];
 extern bool disabled[16];
-extern bool isMovement;
 extern bool p1Balls[16];
 extern bool p2Balls[16];
 extern int p1Score;
@@ -17,13 +16,13 @@ extern int p2Score;
 extern bool p1Turn;
 extern bool p2Turn;
 extern bool isRoundOver;
-extern Game game;
 extern bool blackHole;
 extern bool whiteHole;
 extern bool p1Ball;
 extern bool p2Ball;
 
-B2GameState::B2GameState(b2Vec2 gravity, bool doSleep) : world(gravity, doSleep){
+B2GameState::B2GameState(Game* _game, b2Vec2 gravity, bool doSleep) : world(gravity, doSleep){
+    game = _game;
     timeStep = 1.0f / 60.0f;
     velocityIterations = 6;
     positionIterations = 2;
@@ -139,7 +138,7 @@ void B2GameState::updateBalls(){
 
     world.Step(timeStep, velocityIterations, positionIterations);
     world.ClearForces();
-    isMovement = false;
+    game->setMovement(false);
     for(int i = 0; i <= 15; i++){
         if(!balls[i]){
             continue;
@@ -151,11 +150,11 @@ void B2GameState::updateBalls(){
         float32 diff = (lastpos[i] - position).Length();
         lastpos[i] = position;
         if(diff > 0.01){ // TODO
-           isMovement = true;
+           game->setMovement(true);
         }
     }
-    if(!isMovement && !isRoundOver){
-        game.roundOver();
+    if(!game->getMovement() && !isRoundOver){
+        game->roundOver();
     }
 }
 

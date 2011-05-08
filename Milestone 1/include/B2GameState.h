@@ -3,6 +3,7 @@
 #include "vector.h"
 #include <GL/glut.h> // GLfloat
 #include <Box2D/Box2D.h>
+#include "../include/game.h"
 
 class GameState {
     public:
@@ -12,9 +13,11 @@ class GameState {
         virtual void removeBall(int id) = 0;
 };
 
+class Game; // forward declaration
+
 class B2GameState : public GameState {
     public:
-        B2GameState(b2Vec2 gravity, bool doSleep);
+        B2GameState(Game* game, b2Vec2 gravity, bool doSleep);
         ~B2GameState();
 
         void init();
@@ -37,5 +40,6 @@ class B2GameState : public GameState {
         b2Vec2 lastpos[16];
 
         bool initDone;
+        Game* game;
 };
 #endif

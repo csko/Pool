@@ -5,48 +5,13 @@
 #include <Box2D/Box2D.h>
 #include "../include/B2GameState.h"
 
+class B2GameState; // forward declaration
 
 struct golyo {
    GLfloat x;
    GLfloat y;
    GLfloat xRot, yRot;
 }; // TODO: két vectorra bontani
-/*
-class GameState {
-    public:
-        virtual void init() = 0;
-        virtual void hit(float x, float y) = 0;
-        virtual void updateBalls() = 0;
-        virtual void removeBall(int id) = 0;
-};
-
-class B2GameState : public GameState {
-    public:
-        B2GameState(b2Vec2 gravity, bool doSleep);
-        ~B2GameState();
-
-        void init();
-        void hit(float x, float y);
-        void updateBalls();
-        void removeBall(int id);
-    private:
-        float32 timeStep;
-        int32 velocityIterations;
-        int32 positionIterations;
-
-        b2World world;
-        b2CircleShape ballShape;
-        b2FixtureDef ballFixture;
-        b2BodyDef ballDef;
-
-        b2Body* balls[16];
-        b2Body* sides[4];
-
-        b2Vec2 lastpos[16];
-
-        bool initDone;
-};
-*/
 class Game {
     public:
         Game();
@@ -61,8 +26,11 @@ class Game {
         void setEnd(bool e);
 	int getP1Score();
 	int getP2Score();
+	    bool getMovement();
+	    void setMovement(bool m);
     private:
         B2GameState* state;
+        bool isMovement;
 };
 
 const float eps = 0.000000000001;

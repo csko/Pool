@@ -13,7 +13,6 @@
 #include <iostream>
 using namespace std;
 extern struct golyo golyok[16];
-extern bool isMovement;
 extern Vector white;
 extern Game game;
 extern bool disabled[16];
@@ -229,7 +228,7 @@ void Layout::drawGolyok(){
     for(int i = 1; i<=10; i++)glDisable(GL_TEXTURE_2D);
     glTranslatef(golyok[0].x, 35.5, golyok[0].y);
 
-    if(!isMovement){
+    if(!game.getMovement()){
         glBegin(GL_LINES); // A fehér golyó irányának vektora
             glVertex3f(0,0,0);
             glVertex3f(white.getX(), 0, white.getY());
