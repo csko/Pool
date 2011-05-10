@@ -20,7 +20,7 @@ const bool p2Balls[16] = {false, true, false, false, true, false, true, false, f
 struct golyo {
    GLfloat x;
    GLfloat y;
-   GLfloat xRot, yRot;
+   GLfloat xRot, yRot, zRot;
 }; // TODO: két vectorra bontani
 
 class GameState {

@@ -46,7 +46,10 @@ Layout::Layout(){
     ballsImage[10] = ImageLoad("images/3.bmp");
     ballsImage[12] = ImageLoad("images/2.bmp");
     ballsImage[14] = ImageLoad("images/1.bmp");
-
+    for(int i = 1; i<=15;i++){
+        golyok_elozo[i].x = 0.0;
+        golyok_elozo[i].y = 0.0;
+    }
 }
 
 void Layout::drawTable(int q){
@@ -124,43 +127,7 @@ glPushMatrix();
     glPopMatrix(); 
 glPopMatrix();
 }
-//mozaikos fal, padlo(bugos)
-/*
-void drawFloor() {
 
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, floorTexture);
-    glTexParameteri(GL_TEXTURE_2D, GL_REPEAT, GL_REPEAT);
-    glBegin(GL_TRIANGLE_STRIP);
-        glTexCoord2f(2,2);    	
-    	glVertex3f(-250.0,-10.0,-250.0);
-        glTexCoord2f(-1,2);
-    	glVertex3f(250.0,-10.0,-250.0); 
-        glTexCoord2f(2,-1);
-    	glVertex3f(250.0,-10.0,250.0);
-        glTexCoord2f(-1,-1);
-    	glVertex3f(-250.0,-10.0,250.0);   	
-    glEnd();
-    glDisable(GL_TEXTURE_2D);
-}
-
-void drawWall() {
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, wallTexture);
-    glBegin(GL_TRIANGLE_STRIP);
-        glTexCoord2f(-1,-1);    	
-    	glVertex3f(-250.0,-220.0,250.0);
-        glTexCoord2f(2,-1.0);   
-    	glVertex3f(250.0,-220.0,250.0);    	
-        glTexCoord2f(2,2);
-    	glVertex3f(250.0,-10.0,250.0);
-        glTexCoord2f(-1,2.0);
-    	glVertex3f(-250.0,-10.0,250.0);
-    glEnd();
-    glDisable(GL_TEXTURE_2D);
-    
-}
-*/
 void Layout::drawFloor() {
     glEnable(GL_TEXTURE_2D);
     glTexImage2D(GL_TEXTURE_2D, 0, 3, floor.sizeX, floor.sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, floor.data);
@@ -259,6 +226,10 @@ void Layout::initGolyok(){
   for(i=1;i<=15;i++){
     game.golyok[i].xRot = 180;
   }
+  for(int i = 1; i<=15;i++){
+    golyok_elozo[i].x = game.golyok[i].x;
+    golyok_elozo[i].y = game.golyok[i].y;
+  }
 }
 
 void Layout::drawGolyok(){
@@ -272,10 +243,16 @@ void Layout::drawGolyok(){
   glPushMatrix();
     glColor3f(1,1,1);
     for(int i = 1; i<=10; i++)glDisable(GL_TEXTURE_2D);
+    for(int i = 1; i<=15; i++){
+       x_diff[i] = game.golyok[i].x - golyok_elozo[i].x;
+       y_diff[i] = game.golyok[i].y - golyok_elozo[i].y;
+       game.golyok[i].xRot+=y_diff[i]*15;
+       game.golyok[i].zRot+=x_diff[i]*15;
+    }
     glTranslatef(game.golyok[0].x, 35.5, game.golyok[0].y);
 
     if(!game.getMovement()){
-        glBegin(GL_LINES); // A fehér golyó irányának vektora
+        glBegin(GL_LINES); //A fehér golyó irányának vektora
             glVertex3f(0,0,0);
             glVertex3f(white.getX(), 0, white.getY());
         glEnd();
@@ -297,6 +274,7 @@ void Layout::drawGolyok(){
       glTranslatef(game.golyok[i].x, 35.5, game.golyok[i].y);
       glRotatef(game.golyok[i].xRot, 1, 0, 0);
       glRotatef(game.golyok[i].yRot, 0, 1, 0);
+      glRotatef(game.golyok[i].zRot, 0, 0, 1);
       GLUquadric *qobj = gluNewQuadric();
       gluQuadricTexture(qobj,GL_TRUE);
       glEnable(GL_TEXTURE_2D);
@@ -310,6 +288,10 @@ void Layout::drawGolyok(){
       gluDeleteQuadric(qobj);
       glDisable(GL_TEXTURE_2D);
     glPopMatrix();
+  }
+  for(int i = 1; i<=15;i++){
+     golyok_elozo[i].x = game.golyok[i].x;
+     golyok_elozo[i].y = game.golyok[i].y;
   }
 }
 

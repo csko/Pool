@@ -38,4 +38,7 @@ class Layout {
                 int dakoeltolas;
 		bool elso;
 		GLfloat whiteX, whiteY;
+                struct golyo golyok_elozo[16];
+                GLfloat x_diff[16];
+                GLfloat y_diff[16];
 };
