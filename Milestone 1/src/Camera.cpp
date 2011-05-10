@@ -1,4 +1,6 @@
 #include "../include/Camera.h"
+#include "../include/Kvaternio.h"
+#include "../include/Vektor3.h"
 #include <iostream>
 
 #define _HACK
@@ -31,13 +33,49 @@ Camera::Camera() {
     verticalBound2 = 150;
     
     rotate = false;
+    kvaternio = true;
 }
 
 void Camera::view() {
-    glTranslatef(horizontal,zDir, vertical);   
-    glRotatef(xRot, 1.0f, 0.0f, 0.0f);
-    glRotatef(zRot, 0.0f, 1.0f, 0.0f);     
-    glScalef(zoom,zoom,zoom);    
+	if ( !kvaternio ) {
+		cout << "Nem kvaternioval" << endl;
+		glTranslatef(horizontal,zDir, vertical);   
+		glRotatef(xRot, 1.0f, 0.0f, 0.0f);
+		glRotatef(zRot, 0.0f, 1.0f, 0.0f);         
+	} else {
+
+		glTranslatef(horizontal,zDir, vertical);   
+		cout << "Kvaternioval" << endl;
+	
+		GLfloat nezetMatrix[16];	//nézeti mátrixunk, ahol a forgatás után a szükséges paramétereket olvashatjuk ki
+		Kvaternio q;				//ideiglenes kvaternio
+		Kvaternio qPitch, qYaw;		//a pitch és yaw forgatásnak megfelelő kvaterniók
+		
+		//létrehozzuk az egyes irányok kvaternióit a forgatási tengelyből és a forgatás szögéből
+		Vektor3 x(1.0f, 0.0f, 0.0f);
+		Vektor3 z(0.0f, 1.0f, 0.0f);
+		qPitch.kvaternioTengelybolEsSzogbol(x, xRot);		//döntés
+		qYaw.kvaternioTengelybolEsSzogbol(z, zRot);			//forgás
+		
+		q = qPitch * qYaw;		//összeszorozzuk a két kvaterniót, hogy mindkét forgatást tárolja egy kvaternió
+		q.kvaterniobolMatrix(nezetMatrix);	//lekérjük a két forgatás kombinációjának mátrixát
+		
+		glMultMatrixf(nezetMatrix);		//beállítjuk a kvaterniók szorzatából kapott mátrixot nézetmátrixnak
+		
+		qPitch.kvaterniobolMatrix(nezetMatrix);
+		GLfloat iranyv[3];
+
+		iranyv[1] = nezetMatrix[9];
+		
+		q = qYaw * qPitch;
+		q.kvaterniobolMatrix(nezetMatrix);
+		iranyv[0] = nezetMatrix[8];
+		iranyv[2] = nezetMatrix[10];
+
+		iranyvektor = new Vektor3(iranyv[0], iranyv[1], iranyv[2]);
+		
+	}	
+	glScalef(zoom,zoom,zoom);
 }
 
 GLfloat Camera::getXRot() {
@@ -127,6 +165,7 @@ void Camera::decVertical(GLfloat par) {
 }
 void Camera::decZDir(GLfloat par) {
 	zDir -= par;
+	cout << "iranyvektor[0]" << (*iranyvektor)[0] << endl;
 	//if (zDir > 360.0) 
 	//	zDir -= 360.0;
 	if (debug) cout << "zDir=" << zDir << endl;	
@@ -302,5 +341,9 @@ void Camera::rotateTo(GLfloat deg, GLfloat speed, int direction) {
 	duration = withDeg / rotateSpeed;
 	rotateTime = 0;
 	rotated = 0;
+}
+
+void Camera::negateKvaternio() {
+	kvaternio = !kvaternio;
 }
 

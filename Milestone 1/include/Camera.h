@@ -1,68 +1,73 @@
 #ifndef _KAMERAMOZGAS_
 #define _KAMERAMOZGAS_
 #include <GL/glut.h> // GLfloat
+#include "Vektor3.h"
 
 enum rotationOrientation {HORIZONTAL, VERTICAL};
 
 class Camera {
 private:
-   //kamerapozíció
-   GLfloat xDirection;
-   GLfloat yDirection;
-   GLfloat zDirection;
-   GLfloat xMoveLength;
-   GLfloat yMoveLength;
-   GLfloat zMoveLength;
-   GLfloat moveSpeed;
-   
-   int moveTime;
-   bool move;
-   
-   GLfloat xMoved;
-   GLfloat yMoved;
-   GLfloat zMoved;
-   
-   GLfloat horizontalBound1;
-   GLfloat horizontalBound2;   
 
-   GLfloat verticalBound1;
-   GLfloat verticalBound2; 
+   //alapadatok
+   GLfloat xRot;		//pitch
+   GLfloat zRot;		//yaw
    
-   GLfloat roomDimension;
+   GLfloat horizontal;	//kamera aktuális vízszintes pozíciója
+   GLfloat vertical;   	//kamera aktuális mélységi pozíciója
+   GLfloat zDir;		//kamera aktuális függőleges pozíciója
+   GLfloat zoom;		//nagyítás mértéke
+   GLfloat roomDimension;	//a szoba oldalának hossza kezdetben
    
-   int rotateDirection;  
+   Vektor3 *iranyvektor;	//amerre éppen nézünk
    
-   GLfloat xRot;
-   GLfloat zRot;
-   GLfloat moveX; 
-   GLfloat moveZ; 
-   GLfloat moveY; 
-   GLfloat horizontal;
-   GLfloat vertical;
-   GLfloat zDir;
-   GLfloat zoom;
+   /********* Mozgatáskor szükséges adattagok.*******/
+   int moveTime;				//mozgás időpillanata
+   bool move;					//mozgás folyamatban van-e
    
-   GLfloat withDeg;
-   GLfloat actualSpeed;
-   GLfloat rotateSpeed;
+   GLfloat xMoved;				//eddigi elmozdulás x irányban
+   GLfloat yMoved;				//eddigi elmozdulás y irányban
+   GLfloat zMoved;				//eddigi elmozdulás z irányban
+   
+   GLfloat horizontalBound1;	//mélységi egyik határ
+   GLfloat horizontalBound2;   	//mélységi másik határ
+
+   GLfloat verticalBound1;	//vízszintes egyik határ
+   GLfloat verticalBound2; 	//vízszintes másik határ
+   
+   GLfloat xDirection;	//melyik irányba tartunk az x tengelyen
+   GLfloat yDirection;	//melyik irányba tartunk az y tengelyen
+   GLfloat zDirection;	//melyik irányba tartunk az z tengelyen
+   
+   GLfloat xMoveLength;	//mekkora távot teszünk majd meg az x tengelyen
+   GLfloat yMoveLength; //mekkora távot teszünk majd meg az y tengelyen
+   GLfloat zMoveLength; //mekkora távot teszünk majd meg az z tengelyen
+   GLfloat moveSpeed;	//mozgás aktuális sebessége   
+         
+   /***************Forgatáskor szükséges adattagok.******************/
+   GLfloat withDeg;		//hány fokkal forgatunk
+   GLfloat actualSpeed;	//csillapított mozgás során az aktuális sebesség
+   GLfloat rotateSpeed;	//csillapított forgás során az aktuális sebesség
    GLfloat duration;	//meddig tartana a forgás egyenletes sebességgel
-   GLfloat rotated;
-   int rotateTime;
-   bool rotate;   
+   GLfloat rotated;		//hány fokkal forgattunk el eddig
+   int rotateTime;		//hanyadik időpillanatban tart a forgatás
+   bool rotate;   		//folyamatban van-e forgatás
+   int rotateDirection;  //mely tengely mentén akarunk forgatni
    
-   static const bool debug = true;
    
+   static const bool debug = true;	//szeretnénk-e az stdout-ra információt kiírni
+   bool kvaternio;	//kvaterniókat használunk-e a mozgatáshoz?
+   
+   /********************Csillapítást számító függvények**************/
    void cubicEaseInOutRotate();
    void cubicEaseOutRotate();
-   void cubicEaseInRotate();
-   
+   void cubicEaseInRotate();   
    void cubicEaseInOutMove();
    
 public:   
 
    Camera();
    void view();
-   
+      
    GLfloat getXRot();
    GLfloat getZRot();
    GLfloat getHorizontal();
@@ -92,6 +97,8 @@ public:
    void doMove();
    void rotateTo(GLfloat deg, GLfloat speed,int direction);
    void moveToPos(GLfloat x, GLfloat y, GLfloat z);
+   
+   void negateKvaternio();
    
 };
 

@@ -4,7 +4,9 @@
 MAINSRC = billiard.cpp
 MAINLIB = -lglut
 
-SRC = $(MAINSRC) src/MyGameState.cpp include/bitmap.c include/texture.c src/output.cpp src/texturefunctions.cpp src/game.cpp src/vector.cpp src/layout.cpp src/Camera.cpp src/B2GameState.cpp src/tray.cpp src/tvector.cpp
+
+SRC = $(MAINSRC) src/MyGameState.cpp include/bitmap.c include/texture.c src/output.cpp src/texturefunctions.cpp src/game.cpp src/vector.cpp src/layout.cpp src/Camera.cpp src/Vektor3.cpp src/Kvaternio.cpp src/B2GameState.cpp src/tray.cpp src/tvector.cpp
+
 
 OBJ = $(SRC:.c=.o)
 

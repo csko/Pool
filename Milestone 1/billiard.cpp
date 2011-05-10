@@ -116,6 +116,10 @@ void keyboard (unsigned char key, int x, int y)
 
 //  int state = glutGetModifiers();
   switch(key){
+  	case 'k': 
+  	case 'K':
+  		 cam.negateKvaternio();
+  		 break;
     case 'z':
     case 'Z':
        	cam.moveToPos(game.golyok[0].x, game.golyok[0].y-80, 40);
