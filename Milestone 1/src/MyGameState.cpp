@@ -117,35 +117,41 @@ void MyGameState::updateBalls(){
 
 
        if (FindBallCol(Pos2,BallTime,RestTime,BallColNr1,BallColNr2)){
-            if ( (lamda==10000) || (lamda>BallTime) ) {
-                RestTime=RestTime-BallTime;
+            if ( (lambda==10000) || (lambda>BallTime) ) {
+                game->collision(BallColNr1, BallColNr2);
+                RestTime = RestTime - BallTime;
 
-                TVector pb1,pb2,xaxis,U1x,U1y,U2x,U2y,V1x,V1y,V2x,V2y;
+                Vector pb1,pb2,xaxis,U1x,U1y,U2x,U2y,V1x,V1y,V2x,V2y;
                 double a,b;
 
-                pb1=OldPos[BallColNr1]+ArrayVel[BallColNr1]*BallTime;
-                pb2=OldPos[BallColNr2]+ArrayVel[BallColNr2]*BallTime;
-                xaxis=(pb2-pb1).unit();
+                pb1 = oldPos[BallColNr1] + ArrayVel[BallColNr1] * BallTime;
+                pb2 = oldPos[BallColNr2] + ArrayVel[BallColNr2] * BallTime;
 
-                a=xaxis.dot(ArrayVel[BallColNr1]);
-                U1x=xaxis*a;
-                U1y=ArrayVel[BallColNr1]-U1x;
+                xaxis = pb2 - pb1;
+                xaxis.normalize();
 
-                xaxis=(pb1-pb2).unit();
-                b=xaxis.dot(ArrayVel[BallColNr2]);
-                U2x=xaxis*b;
-                U2y=ArrayVel[BallColNr2]-U2x;
+                a = dot(xaxis, movement[BallColNr1]);
+                U1x = xaxis * a;
+                U1y = movement[BallColNr1] - U1x;
 
-                V1x=(U1x+U2x-(U1x-U2x))*0.5;
-                V2x=(U1x+U2x-(U2x-U1x))*0.5;
-                V1y=U1y;
-                V2y=U2y;
+                xaxis = pb1 - pb2;
+                xaxis.normalize();
 
-                for (j=0;j<NrOfBalls;j++)
-                    ArrayPos[j]=OldPos[j]+ArrayVel[j]*BallTime;
+                b = dot(xaxis, movement[BallColNr2]);
+                U2x = xaxis * b;
+                U2y = movement[BallColNr2] - U2x;
 
-                    ArrayVel[BallColNr1]=V1x+V1y;
-                    ArrayVel[BallColNr2]=V2x+V2y;
+                V1x = (U1x + U2x - (U1x - U2x)) * 0.5;
+                V2x = (U1x + U2x - (U2x - U1x)) * 0.5;
+                V1y = U1y;
+                V2y = U2y;
+
+                for (j=0; j<=15;j++){
+                    balls[j] = oldPos[j] + movement[j] * BallTime;
+                }
+
+                movement[BallColNr1] = V1x + V1y;
+                movement[BallColNr2] = V2x + V2y;
 
 /*
                     //Update explosion array
@@ -162,27 +168,24 @@ void MyGameState::updateBalls(){
 					  */
 
 					  continue; // ????
-				  }
-			  }
-			  
-    
+                }
+            }
+
             //End of tests
             //If collision occured move simulation for the correct timestep
             //and compute response for the colliding ball
-			if (lamda!=10000)
-			{		 
-				      RestTime-=lamda;
+            if (lambda!=10000){
+                RestTime-=lambda;
 
-					  for (j=0;j<NrOfBalls;j++)
-					  ArrayPos[j]=OldPos[j]+ArrayVel[j]*lamda;
-
-					  rt2=ArrayVel[BallNr].mag();
-					  ArrayVel[BallNr].unit();
-					  ArrayVel[BallNr]=TVector::unit( (normal*(2*normal.dot(-ArrayVel[BallNr]))) + ArrayVel[BallNr] );
-					  ArrayVel[BallNr]=ArrayVel[BallNr]*rt2;
-							
-					  //Update explosion array
-					  for(j=0;j<20;j++)
+                for (j=0; j <= 15; j++)
+                    balls[j] = oldPos[j] + movement[j] * lamda;
+                    rt2 = movement[BallNr].length();
+                    movement[BallNr].normalize();
+                    movement[BallNr] = TVector::unit( (normal*(2*normal.dot(-ArrayVel[BallNr]))) + ArrayVel[BallNr] );
+                    movement[BallNr] = movement[BallNr]*rt2;
+/*
+                    //Update explosion array
+                    for(j=0;j<20;j++)
 					  {
 						  if (ExplosionArray[j]._Alpha<=0)
 						  {
@@ -192,10 +195,11 @@ void MyGameState::updateBalls(){
 							  break;
 						  }
 					  }
-			}
-			else RestTime=0;
-
-	}
+*/
+            } else {
+                RestTime=0;
+            }
+    }
     // TODO: Do the collision detection, response.
     // TODO: game->setMovement() accordingly
     // TODO: change game->golyok[i]
@@ -231,87 +235,47 @@ bool TestIntersionPlane(const Plane& plane, const Vector& position, const Vector
 
     return true;
 }
-/*
-int FindBallCol(TVector& point, double& TimePoint, double Time2, int& BallNr1, int& BallNr2)
 
-{
+bool FindBallCol(Vector& point, double& TimePoint, double Time2, int& BallNr1, int& BallNr2){
+    Vector RelativeV;
+    TRay rays;
 
-	TVector RelativeV;
+    double MyTime=0.0, Add=Time2/150.0, Timedummy=10000, Timedummy2=-1;
 
-	TRay rays;
+    Vector posi;
 
-	double MyTime=0.0, Add=Time2/150.0, Timedummy=10000, Timedummy2=-1;
+    //Test all balls against eachother in 150 small steps
 
-	TVector posi;
+    for (int i = 0; i <= 15-1; i++){
+        for (int j = i + 1; j<= 15; j++){
+            RelativeV = movement[i] - movement[j];
 
-	
+            Vector urel(RelativeV);
+            urel.normalize();
+            rays = TRay(oldPos[i], urel);
+            MyTime=0.0;
+            if ( rays.dist(oldPos[j]) > 40){
+                continue;
+            }
+            while (MyTime < Time2){
+                MyTime += Add;
+                posi = oldPos[i] + RelativeV * MyTime;
+                if (posi.dist(oldPos[j]) <= 40) {
+                    point = posi;
+                    if (Timedummy > (MyTime-Add)) {
+                        Timedummy = MyTime - Add;
+                    }
+                    BallNr1=i;
+                    BallNr2=j;
+                    break;
+                }
+            }
+        }
+    }
+    if (Timedummy!=10000) {
+        TimePoint=Timedummy;
+        return true;
+    }
 
-	//Test all balls against eachother in 150 small steps
-
-	for (int i=0;i<NrOfBalls-1;i++)
-
-	{
-
-	 for (int j=i+1;j<NrOfBalls;j++)
-
-	 {	
-
-		    RelativeV=ArrayVel[i]-ArrayVel[j];
-
-			rays=TRay(OldPos[i],TVector::unit(RelativeV));
-
-			MyTime=0.0;
-
-
-
-			if ( (rays.dist(OldPos[j])) > 40) continue; 
-
-
-
-			while (MyTime<Time2)
-
-			{
-
-			   MyTime+=Add;
-
-			   posi=OldPos[i]+RelativeV*MyTime;
-
-			   if (posi.dist(OldPos[j])<=40) {
-
-										   point=posi;
-
-										   if (Timedummy>(MyTime-Add)) Timedummy=MyTime-Add;
-
-										   BallNr1=i;
-
-										   BallNr2=j;
-
-										   break;
-
-										}
-
-			
-
-			}
-
-	 }
-
-
-
-	}
-
-
-
-	if (Timedummy!=10000) { TimePoint=Timedummy;
-
-	                        return 1;
-
-	}
-
-
-
-	return 0;
-
+    return false;
 }
-
-*/
