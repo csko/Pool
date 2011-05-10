@@ -226,7 +226,7 @@ void Game::roundOver(){
     }
 }
 void Game::collision(int a, int b){ // Balls a and b have collided
-    cout << "collision " << a << " " << b << endl;
+//    cout << "collision " << a << " " << b << endl;
     // TODO
 }
 void hole(int a, int h){ // Ball a has fallen into hole h

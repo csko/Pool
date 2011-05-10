@@ -15,13 +15,17 @@ MyGameState::MyGameState(Game* _game) {
     timeStep = 1.0f / 60.0f;
 
     // Create the 4 sides
-    /*
-    sideDef.position.Set(-25.0f, -49.0f);
-    sideDef.position.Set(-25.0f, -49.0f);
-    sideDef.position.Set(25.0f, 49.0f);
-    sideDef.position.Set(25.0f, 49.0f);
-    */
-    
+    pl[0].position = TVector(-25.0f, -49.0f, 0); // lower left
+    pl[0].normal = TVector(1, 0, 0);
+
+    pl[1].position = TVector(-25.0f, -49.0f, 0); // lower left
+    pl[1].normal = TVector(0, 1, 0);
+
+    pl[2].position = TVector(25.0f, 49.0f, 0); // lower left
+    pl[2].normal = TVector(-1, 0, 0);
+
+    pl[3].position = TVector(25.0f, 49.0f, 0); // lower left
+    pl[3].normal = TVector(0,- 1, 0);
 
     initDone = false;
 }
@@ -39,7 +43,6 @@ void MyGameState::init(){
 
         moveBall(i, game->golyok[i].x, game->golyok[i].y);
 
-        //movement[i] = TVector(0.01*i, 0.01*i, 0);
         movement[i] = TVector(0, 0, 0);
     }
     initDone = true;
@@ -64,12 +67,14 @@ void MyGameState::updateBalls(){
     int BallNr=0,dummy=0,BallColNr1,BallColNr2;
 
     //Compute velocity for next timestep using Euler equations
-/*
-    TVector accel(0,-0.05,0);
+
+    // Linear friction, might need some tweaking
+    // TODO: not working?
+    TVector accel(-2.0,-2.0,0);
     for (int i=0; i <= 15; i++){
         movement[i] += accel * RestTime;
     }
-*/
+
     RestTime=0.6; // timestep
     lambda=1000;
 
@@ -84,51 +89,29 @@ void MyGameState::updateBalls(){
             TVector::unit(movement[i], uveloc);
             balls[i] += movement[i] * RestTime;
             rt2 = oldPos[i].dist(balls[i]);
-//            cout << i << " rt2 " << rt2 << endl;
-// TODO
-/*
-            //Test if collision occured between ball and all 4 planes
-            if (TestIntersionPlane(pl1, oldPos[i], uveloc, rt, norm)) {
-                //Find intersection time
-                rt4=rt*RestTime/rt2;
 
-                //if smaller than the one already stored replace and in timestep
-                if (rt4<=lamda and rt4<=RestTime+ZERO){
-                    if (! ((rt<=ZERO)&&(uveloc.dot(norm)>ZERO)) ){
-                        normal=norm;
-                        point=OldPos[i]+uveloc*rt;
-                        lamda=rt4;
-                        BallNr=i;
+            //Test if collision occured between ball and all 4 planes
+            for(int wall = 0; wall < 4; wall++){
+                if (TestIntersionPlane(pl[wall], oldPos[i], uveloc, rt, norm)) {
+                    //Find intersection time
+                    rt4=rt*RestTime/rt2;
+
+                    //if smaller than the one already stored replace and in timestep
+                    if (rt4<=lambda and rt4<=RestTime+ZERO){
+                        if (! ((rt<=ZERO)&&(uveloc.dot(norm)>ZERO)) ){
+                            normal=norm;
+                            point=oldPos[i]+uveloc*rt;
+                            lambda=rt4;
+                            BallNr=i;
+                        }
                     }
                 }
             }
-*/
-/*
-			  if (TestIntersionPlane(pl2,OldPos[i],uveloc,rt,norm))
-			  {
-				   rt4=rt*RestTime/rt2;
 
-				  if (rt4<=lamda)
-				  { 
-				    if (rt4<=RestTime+ZERO)
-						if (! ((rt<=ZERO)&&(uveloc.dot(norm)>ZERO)) )
-						 {
-							normal=norm;
-							point=OldPos[i]+uveloc*rt;
-							lamda=rt4;
-							BallNr=i;
-							dummy=1;
-						 }
-				  }
-				 
-			  }
-*/
- // 3 more planes...
         }
+
        // After all balls have been tested with planes, test for collision
        // between them and replace if collision time smaller
-
-
        if (FindBallCol(Pos2,BallTime,RestTime,BallColNr1,BallColNr2)){
             if ( (lambda==10000) || (lambda>BallTime) ) {
                 game->collision(BallColNr1, BallColNr2);
@@ -215,9 +198,7 @@ void MyGameState::updateBalls(){
                 }
         }
     // TODO: game->setMovement() accordingly
-    // TODO: change game->golyok[i]
     for(int i = 0; i <= 15; i++){
-        // TODO: if disabled, don't
         game->golyok[i].x = balls[i].X();
         game->golyok[i].y = balls[i].Y();
     }
@@ -232,7 +213,6 @@ void MyGameState::moveBall(int id, float x, float y){
 }
 
 bool TestIntersionPlane(const Plane& plane, const TVector& position, const TVector& direction, double& lambda, TVector& pNormal) {
-    return false;
     double DotProduct = direction.dot(plane.normal);
     double l2;
 

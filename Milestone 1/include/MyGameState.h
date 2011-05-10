@@ -29,6 +29,9 @@ class MyGameState : public GameState {
 
         bool initDone;
         Game* game;
+        Plane pl[4];
 };
+
+bool TestIntersionPlane(const Plane& plane, const TVector& position, const TVector& direction, double& lambda, TVector& pNormal);
 
 #endif
