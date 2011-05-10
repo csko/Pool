@@ -19,6 +19,7 @@ using namespace std;
  *********************************************************/
 
 // The width and height of your window, change them as you like
+
 static int screen_width = 800;
 static int screen_height = 600;
 const static int timer = 10;
@@ -28,8 +29,12 @@ static bool doScore = 1;
 
 static int mouse_elozo_x = 0.0f;
 static int q = 0;
+static long ido = 0;
 static bool mouse_init = false;
+static bool loves = false;
 static GLfloat angle=0.0f;
+static GLfloat dakoAngle=0.0f;
+
 
 // src/game.cpp
 extern Vector white;
@@ -38,7 +43,7 @@ extern Vector movement[16];
 extern bool isMovement;
 extern Game game;
 extern Layout layout;
-static Camera cam;
+extern Camera cam;
 
 void init(void)
 {
@@ -86,6 +91,16 @@ void Timer(int value)
     glutTimerFunc(timer, Timer, value + 1);
     if (cam.isRotate()) cam.doRotate();
     if (cam.isMove()) cam.doMove();
+    if(loves){
+    	    ido++;
+        if(ido==5){
+	    ido = 0;
+            loves = false;
+            game.hit();
+	    game.setMovement(true);
+        }
+    }
+    
 }
 
 /**********************************************************
@@ -146,9 +161,6 @@ void keyboard (unsigned char key, int x, int y)
     case 'q':
     case 'Q':
         exit(0);
-        break;
-    case ' ':
-        game.hit();
         break;
     case '4':
         balraIrany();
@@ -232,7 +244,7 @@ void mouse(int button, int state, int x, int y)
     {
 
     }else{
-      game.hit();  
+      loves = true;
     }
   }
 }
@@ -244,7 +256,9 @@ if(!mouse_init){
   mouse_elozo_x = x;
 }
   glutSetCursor(GLUT_CURSOR_FULL_CROSSHAIR); 
-  angle = (mouse_elozo_x-x)*(-0.01f);
+  angle = (GLfloat)(mouse_elozo_x-x)*(-0.01f);
+  if(loves)angle = 0;
+  dakoAngle+=angle;	
   white.rotate(angle);
   mouse_elozo_x = x;
 }
@@ -271,6 +285,7 @@ void display(void)
   cam.view();
   layout.drawEnv(); //falak, padló, meg ami még jön
   layout.drawTable(q);
+  layout.drawDako(dakoAngle, loves);dakoAngle = 0;
   game.updateBalls();
   layout.drawGolyok();
   layout.drawAxes();
@@ -297,7 +312,7 @@ int main(int argc, char **argv)
     glutDisplayFunc(display);
     glutIdleFunc(display);
     glutReshapeFunc (resize);
-    glutTimerFunc(timer, Timer, 10);
+    glutTimerFunc(timer, Timer, 1);
     glutKeyboardFunc (keyboard);
     glutSpecialFunc (keyboard_s);
     glutMouseFunc(mouse);

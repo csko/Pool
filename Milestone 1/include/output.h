@@ -13,6 +13,10 @@ void Tabla_nagy_0(Image f0);
 void Tabla_nagy_1(Image f1);
 void Tabla_nagy_2(Image f2);
 
+void dako1();
+void dako2();
+void dako3();
+
 
 
 

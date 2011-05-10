@@ -3,6 +3,7 @@
 #include "../include/texture.h"
 #include "../include/layout.h"
 #include "../include/output.h"
+#include "../include/Camera.h"
 #include "../include/texturefunctions.h"
 #include <cstdio>
 #include <cstdlib>
@@ -14,11 +15,15 @@
 using namespace std;
 extern Vector white;
 extern Game game;
+extern Camera cam;
 
 Layout layout;
 Layout::Layout(){
     sugar = 1.5f;
     gInit = 0;
+    dakoRot = 0.0;
+    dakoeltolas = 0;
+    elso = false;
     f0 = ImageLoad("images/f0.bmp");
     f1 = ImageLoad("images/f1.bmp");
     f2 = ImageLoad("images/f2.bmp");
@@ -59,7 +64,40 @@ if(q%3 == 0){
     Tabla_nagy_1(f1);
     Tabla_nagy_2(f2);
 }
-  glEnable(GL_TEXTURE_2D);
+  glDisable(GL_TEXTURE_2D);
+}
+void Layout::drawDako(GLfloat angle, bool loves){
+	if(!game.getMovement()){
+        if(elso){
+	    elso = false; 
+	    white.setX(whiteX);
+	    white.setY(whiteY);
+        }
+	glPushMatrix();
+		dakoRot+=angle;
+                glTranslatef(game.golyok[0].x,36, game.golyok[0].y);
+		glRotatef(-1*(180.0f+57.5*dakoRot), 0, 1, 0);
+                glTranslatef(0,0,-7);
+                if(loves){
+                        dakoeltolas++;
+	                glTranslatef(0,0,1*dakoeltolas);
+                        whiteY = white.getY();
+                        whiteX = white.getX();
+		}else{
+			dakoeltolas = 0;
+		}
+		glRotatef(5, 1, 0, 0);
+		glScalef(0.15, 0.15, 0.15);
+		glColor3f(0.4,0.15,0.02);
+		dako1();//kozepso
+		glColor3f(1,1,1);
+		dako2();//eleje
+		glColor3f(0.0,0.0,0.0);
+		dako3();//vege
+	glPopMatrix();
+	}else{
+		elso = true;
+	}
 }
 
 void Layout::drawEnv(){

@@ -17,6 +17,7 @@ class Layout {
 		void drawFloor();
 		void drawAxes();
 		void drawEnv();
+		void drawDako(GLfloat dakoAngle, bool loves);
 		void drawAbout(int doAbout);
 		void drawHelp(int doHelp);
                 void drawScore(int doScore);
@@ -32,6 +33,9 @@ class Layout {
 		Image f2;
 		Image floor;
 		Image wall;
-		GLfloat sugar;
+		GLfloat sugar, dakoRot;
 		int gInit;
+                int dakoeltolas;
+		bool elso;
+		GLfloat whiteX, whiteY;
 };

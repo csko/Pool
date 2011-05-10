@@ -12,6 +12,8 @@ GLfloat abs(GLfloat a){
 
 using namespace std;
 
+Camera cam;
+
 Camera::Camera() {
     xRot = 0.0f;
     zRot = 0.0f;
