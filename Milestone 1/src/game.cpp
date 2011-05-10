@@ -218,3 +218,9 @@ void Game::roundOver(){
         stepNum = 1;   
     }
 }
+void Game::collision(int a, int b){ // Balls a and b have collided
+    // TODO
+}
+void hole(int a, int h){ // Ball a has fallen into hole h
+    // TODO
+}

@@ -41,6 +41,10 @@ class Game {
 	    bool getRoundOver();
 	    struct golyo golyok[16];
         bool disabled[16];
+
+        // Callback
+        void collision(int a, int b); // Balls a and b have collided
+        void hole(int a, int h); // Ball a has fallen into hole h
     private:
         B2GameState* state;
         bool isMovement;
