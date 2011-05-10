@@ -3,6 +3,11 @@
 #include "vector.h"
 #include "../include/game.h"
 
+struct Plane{
+    Vector position;
+    Vector normal;
+};
+
 class MyGameState : public GameState {
     public:
         MyGameState(Game* game);
