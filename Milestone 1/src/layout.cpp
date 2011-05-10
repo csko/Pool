@@ -44,11 +44,21 @@ Layout::Layout(){
 
 }
 
-void Layout::drawTable(){
+void Layout::drawTable(int q){
   glEnable(GL_TEXTURE_2D);
-    BilliardTable_FACES(f0);
-    BilliardTable_FACES__1(f1);
-    BilliardTable_FACES__2(f2);
+if(q%3 == 0){
+    Tabla_kicsi_0(f0);
+    Tabla_kicsi_1(f1);
+    Tabla_kicsi_2(f2);
+}else if(q%3==1){
+    Tabla_kozepes_0(f0);
+    Tabla_kozepes_1(f1);
+    Tabla_kozepes_2(f2);
+}else if(q%3==2){
+    Tabla_nagy_0(f0);
+    Tabla_nagy_1(f1);
+    Tabla_nagy_2(f2);
+}
   glEnable(GL_TEXTURE_2D);
 }
 

@@ -27,6 +27,7 @@ static bool doAbout = 0;
 static bool doScore = 1;
 
 static int mouse_elozo_x = 0.0f;
+static int q = 0;
 static bool mouse_init = false;
 static GLfloat angle=0.0f;
 
@@ -170,6 +171,10 @@ void keyboard (unsigned char key, int x, int y)
     case 'p':
         doScore = !doScore;
         break;
+    case 'm':
+    case 'M':
+	q++;
+        break;
     default:
         cout << "Unknown key pressed: " << key << endl;
     }
@@ -265,7 +270,7 @@ void display(void)
   layout.drawScore(doScore);
   cam.view();
   layout.drawEnv(); //falak, padló, meg ami még jön
-  layout.drawTable();
+  layout.drawTable(q);
   game.updateBalls();
   layout.drawGolyok();
   layout.drawAxes();
@@ -292,7 +297,7 @@ int main(int argc, char **argv)
     glutDisplayFunc(display);
     glutIdleFunc(display);
     glutReshapeFunc (resize);
-    glutTimerFunc(timer, Timer, 1);
+    glutTimerFunc(timer, Timer, 10);
     glutKeyboardFunc (keyboard);
     glutSpecialFunc (keyboard_s);
     glutMouseFunc(mouse);

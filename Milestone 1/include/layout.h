@@ -12,7 +12,7 @@ class Layout {
 		Layout();
 		void initGolyok();
 		void drawGolyok();
-		void drawTable();
+		void drawTable(int q);
 		void drawWall();
 		void drawFloor();
 		void drawAxes();
