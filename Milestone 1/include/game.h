@@ -3,9 +3,9 @@
 #include "vector.h"
 #include <GL/glut.h> // GLfloat
 #include <Box2D/Box2D.h>
-#include "../include/B2GameState.h"
+//#include "../include/B2GameState.h"
 
-class B2GameState; // forward declaration
+//class B2GameState; // forward declaration
 
 const float holes[6][2] = {{25.549, -50},{27.564, 0},{25.549, 51},
                           {-25.549, 51},{-27.564, 0},{-25.549, -50.275}
@@ -22,6 +22,16 @@ struct golyo {
    GLfloat y;
    GLfloat xRot, yRot;
 }; // TODO: két vectorra bontani
+
+class GameState {
+    public:
+        virtual void init() = 0;
+        virtual void hit(float x, float y) = 0;
+        virtual void updateBalls() = 0;
+        virtual void removeBall(int id) = 0;
+        virtual void moveBall(int id, float x, float y) = 0;
+};
+
 class Game {
     public:
         Game();
@@ -46,7 +56,7 @@ class Game {
         void collision(int a, int b); // Balls a and b have collided
         void hole(int a, int h); // Ball a has fallen into hole h
     private:
-        B2GameState* state;
+        GameState* state;
         bool isMovement;
         bool isRoundOver;
         int p1Score, p2Score;

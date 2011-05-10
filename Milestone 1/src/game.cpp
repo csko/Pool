@@ -1,4 +1,5 @@
 #include "../include/game.h"
+#include "../include/B2GameState.h"
 #include <iostream>
 
 using namespace std;
@@ -83,6 +84,10 @@ void Game::hit(){
 
 void Game::updateBalls(){
     state->updateBalls(); // Update the position of the balls
+
+    if(!getMovement() && !getRoundOver()){
+       roundOver();
+    }
 
     // Handle balls falling in the holes
     for(int i = 0; i <= 15; i++){

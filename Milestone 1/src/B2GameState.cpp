@@ -109,9 +109,6 @@ void B2GameState::updateBalls(){
            game->setMovement(true);
         }
     }
-    if(!game->getMovement() && !game->getRoundOver()){
-        game->roundOver();
-    }
 }
 
 

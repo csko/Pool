@@ -1,20 +1,13 @@
 #ifndef _B2GAMESTATE_
 #define _B2GAMESTATE_
-#include "vector.h"
 #include <GL/glut.h> // GLfloat
 #include <Box2D/Box2D.h>
-#include "../include/game.h"
 
-class GameState {
-    public:
-        virtual void init() = 0;
-        virtual void hit(float x, float y) = 0;
-        virtual void updateBalls() = 0;
-        virtual void removeBall(int id) = 0;
-        virtual void moveBall(int id, float x, float y) = 0;
-};
+#include "../include/game.h"
+#include "vector.h"
 
 class Game; // forward declaration
+class GameState; // forward declaration
 
 class B2GameState : public GameState {
     public:
