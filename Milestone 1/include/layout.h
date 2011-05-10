@@ -18,6 +18,7 @@ class Layout {
 		void drawAxes();
 		void drawEnv();
 		void drawDako(GLfloat dakoAngle, bool loves);
+                void drawLampa();
 		void drawAbout(int doAbout);
 		void drawHelp(int doHelp);
                 void drawScore(int doScore);

@@ -17,6 +17,13 @@ void dako1();
 void dako2();
 void dako3();
 
+void lampa1();
+void lampa2();
+void lampa3();
+void lampa4();
+void lampa5();
+void lampa6();
+
 
 
 

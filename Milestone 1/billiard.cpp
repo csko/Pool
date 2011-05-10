@@ -290,6 +290,7 @@ void display(void)
   layout.drawEnv(); //falak, padló, meg ami még jön
   layout.drawTable(q);
   layout.drawDako(dakoAngle, loves);dakoAngle = 0;
+  layout.drawLampa();;
   game.updateBalls();
   layout.drawGolyok();
   layout.drawAxes();

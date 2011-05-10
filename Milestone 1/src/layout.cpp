@@ -69,6 +69,23 @@ if(q%3 == 0){
 }
   glDisable(GL_TEXTURE_2D);
 }
+void Layout::drawLampa(){
+    glPushMatrix();
+      glScalef(0.3,0.3,0.3);
+      glTranslatef(0,230,0);
+      glRotatef(90, 0, 1, 0);
+      glColor3f(0,0.5,0);
+      lampa1();
+      lampa2();
+      lampa3();
+      glColor3f(0,0,0);
+      lampa4();
+      lampa5();
+      lampa6();
+    glPopMatrix();
+
+
+}
 void Layout::drawDako(GLfloat angle, bool loves){
 	if(!game.getMovement()){
         if(elso){
