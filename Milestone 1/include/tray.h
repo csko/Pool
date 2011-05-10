@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include "../include/mathex.h"
-#include "vector.h"
+#include "../include/tvector.h"
 
 ///////////////////////////////////////////////////////////////////////
 //  Class Line

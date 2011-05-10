@@ -5,11 +5,10 @@
 /**********************COLLISION CRAZY******************************************/
 /*******************************************************************************/
 
-#include "../include/tray.h"
-
 #include <cmath>
-
-#include "mathex.h"
+#include "../include/tray.h"
+#include "../include/mathex.h"
+#include "../include/tvector.h"
 
 
 
@@ -35,7 +34,7 @@ bool TRay::adjacentPoints(const TRay &ray, TVector &point1, TVector &point2) con
 
 		double temp2 = 1.0 - sqr(temp);
 
-		TVector tv; // Temporary vector to enable use of optimised routines
+		TVector tv; // Temporary TVector to enable use of optimised routines
 
 
 
