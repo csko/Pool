@@ -47,6 +47,48 @@ extern Camera cam;
 
 void init(void)
 {
+    glEnable(GL_LIGHTING); //Enable lighting
+    glEnable(GL_LIGHT0); //Enable light #0
+    glEnable(GL_LIGHT1); //Enable light #1
+
+    //Ambient lighting
+    GLfloat RADIUS = 10.0f;
+    GLfloat ambientLight[] = {0.25f, 0.25f, 0.25f, 1.0f};
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientLight);
+    
+    GLfloat lightColor[] = {0.7f, 0.7f, 0.7f, 1.0f};
+    GLfloat lightPos[] = {1.5f * RADIUS, 2 * RADIUS, 1.5 * RADIUS, 1.0f};
+    //Diffuse (non-shiny) light component
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor);
+    //Specular (shiny) light component
+    glLightfv(GL_LIGHT0, GL_SPECULAR, lightColor);
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+    
+    
+    
+    //Set up the material
+    
+    //The color of the object
+    GLfloat materialColor[] = {0.9f, 0.9f, 1.0f, 1.0f};
+    //The specular (shiny) component of the material
+    GLfloat materialSpecular[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    //The color emitted by the material
+    GLfloat materialEmission[] = {0, 0, 0, 1.0f};
+    
+    glDisable(GL_COLOR_MATERIAL); //Required for the glMaterial calls to work
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, materialColor);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, materialSpecular);
+    glMaterialfv(GL_FRONT, GL_EMISSION, materialEmission);
+    //The shininess parameter.  A higher number indicates a more concentrated
+    //shiny area, while a lower number indicates a larger shiny area.  The
+    //shininess must be between 0 and 128.
+    glMaterialf(GL_FRONT, GL_SHININESS, 15.0f);
+
+
+
+
+   glEnable(GL_DEPTH_TEST);
+
     glShadeModel(GL_SMOOTH); // Type of shading for the polygons
    	
     // Viewport transformation
@@ -283,6 +325,7 @@ void display(void)
 
   glRotatef(30,1,0,0);    //egy kicsit döntött szögben nézünk az asztalra
   glTranslatef(0.0, -140.0,-180);   //minden a helyére kerül
+
   layout.drawHelp(doHelp);
   layout.drawAbout(doAbout);
   layout.drawScore(doScore);

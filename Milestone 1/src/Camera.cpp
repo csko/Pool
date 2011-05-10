@@ -22,7 +22,7 @@ Camera::Camera() {
     horizontal = 0.0f;
     vertical = 0.0f;
     zDir = 0.0f;
-    zoom = 1.0f;
+    zoom = 0.9f;
     
     roomDimension = 300.0f;
     

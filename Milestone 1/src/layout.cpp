@@ -71,19 +71,21 @@ if(q%3 == 0){
 }
 void Layout::drawLampa(){
     glPushMatrix();
-      glScalef(0.3,0.3,0.3);
-      glTranslatef(0,230,0);
-      glRotatef(90, 0, 1, 0);
-      glColor3f(0,0.5,0);
-      lampa1();
-      lampa2();
-      lampa3();
-      glColor3f(0,0,0);
-      lampa4();
-      lampa5();
-      lampa6();
+      glPushAttrib(GL_LIGHTING_BIT);
+        glDisable(GL_LIGHTING);
+        glScalef(0.3,0.3,0.3);
+        glTranslatef(0,230,0);
+        glRotatef(90, 0, 1, 0);
+        glColor3f(0,0.5,0);
+        lampa1();
+        lampa2();
+        lampa3();
+        glColor3f(0,0,0);
+        lampa4();
+        lampa5();
+        lampa6();
+      glPopAttrib();
     glPopMatrix();
-
 
 }
 void Layout::drawDako(GLfloat angle, bool loves){
@@ -108,12 +110,15 @@ void Layout::drawDako(GLfloat angle, bool loves){
 		}
 		glRotatef(5, 1, 0, 0);
 		glScalef(0.15, 0.15, 0.15);
-		glColor3f(0.4,0.15,0.02);
-		dako1();//kozepso
-		glColor3f(1,1,1);
-		dako2();//eleje
-		glColor3f(0.0,0.0,0.0);
-		dako3();//vege
+                glPushAttrib(GL_LIGHTING_BIT);
+                  glDisable(GL_LIGHTING);
+		  glColor3f(0.4,0.15,0.02);
+		  dako1();//kozepso
+		  glColor3f(1,1,1);
+		  dako2();//eleje
+		  glColor3f(0.0,0.0,0.0);
+		  dako3();//vege
+                glPopAttrib();
 	glPopMatrix();
 	}else{
 		elso = true;
@@ -352,23 +357,29 @@ void Layout::BitmapText(GLfloat x, GLfloat y, char *string)
 void Layout::drawAbout(int doAbout)
 {
     if(doAbout){
+      glPushAttrib(GL_LIGHTING_BIT);
+        glDisable(GL_LIGHTING);
     	glColor3f(1,1,1);
     	BitmapText(0.0f, 21.0f+45, "Billiard");
     	BitmapText(0.0f, 18.0f+45, "Borde Sandor, Csernai Kornel, Ladanyi Gergely");
 	BitmapText(0.0f, 15.0f+45, "Fejlett Grafikai Algoritmusok");
     	BitmapText(0.0f, 12.0f+45, "SZTE PTI MsC 2010/11 oszi felev");
+      glPopAttrib();
     }
 }
 
 void Layout::drawHelp(int doHelp)
 {
     if(doHelp){
+      glPushAttrib(GL_LIGHTING_BIT);
+        glDisable(GL_LIGHTING);
         glColor3f(1,1,1);
         BitmapText(-40.0f, 21.0f+45, "Hasznalhato billentyuk:");
         BitmapText(-40.0f, 18.0f+45, "a,s,d,w - kamera pozicionalasa");
         BitmapText(-40.0f, 15.0f+45, "fel,le - kamera iranyitasa");
         BitmapText(-40.0f, 12.0f+45, "2,4,6,8 - feher golyo celzasa");
         BitmapText(-40.0f, 9.0f+45,  "space - feher golyo kilovese");
+      glPopAttrib();
     }
 }
 
@@ -386,7 +397,8 @@ void Layout::drawScore(int doScore)
 	sprintf(p2, "%d",p2Score);
         strcat(p1_pontszam,p1);
         strcat(p2_pontszam,p2);       
-
+      glPushAttrib(GL_LIGHTING_BIT);
+        glDisable(GL_LIGHTING);
         BitmapText(-39.7f, 21.0f+50, "Player 1");
         BitmapText(  0.0f, 21.0f+50, "Player 2");
         BitmapText(-40.0f, 18.0f+50, p1_pontszam);
@@ -427,5 +439,6 @@ void Layout::drawScore(int doScore)
        	        glVertex3f(-40.0f+39.5, 67.5f, 0.0f);
             glEnd();
         }
+glPopAttrib();
 	}
 }
