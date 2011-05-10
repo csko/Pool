@@ -17,6 +17,7 @@ class MyGameState : public GameState {
         float  timeStep;
         Vector balls[16];
         Vector lastpos[16];
+        Vector movement[16];
 
         bool initDone;
         Game* game;

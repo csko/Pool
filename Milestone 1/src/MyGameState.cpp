@@ -31,14 +31,22 @@ void MyGameState::init(){
     if(initDone == true){
         //return;
     }
-    // TODO: Put balls in their correct position.
-    // TODO: Reset movement vectors.
+    for(int i = 0; i <= 15; i++){
+        lastpos[i].setX(game->golyok[i].x);
+        lastpos[i].setY(game->golyok[i].y);
+
+        moveBall(i, game->golyok[i].x, game->golyok[i].y);
+
+        movement[i].setX(0);
+        movement[i].setY(0);
+    }
     initDone = true;
 }
 
 void MyGameState::hit(float x, float y){
-    // TODO: adjust movement vector of the white ball
-    // TODO: angle
+    movement[0].setX(x);
+    movement[0].setY(y);
+    // TODO: angle?
 }
 
 void MyGameState::updateBalls(){
@@ -52,9 +60,10 @@ void MyGameState::updateBalls(){
 }
 
 void MyGameState::removeBall(int id){
-    // TODO: remove ball
+    moveBall(id, -50000, -50000); // Hack :)
 }
 
 void MyGameState::moveBall(int id, float x, float y){
-    // TODO: move ball
+    balls[id].setX(x);
+    balls[id].setY(y);
 }
