@@ -13,6 +13,7 @@ class Game;
 MyGameState::MyGameState(Game* _game) {
     game = _game;
     timeStep = 1.0f / 60.0f;
+    timeStep = 1.0f / 10.0f; // Gyorsabb tesztelés
 
     // Create the 4 sides
     pl[0].position = TVector(-25.0f, -49.0f, 0); // lower left
@@ -68,14 +69,16 @@ void MyGameState::updateBalls(){
 
     //Compute velocity for next timestep using Euler equations
 
-    // Linear friction, might need some tweaking
-    // TODO: not working?
-    TVector accel(-2.0,-2.0,0);
+    // 5% linear friction
+    float friction = 1.05f;
     for (int i=0; i <= 15; i++){
-        movement[i] += accel * RestTime;
+        movement[i] *= 1/friction;
+        if(movement[i].mag() < 0.1f){
+            movement[i] = TVector(0, 0, 0);
+        }
     }
 
-    RestTime=0.6; // timestep
+    RestTime=timeStep; // timestep
     lambda=1000;
 
     //While timestep not over
@@ -197,10 +200,13 @@ void MyGameState::updateBalls(){
                     RestTime=0;
                 }
         }
-    // TODO: game->setMovement() accordingly
+    game->setMovement(false);
     for(int i = 0; i <= 15; i++){
         game->golyok[i].x = balls[i].X();
         game->golyok[i].y = balls[i].Y();
+        if(movement[i].mag() > 0.01){
+            game->setMovement(true);
+        }
     }
 }
 
@@ -210,6 +216,7 @@ void MyGameState::removeBall(int id){
 
 void MyGameState::moveBall(int id, float x, float y){
     balls[id] = TVector(x, y, 0);
+    movement[id] = TVector(0, 0, 0);
 }
 
 bool TestIntersionPlane(const Plane& plane, const TVector& position, const TVector& direction, double& lambda, TVector& pNormal) {

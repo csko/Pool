@@ -5,7 +5,7 @@
 
 using namespace std;
 
-Vector white(0, -10);
+Vector white(0, -60);
 Vector movement[16];
 Game game;
 
