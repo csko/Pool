@@ -1,5 +1,6 @@
 #include "../include/game.h"
 #include "../include/B2GameState.h"
+#include "../include/MyGameState.h"
 #include <iostream>
 
 using namespace std;
@@ -61,6 +62,7 @@ Game::Game(){
     b2Vec2 gravity(0.0f, 0.0f);
     bool doSleep = false;
     state = new B2GameState(this, gravity, doSleep);
+//    state = new MyGameState(this);
 }
 
 bool Game::getMovement(){

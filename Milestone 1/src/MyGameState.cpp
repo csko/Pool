@@ -1,6 +1,8 @@
+#include <iostream>
 #include "../include/MyGameState.h"
 #include "../include/game.h"
-#include <iostream>
+#include "../include/tvector.h"
+#include "../include/tray.h"
 
 using namespace std;
 
@@ -37,15 +39,14 @@ void MyGameState::init(){
 
         moveBall(i, game->golyok[i].x, game->golyok[i].y);
 
-        movement[i].setX(0);
-        movement[i].setY(0);
+        movement[i] = TVector(0, 0, 0);
     }
     initDone = true;
 }
 
 void MyGameState::hit(float x, float y){
-    movement[0].setX(x);
-    movement[0].setY(y);
+    movement[0] = TVector(x, y, 0);
+    cout << movement[0] << endl;
     // TODO: angle?
 }
 
@@ -54,29 +55,41 @@ void MyGameState::updateBalls(){
         return;
     }
 
-    float RestTime = timeStep;
     float lambda;
-    float accel = 1.0f;
-    Vector oldPos[16];
+    double rt,rt2,rt4;
+    TVector norm,uveloc;
+    TVector Pos2;
+    TVector normal,point,time;
+    double RestTime,BallTime;
+    int BallNr=0,dummy=0,BallColNr1,BallColNr2;
 
     //Compute velocity for next timestep using Euler equations
-    for (i=0; i <= 15; i++)
-      movement[i] += accel*RestTime;
+    TVector accel(0,-0.05,0); // TODO
+    for (int i=0; i <= 15; i++){
+//        movement[i] += accel * RestTime;
+    }
+    cout << "update " << endl;
+
+    RestTime=0.6; // timestep
+    lambda=1000;
+
+    cout << RestTime << " " << eps << endl;
 
     //While timestep not over
     while (RestTime > eps){
        lambda=10000;   //initialize to very large value
+       cout << RestTime << endl;
 
        //For all the balls find closest intersection between balls and planes
         for (int i=0; i <= 15; i++){
             //compute new position and distance
             oldPos[i]=balls[i];
-            uveloc = movement[i];
-            uveloc.normalize();
+            TVector::unit(movement[i],uveloc);
             balls[i] += movement[i] * RestTime;
-            rt2 = oldPos[i].dist(balls[i]); // TODO: dist
-
-            //Test if collision occured between ball and all 5 planes
+            rt2 = oldPos[i].dist(balls[i]);
+// TODO
+/*
+            //Test if collision occured between ball and all 4 planes
             if (TestIntersionPlane(pl1, oldPos[i], uveloc, rt, norm)) {
                 //Find intersection time
                 rt4=rt*RestTime/rt2;
@@ -91,6 +104,7 @@ void MyGameState::updateBalls(){
                     }
                 }
             }
+*/
 /*
 			  if (TestIntersionPlane(pl2,OldPos[i],uveloc,rt,norm))
 			  {
@@ -117,27 +131,26 @@ void MyGameState::updateBalls(){
 
 
        if (FindBallCol(Pos2,BallTime,RestTime,BallColNr1,BallColNr2)){
+            cout << "COLLISION" << endl;
             if ( (lambda==10000) || (lambda>BallTime) ) {
                 game->collision(BallColNr1, BallColNr2);
                 RestTime = RestTime - BallTime;
 
-                Vector pb1,pb2,xaxis,U1x,U1y,U2x,U2y,V1x,V1y,V2x,V2y;
+                TVector pb1,pb2,xaxis,U1x,U1y,U2x,U2y,V1x,V1y,V2x,V2y;
                 double a,b;
 
-                pb1 = oldPos[BallColNr1] + ArrayVel[BallColNr1] * BallTime;
-                pb2 = oldPos[BallColNr2] + ArrayVel[BallColNr2] * BallTime;
+                pb1 = oldPos[BallColNr1] + movement[BallColNr1] * BallTime;
+                pb2 = oldPos[BallColNr2] + movement[BallColNr2] * BallTime;
 
-                xaxis = pb2 - pb1;
-                xaxis.normalize();
+                xaxis = (pb2 - pb1).unit();
+                a = xaxis.dot(movement[BallColNr1]);
 
-                a = dot(xaxis, movement[BallColNr1]);
                 U1x = xaxis * a;
                 U1y = movement[BallColNr1] - U1x;
 
-                xaxis = pb1 - pb2;
-                xaxis.normalize();
+                xaxis = (pb1 - pb2).unit();
+                b = xaxis.dot(movement[BallColNr2]);
 
-                b = dot(xaxis, movement[BallColNr2]);
                 U2x = xaxis * b;
                 U2y = movement[BallColNr2] - U2x;
 
@@ -146,7 +159,7 @@ void MyGameState::updateBalls(){
                 V1y = U1y;
                 V2y = U2y;
 
-                for (j=0; j<=15;j++){
+                for (int j=0; j<=15;j++){
                     balls[j] = oldPos[j] + movement[j] * BallTime;
                 }
 
@@ -177,11 +190,11 @@ void MyGameState::updateBalls(){
             if (lambda!=10000){
                 RestTime-=lambda;
 
-                for (j=0; j <= 15; j++)
-                    balls[j] = oldPos[j] + movement[j] * lamda;
-                    rt2 = movement[BallNr].length();
-                    movement[BallNr].normalize();
-                    movement[BallNr] = TVector::unit( (normal*(2*normal.dot(-ArrayVel[BallNr]))) + ArrayVel[BallNr] );
+                for (int j=0; j <= 15; j++)
+                    balls[j] = oldPos[j] + movement[j] * lambda;
+                    rt2 = movement[BallNr].mag();
+                    movement[BallNr].unit(); // TODO
+                    movement[BallNr] = TVector::unit( (normal*(2*normal.dot(-movement[BallNr]))) + movement[BallNr] );
                     movement[BallNr] = movement[BallNr]*rt2;
 /*
                     //Update explosion array
@@ -199,6 +212,7 @@ void MyGameState::updateBalls(){
             } else {
                 RestTime=0;
             }
+        }
     }
     // TODO: Do the collision detection, response.
     // TODO: game->setMovement() accordingly
@@ -210,13 +224,12 @@ void MyGameState::removeBall(int id){
 }
 
 void MyGameState::moveBall(int id, float x, float y){
-    balls[id].setX(x);
-    balls[id].setY(y);
+    balls[id] = TVector(x, y, 0);
 }
 
-bool TestIntersionPlane(const Plane& plane, const Vector& position, const Vector& direction, double& lamda, TVector& pNormal) {
+bool TestIntersionPlane(const Plane& plane, const TVector& position, const TVector& direction, double& lambda, TVector& pNormal) {
 
-    double DotProduct = dot(direction, plane.normal);
+    double DotProduct = direction.dot(plane.normal);
     double l2;
 
     // determine if ray parallel to plane
@@ -224,25 +237,25 @@ bool TestIntersionPlane(const Plane& plane, const Vector& position, const Vector
         return false;
     }
 
-    l2 = dot(plane.normal, plane.position - position) / DotProduct;
+    l2 = plane.normal.dot(plane.position - position) / DotProduct;
 
     if (l2 < -ZERO) {
         return false;
     }
 
     pNormal = plane.normal;
-    lamda = l2;
+    lambda = l2;
 
     return true;
 }
 
-bool FindBallCol(Vector& point, double& TimePoint, double Time2, int& BallNr1, int& BallNr2){
-    Vector RelativeV;
+bool MyGameState::FindBallCol(TVector& point, double& TimePoint, double Time2, int& BallNr1, int& BallNr2){
+    TVector RelativeV;
     TRay rays;
 
     double MyTime=0.0, Add=Time2/150.0, Timedummy=10000, Timedummy2=-1;
 
-    Vector posi;
+    TVector posi;
 
     //Test all balls against eachother in 150 small steps
 
@@ -250,9 +263,7 @@ bool FindBallCol(Vector& point, double& TimePoint, double Time2, int& BallNr1, i
         for (int j = i + 1; j<= 15; j++){
             RelativeV = movement[i] - movement[j];
 
-            Vector urel(RelativeV);
-            urel.normalize();
-            rays = TRay(oldPos[i], urel);
+            rays = TRay(oldPos[i],TVector::unit(RelativeV));
             MyTime=0.0;
             if ( rays.dist(oldPos[j]) > 40){
                 continue;
