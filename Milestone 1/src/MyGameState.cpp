@@ -39,6 +39,7 @@ void MyGameState::init(){
 
         moveBall(i, game->golyok[i].x, game->golyok[i].y);
 
+        //movement[i] = TVector(0.01*i, 0.01*i, 0);
         movement[i] = TVector(0, 0, 0);
     }
     initDone = true;
@@ -46,7 +47,6 @@ void MyGameState::init(){
 
 void MyGameState::hit(float x, float y){
     movement[0] = TVector(x, y, 0);
-    cout << movement[0] << endl;
     // TODO: angle?
 }
 
@@ -64,29 +64,27 @@ void MyGameState::updateBalls(){
     int BallNr=0,dummy=0,BallColNr1,BallColNr2;
 
     //Compute velocity for next timestep using Euler equations
-    TVector accel(0,-0.05,0); // TODO
+/*
+    TVector accel(0,-0.05,0);
     for (int i=0; i <= 15; i++){
-//        movement[i] += accel * RestTime;
+        movement[i] += accel * RestTime;
     }
-    cout << "update " << endl;
-
+*/
     RestTime=0.6; // timestep
     lambda=1000;
-
-    cout << RestTime << " " << eps << endl;
 
     //While timestep not over
     while (RestTime > eps){
        lambda=10000;   //initialize to very large value
-       cout << RestTime << endl;
 
        //For all the balls find closest intersection between balls and planes
         for (int i=0; i <= 15; i++){
             //compute new position and distance
             oldPos[i]=balls[i];
-            TVector::unit(movement[i],uveloc);
+            TVector::unit(movement[i], uveloc);
             balls[i] += movement[i] * RestTime;
             rt2 = oldPos[i].dist(balls[i]);
+//            cout << i << " rt2 " << rt2 << endl;
 // TODO
 /*
             //Test if collision occured between ball and all 4 planes
@@ -126,12 +124,12 @@ void MyGameState::updateBalls(){
 			  }
 */
  // 3 more planes...
+        }
        // After all balls have been tested with planes, test for collision
        // between them and replace if collision time smaller
 
 
        if (FindBallCol(Pos2,BallTime,RestTime,BallColNr1,BallColNr2)){
-            cout << "COLLISION" << endl;
             if ( (lambda==10000) || (lambda>BallTime) ) {
                 game->collision(BallColNr1, BallColNr2);
                 RestTime = RestTime - BallTime;
@@ -180,6 +178,8 @@ void MyGameState::updateBalls(){
 					  }
 					  */
 
+
+
 					  continue; // ????
                 }
             }
@@ -190,12 +190,13 @@ void MyGameState::updateBalls(){
             if (lambda!=10000){
                 RestTime-=lambda;
 
-                for (int j=0; j <= 15; j++)
+                for (int j=0; j <= 15; j++){
                     balls[j] = oldPos[j] + movement[j] * lambda;
-                    rt2 = movement[BallNr].mag();
-                    movement[BallNr].unit(); // TODO
-                    movement[BallNr] = TVector::unit( (normal*(2*normal.dot(-movement[BallNr]))) + movement[BallNr] );
-                    movement[BallNr] = movement[BallNr]*rt2;
+                }
+                rt2 = movement[BallNr].mag();
+                movement[BallNr].unit(); // TODO
+                movement[BallNr] = TVector::unit( (normal*(2*normal.dot(-movement[BallNr]))) + movement[BallNr] );
+                movement[BallNr] = movement[BallNr]*rt2;
 /*
                     //Update explosion array
                     for(j=0;j<20;j++)
@@ -209,14 +210,17 @@ void MyGameState::updateBalls(){
 						  }
 					  }
 */
-            } else {
-                RestTime=0;
-            }
+                } else {
+                    RestTime=0;
+                }
         }
-    }
-    // TODO: Do the collision detection, response.
     // TODO: game->setMovement() accordingly
     // TODO: change game->golyok[i]
+    for(int i = 0; i <= 15; i++){
+        // TODO: if disabled, don't
+        game->golyok[i].x = balls[i].X();
+        game->golyok[i].y = balls[i].Y();
+    }
 }
 
 void MyGameState::removeBall(int id){
@@ -228,7 +232,7 @@ void MyGameState::moveBall(int id, float x, float y){
 }
 
 bool TestIntersionPlane(const Plane& plane, const TVector& position, const TVector& direction, double& lambda, TVector& pNormal) {
-
+    return false;
     double DotProduct = direction.dot(plane.normal);
     double l2;
 
@@ -265,13 +269,13 @@ bool MyGameState::FindBallCol(TVector& point, double& TimePoint, double Time2, i
 
             rays = TRay(oldPos[i],TVector::unit(RelativeV));
             MyTime=0.0;
-            if ( rays.dist(oldPos[j]) > 40){
+            if ( rays.dist(oldPos[j]) > 10){
                 continue;
             }
             while (MyTime < Time2){
                 MyTime += Add;
                 posi = oldPos[i] + RelativeV * MyTime;
-                if (posi.dist(oldPos[j]) <= 40) {
+                if (posi.dist(oldPos[j]) <= 3) {
                     point = posi;
                     if (Timedummy > (MyTime-Add)) {
                         Timedummy = MyTime - Add;
@@ -287,6 +291,5 @@ bool MyGameState::FindBallCol(TVector& point, double& TimePoint, double Time2, i
         TimePoint=Timedummy;
         return true;
     }
-
     return false;
 }

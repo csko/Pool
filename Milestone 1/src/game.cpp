@@ -5,7 +5,7 @@
 
 using namespace std;
 
-Vector white(0, -60);
+Vector white(0, -10);
 Vector movement[16];
 Game game;
 
@@ -61,8 +61,8 @@ Game::Game(){
 
     b2Vec2 gravity(0.0f, 0.0f);
     bool doSleep = false;
-    state = new B2GameState(this, gravity, doSleep);
-//    state = new MyGameState(this);
+//    state = new B2GameState(this, gravity, doSleep);
+    state = new MyGameState(this);
 }
 
 bool Game::getMovement(){
