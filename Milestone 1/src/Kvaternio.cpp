@@ -70,6 +70,10 @@ Vektor3 Kvaternio::operator*( const Vektor3& v ) {
 	return ( Vektor3( res.x, res.y, res.z ) );
 }
 
+bool Kvaternio::operator==( const Kvaternio& k ) const {
+	return ( (x==k.x) && (y==k.y) && (z==k.z) && (w==k.w) );
+}
+
 /* 
  * Kvaternió kiszámítása forgatási tengelyből és forgatási szögből.
  * Adott tengely körüli forgatás (amit a v vektor reprezentál) egy 
@@ -142,3 +146,32 @@ void Kvaternio::kvaterniobolMatrix(GLfloat *forgatoMatrix) const {
 	forgatoMatrix[15] = 1.0f;	
 }
 
+float Kvaternio::kvaternioCosTheta( const Kvaternio& k ) const {
+	return w*k.w + x*k.x + y*k.y + z*k.z;
+}
+
+GLfloat Kvaternio::getX() {
+	return x;
+}
+GLfloat Kvaternio::getY() {
+	return y;
+}
+GLfloat Kvaternio::getZ() {
+	return z;
+}
+GLfloat Kvaternio::getW() {
+	return w;
+}
+
+void Kvaternio::setX(GLfloat x) {
+	this->x = x;
+}
+void Kvaternio::setY(GLfloat y) {
+	this->y = y;
+}
+void Kvaternio::setZ(GLfloat z) {
+	this->z = z;
+}
+void Kvaternio::setW(GLfloat w) {
+	this->w = w;
+}	

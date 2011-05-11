@@ -176,7 +176,7 @@ void keyboard (unsigned char key, int x, int y)
     case 'r':
     case 'R':
     	if (!cam.isRotate())
-			cam.rotateTo(90.0, 5.0, VERTICAL);
+			cam.rotateTo(89.0, 5.0, VERTICAL);
 		else 
 			cout << "Rotation in process..." << endl;			
         break;

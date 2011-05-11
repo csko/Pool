@@ -2,6 +2,7 @@
 #define _KAMERAMOZGAS_
 #include <GL/glut.h> // GLfloat
 #include "Vektor3.h"
+#include "Kvaternio.h"
 
 enum rotationOrientation {HORIZONTAL, VERTICAL};
 
@@ -53,6 +54,8 @@ private:
    bool rotate;   		//folyamatban van-e forgatás
    int rotateDirection;  //mely tengely mentén akarunk forgatni
    
+   Kvaternio *start, *end;
+   
    
    static const bool debug = true;	//szeretnénk-e az stdout-ra információt kiírni
    bool kvaternio;	//kvaterniókat használunk-e a mozgatáshoz?
@@ -62,6 +65,9 @@ private:
    void cubicEaseOutRotate();
    void cubicEaseInRotate();   
    void cubicEaseInOutMove();
+   
+   float fokRadianba(float);
+   float radianFokba(float);
    
 public:   
 
