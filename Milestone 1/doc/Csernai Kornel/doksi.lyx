@@ -36,6 +36,7 @@
 \tracking_changes false
 \output_changes false
 \author "" 
+\author "" 
 \end_header
 
 \begin_body
@@ -601,6 +602,15 @@ Legyen
 \end_inset
 
 .
+ Az 
+\begin_inset Formula $x$
+\end_inset
+
+ komponens a relatív pozíció, 
+\begin_inset Formula $y$
+\end_inset
+
+ erre merőleges.
 \end_layout
 
 \begin_layout Standard
