@@ -17,10 +17,10 @@ using namespace std;
 Camera cam;
 
 Camera::Camera() {
-    xRot = 0.0f;
+    xRot = -1.0f;
     zRot = 0.0f;
     horizontal = 0.0f;
-    vertical = 0.0f;
+    vertical = 20.0f;
     zDir = 0.0f;
     zoom = 0.9f;
     

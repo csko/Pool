@@ -5,6 +5,8 @@
 #include "../include/output.h"
 #include "../include/Camera.h"
 #include "../include/texturefunctions.h"
+#include "../include/B2GameState.h"
+#include "../include/MyGameState.h"
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -257,8 +259,7 @@ void Layout::initGolyok(){
 void Layout::drawGolyok(){
   if(gInit == 0 || game.getEnd()) {
     initGolyok();
-    game.init();
-    game.setEnd(false);
+    game.newGameState();
     gInit = 1;
   }
   if(!game.disabled[0]){

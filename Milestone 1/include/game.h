@@ -49,9 +49,11 @@ class Game {
 	    bool getMovement();
 	    void setMovement(bool m);
 	    bool getRoundOver();
+	    void setRoundOver(bool r);
 	    struct golyo golyok[16];
         bool disabled[16];
-
+	bool kornelGameState;
+	void newGameState();
         // Callback
         void collision(int a, int b); // Balls a and b have collided
         void hole(int a, int h); // Ball a has fallen into hole h

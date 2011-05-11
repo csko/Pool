@@ -60,11 +60,14 @@ Game::Game(){
     p1Ball = p2Ball = false;
     end = false;
     stepNum = 1;
-
+    kornelGameState = true;
     b2Vec2 gravity(0.0f, 0.0f);
     bool doSleep = false;
-//    state = new B2GameState(this, gravity, doSleep);
-    state = new MyGameState(this);
+    if(!kornelGameState){
+       state = new B2GameState(this, gravity, doSleep);
+    }else{
+       state = new MyGameState(this);
+    }
 }
 
 bool Game::getMovement(){
@@ -73,6 +76,9 @@ bool Game::getMovement(){
 
 bool Game::getRoundOver(){
     return isRoundOver;
+}
+void Game::setRoundOver(bool r){
+    isRoundOver = r;
 }
 
 void Game::setMovement(bool m){
@@ -150,7 +156,18 @@ int Game::getP1Score(){
 int Game::getP2Score(){
     return p2Score;
 }
-
+void Game::newGameState(){
+    end = false;
+    b2Vec2 gravity(0.0f, 0.0f);
+        bool doSleep = false;  
+        delete state;
+        if(!kornelGameState){
+           state = new B2GameState(this, gravity, doSleep);
+        }else{
+           state = new MyGameState(this);
+	}
+	init();
+}
 void Game::roundOver(){
     isRoundOver = true;
     if(p1Turn){
@@ -224,11 +241,9 @@ void Game::roundOver(){
         p1Turn = 1;
         p1Score = 0;
         p2Score = 0;
-        stepNum = 1;  
-        delete state;
-	state = new MyGameState(this);
-        state->init();
+        stepNum = 1;
     }
+
 }
 void Game::collision(int a, int b){ // Balls a and b have collided
 //    cout << "collision " << a << " " << b << endl;

@@ -208,6 +208,12 @@ void keyboard (unsigned char key, int x, int y)
     case 'Q':
         exit(0);
         break;
+    case 'b':
+    case 'B':
+	game.kornelGameState = !game.kornelGameState;
+	game.setRoundOver(false);
+	game.setEnd(true); 
+        break;
     case '4':
         balraIrany();
         break;
@@ -235,7 +241,7 @@ void keyboard (unsigned char key, int x, int y)
         break;
     case 'n':
     case 'N':
-	game.setEnd(true);
+        if(game.kornelGameState)game.setEnd(true);
         break;
     default:
         cout << "Unknown key pressed: " << key << endl;
