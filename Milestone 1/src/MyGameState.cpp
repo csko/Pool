@@ -211,7 +211,7 @@ void MyGameState::updateBalls(){
 }
 
 void MyGameState::removeBall(int id){
-    moveBall(id, -50000, -50000); // Hack :)
+    moveBall(id, -50000 + id * 10, -50000); // Hack :)
 }
 
 void MyGameState::moveBall(int id, float x, float y){
