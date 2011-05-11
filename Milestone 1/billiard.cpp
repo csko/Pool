@@ -233,6 +233,10 @@ void keyboard (unsigned char key, int x, int y)
     case 'M':
 	q++;
         break;
+    case 'n':
+    case 'N':
+	game.setEnd(true);
+        break;
     default:
         cout << "Unknown key pressed: " << key << endl;
     }

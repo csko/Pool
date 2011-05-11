@@ -25,8 +25,6 @@ class Layout {
 		void BitmapText(GLfloat x, GLfloat y, char *string);
 
 
-
-
 	private:
 		Image ballsImage[16];
 		Image f0;

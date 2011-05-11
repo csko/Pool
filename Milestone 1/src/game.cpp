@@ -1,4 +1,5 @@
 #include "../include/game.h"
+#include "../include/layout.h"
 #include "../include/B2GameState.h"
 #include "../include/MyGameState.h"
 #include <iostream>
@@ -8,6 +9,7 @@ using namespace std;
 Vector white(0, -60);
 Vector movement[16];
 Game game;
+extern Layout layout;
 
 // TODO: ezeket bele kell rakni Game osztályba
 //milyen esemény történt egy ütés során
@@ -222,7 +224,10 @@ void Game::roundOver(){
         p1Turn = 1;
         p1Score = 0;
         p2Score = 0;
-        stepNum = 1;   
+        stepNum = 1;  
+        delete state;
+	state = new MyGameState(this);
+        state->init();
     }
 }
 void Game::collision(int a, int b){ // Balls a and b have collided
