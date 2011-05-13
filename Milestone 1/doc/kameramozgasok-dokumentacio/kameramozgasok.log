@@ -1,0 +1,349 @@
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.8)  13 MAY 2011 21:49
+entering extended mode
+ %&-line parsing enabled.
+**kameramozgasok.tex
+(./kameramozgasok.tex
+LaTeX2e <2009/09/24>
+Babel <v3.8l> and hyphenation patterns for english, usenglishmax, dumylang, noh
+yphenation, loaded.
+(/usr/share/texmf-texlive/tex/latex/base/article.cls
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/share/texmf-texlive/tex/latex/base/size10.clo
+File: size10.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/usr/share/texmf-texlive/tex/latex/base/inputenc.sty
+Package: inputenc 2008/03/30 v1.1d Input encoding file
+\inpenc@prehook=\toks14
+\inpenc@posthook=\toks15
+
+(/usr/share/texmf-texlive/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+))
+(/usr/share/texmf-texlive/tex/latex/ucs/ucs.sty
+Package: ucs 2004/10/17 UCS: Unicode input support
+
+(/usr/share/texmf-texlive/tex/latex/ucs/data/uni-global.def
+File: uni-global.def 2004/10/17 UCS: Unicode global data
+)
+\uc@secondtry=\count87
+\uc@combtoks=\toks16
+\uc@combtoksb=\toks17
+\uc@temptokena=\toks18
+)
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2000/07/18 v2.13 AMS math features
+\@mathmargin=\skip43
+
+For additional information on amsmath, use the `?' option.
+(/usr/share/texmf-texlive/tex/latex/amsmath/amstext.sty
+Package: amstext 2000/06/29 v2.01
+
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0
+\@emptytoks=\toks19
+\ex@=\dimen103
+))
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d
+\pmbraise@=\dimen104
+)
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsopn.sty
+Package: amsopn 1999/12/14 v2.01 operator names
+)
+\inf@bad=\count88
+LaTeX Info: Redefining \frac on input line 211.
+\uproot@=\count89
+\leftroot@=\count90
+LaTeX Info: Redefining \overline on input line 307.
+\classnum@=\count91
+\DOTSCASE@=\count92
+LaTeX Info: Redefining \ldots on input line 379.
+LaTeX Info: Redefining \dots on input line 382.
+LaTeX Info: Redefining \cdots on input line 467.
+\Mathstrutbox@=\box26
+\strutbox@=\box27
+\big@size=\dimen105
+LaTeX Font Info:    Redeclaring font encoding OML on input line 567.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 568.
+\macc@depth=\count93
+\c@MaxMatrixCols=\count94
+\dotsspace@=\muskip10
+\c@parentequation=\count95
+\dspbrk@lvl=\count96
+\tag@help=\toks20
+\row@=\count97
+\column@=\count98
+\maxfields@=\count99
+\andhelp@=\toks21
+\eqnshift@=\dimen106
+\alignsep@=\dimen107
+\tagshift@=\dimen108
+\tagwidth@=\dimen109
+\totwidth@=\dimen110
+\lineht@=\dimen111
+\@envbody=\toks22
+\multlinegap=\skip44
+\multlinetaggap=\skip45
+\mathdisplay@stack=\toks23
+LaTeX Info: Redefining \[ on input line 2666.
+LaTeX Info: Redefining \] on input line 2667.
+)
+(/usr/share/texmf-texlive/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2009/06/22 v3.00 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 96.
+)
+(/usr/share/texmf-texlive/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2009/06/22 v3.00
+)
+(/usr/share/texmf-texlive/tex/latex/listings/listings.sty
+(/usr/share/texmf-texlive/tex/latex/graphics/keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks24
+)
+\lst@mode=\count100
+\lst@gtempboxa=\box28
+\lst@token=\toks25
+\lst@length=\count101
+\lst@currlwidth=\dimen112
+\lst@column=\count102
+\lst@pos=\count103
+\lst@lostspace=\dimen113
+\lst@width=\dimen114
+\lst@newlines=\count104
+\lst@lineno=\count105
+\lst@maxwidth=\dimen115
+
+(/usr/share/texmf-texlive/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2007/02/22 1.4 (Carsten Heinz)
+\c@lstnumber=\count106
+\lst@skipnumbers=\count107
+\lst@framebox=\box29
+)
+(/usr/share/texmf-texlive/tex/latex/listings/listings.cfg
+File: listings.cfg 2007/02/22 1.4 listings configuration
+))
+Package: listings 2007/02/22 1.4 (Carsten Heinz)
+
+(./kameramozgasok.aux)
+\openout1 = `kameramozgasok.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+ (/usr/share/texmf-texlive/tex/latex/ucs/ucsencs.def
+File: ucsencs.def 2003/11/29 Fixes to fontencodings LGR, T3
+)
+\c@lstlisting=\count108
+
+(/usr/share/texmf-texlive/tex/latex/ucs/data/uni-0.def
+File: uni-0.def 2004/10/17 UCS: Unicode data U+0000..U+00FF
+)
+LaTeX Font Info:    Try loading font information for U+msa on input line 12.
+
+(/usr/share/texmf-texlive/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2009/06/22 v3.00 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 12.
+
+(/usr/share/texmf-texlive/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2009/06/22 v3.00 AMS symbols B
+)
+Overfull \hbox (1.27858pt too wide) in paragraph at lines 14--17
+\OT1/cmr/m/n/10 munk ^^Sankban, a billi^^Sard j^^Sat^^Sekban meg-val^^Sos^^S^^P
+tott kam-er-amozg^^Sasokat ^^Ses az azokhoz
+ []
+
+(/usr/share/texmf-texlive/tex/latex/ucs/data/uni-1.def
+File: uni-1.def 2004/10/17 UCS: Unicode data U+0100..U+01FF
+)
+Overfull \hbox (3.27852pt too wide) in paragraph at lines 19--20
+ \OT1/cmr/m/n/10 Sz^^Sam^^S^^Pt^^Sog^^Sepes grafik^^Saban a kam-era mozg^^Sasko
+r val^^Soj^^Saban nem a kam-era helyzete
+ []
+
+
+Overfull \hbox (13.40054pt too wide) in paragraph at lines 24--25
+\OT1/cmr/m/n/10 ordin^^Sat^^Sait v^^Sarja (\OT1/cmr/m/it/10 x\OT1/cmr/m/n/10 , 
+\OT1/cmr/m/it/10 y \OT1/cmr/m/n/10 ^^Ses \OT1/cmr/m/it/10 z\OT1/cmr/m/n/10 ). A
+ f^^?uggv^^Seny ezut^^San odamoz-gatja a kamer^^Sat. Mindh^^Sarom
+ []
+
+LaTeX Font Info:    Try loading font information for OML+cmr on input line 29.
+(/usr/share/texmf-texlive/tex/latex/base/omlcmr.fd
+File: omlcmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10> not available
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 29.
+LaTeX Font Info:    Font shape `OML/cmr/m/it' in size <10> not available
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 31.
+
+Overfull \hbox (12.3176pt too wide) in paragraph at lines 35--36
+ \OT1/cmr/m/n/10 A demo pro-gram-ban a \OT1/cmr/m/it/10 z \OT1/cmr/m/n/10 bil-l
+enty}ure van k^^?otve ez a funkci^^So, ami alap^^Sertelmezetten
+ []
+
+[1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+Overfull \hbox (18.40723pt too wide) in paragraph at lines 50--52
+ \OT1/cmr/m/n/10 A kam-era for-gat^^Sas^^Sanak m^^Sasik m^^Sodja a kvaterni^^So
+kkal t^^?ort^^Sen}o for-gat^^Sas. L^^Satv^^Sanyban
+ []
+
+
+Overfull \hbox (4.1397pt too wide) in paragraph at lines 50--52
+\OT1/cmr/m/n/10 nem k^^?ul^^?onb^^?ozik a hagyom^^Sanyos for-gat^^Sast^^Sol, vi
+s-zont k^^?onnyebben ^^Ses olvashat^^Sobban
+ []
+
+
+Overfull \hbox (14.3886pt too wide) in paragraph at lines 56--57
+ \OT1/cmr/m/n/10 A Kvaterni^^So oszt^^Salyom im-ple-ment^^Salja a kvaterni^^Sov
+al kapc-so-latos alapm}uveleteket
+ []
+
+
+Overfull \hbox (4.66751pt too wide) in paragraph at lines 56--57
+\OT1/cmr/m/n/10 (kon-jug^^Sal^^Sas, nor-maliz^^Sal^^Sas, k^^Set kvaterni^^So sz
+orzata), vek-tor for-gat^^Sas^^Sat kvaterni^^Soval,
+ []
+
+
+Overfull \hbox (15.97314pt too wide) in paragraph at lines 59--60
+\OT1/cmr/m/n/10 lenty}u lenyom^^Sas^^Saval v^^Salthat^^So) szab^^Salyozhat^^So,
+ hogy hagyom^^Sanyos vagy kvaterni^^Sokkal
+ []
+
+[2]
+Overfull \hbox (19.99966pt too wide) in paragraph at lines 66--67
+ \OT1/cmr/m/n/10 A spher-i-cal lin-ear in-ter-po-la-tion (g^^?ombmenti line^^Sa
+ris in-ter-pol^^Saci^^So) egy kvaterni^^Sokt^^Sol
+ []
+
+
+Overfull \hbox (8.00073pt too wide) in paragraph at lines 72--73
+ \OT1/cmr/m/n/10 For-gat^^Saskor l^^Setrehozunk k^^Set kvaterni^^Sot: az egyike
+t az aktu^^Salis sz^^?ogelfordul^^Sasb^^Sol,
+ []
+
+
+Overfull \hbox (1.88037pt too wide) in paragraph at lines 72--73
+\OT1/cmr/m/n/10 f^^?ugg}oleges tengely sz-erint for-gat). Ezut^^San az id}oz^^S
+^^Pt}o ^^Saltal megh^^S^^Pvott f^^?uggv^^Senyben
+ []
+
+[3]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 79.
+ (/usr/share/texmf-texlive/tex/latex/base/omscmr.fd
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 79.
+
+Overfull \hbox (21.00372pt too wide) in paragraph at lines 85--86
+[][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (57.00409pt too wide) in paragraph at lines 95--96
+[][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (21.00372pt too wide) in paragraph at lines 96--97
+[][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (69.00421pt too wide) in paragraph at lines 97--99
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (69.00421pt too wide) in paragraph at lines 100--101
+[][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (69.00421pt too wide) in paragraph at lines 101--102
+[][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (69.00421pt too wide) in paragraph at lines 102--103
+[][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (69.00421pt too wide) in paragraph at lines 103--105
+[][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (53.4731pt too wide) in paragraph at lines 113--114
+[]\OT1/cmr/m/n/10 Kvaterni^^Sok le^^S^^Pr^^Sasa - http://www.geometrictools.com
+/Documentation/Quaternions.pdf 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 114--115
+[]\OT1/cmr/m/n/10 Kvaterni^^Sok haszn^^Salata sz^^Sam^^S^^Pt^^Sog^^Sepes grafik
+^^Saban -
+ []
+
+
+Overfull \hbox (68.3315pt too wide) in paragraph at lines 114--115
+\OT1/cmr/m/n/10 http://gpwiki.org/index.php/OpenGL:Tutorials:Using[]Quaternions
+[]to[]represent[]rotation 
+ []
+
+[4] (./kameramozgasok.aux) ) 
+Here is how much of TeX's memory you used:
+ 4159 strings out of 495061
+ 50595 string characters out of 1182622
+ 113597 words of memory out of 3000000
+ 7326 multiletter control sequences out of 15000+50000
+ 12547 words of font info for 48 fonts, out of 3000000 for 9000
+ 28 hyphenation exceptions out of 8191
+ 27i,8n,32p,580b,1213s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/share/texmf-texlive/fonts/type1/public/amsfon
+ts/cm/cmbx12.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi1
+0.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/
+share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-
+texlive/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-texlive/font
+s/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texmf-texlive/fonts/type1/publ
+ic/amsfonts/cm/cmr6.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/c
+m/cmr7.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr8.pfb></
+usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/t
+exmf-texlive/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texmf-texlive
+/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on kameramozgasok.pdf (4 pages, 152243 bytes).
+PDF statistics:
+ 63 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+
